@@ -3,7 +3,7 @@ const Register = () => {
         <>
             <div className="register-form">
                 <div className="header-register">
-                    <img src="" alt="" />
+                    <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/994864e6d407751510742627ffb6c58aa3d305d5/LOGO%20AZUL.svg" alt="" />
                     <span>La estrategia, en tus manos.</span>
                     <div className="select-rol">
                         <button>Jugador</button>
