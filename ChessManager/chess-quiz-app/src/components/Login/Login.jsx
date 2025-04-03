@@ -12,9 +12,9 @@ const Login = () => {
             </div>
             <div className="body-login">
                 <form>
-                    <input type="email" name="" id="" />
-                    <input type="password" name="" id="" />
-                    <button type="submit">Ingresar</button>
+                    <input type="email" name="email" id="user-email" />
+                    <input type="password" name="password" id="user-password" />
+                    <button type="submit" onClick={() => navigate ("/home")}>Ingresar</button>
                     <button onClick={() => navigate ("/register")}>Registrarte</button>
                 </form>
             </div>
