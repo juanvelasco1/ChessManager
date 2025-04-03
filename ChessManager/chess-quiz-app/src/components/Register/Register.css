@@ -1,0 +1,111 @@
+/* Register.css */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form {
+    width: 100%;
+    max-width: 440px;
+    height: 956px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header-register {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.image {
+    display: block;
+    margin: 0 auto;
+    width: 150px;
+    height: auto;
+}
+
+.estrategia {
+    color: rgba(0, 0, 57, 1);
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.select-rol {
+    margin-top: 20px;
+}
+
+.select-rol button {
+    background-color: rgba(0, 0, 57, 1);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.select-rol button:hover {
+    background-color: rgba(0, 0, 57, 0.8);
+}
+
+.body-register {
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form input {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rgba(0, 0, 57, 1);
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+#nickname {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid rgba(0, 0, 57, 1);
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+form button {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: rgba(0, 0, 57, 1);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: rgba(0, 0, 57, 0.8);
+}
