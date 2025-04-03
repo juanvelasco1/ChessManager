@@ -5,6 +5,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     return (
+        <>
         <div className="Login-form">
             <div className="header-login">
                 <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/994864e6d407751510742627ffb6c58aa3d305d5/LOGO%20AZUL.svg" alt="" />
@@ -19,6 +20,7 @@ const Login = () => {
                 </form>
             </div>
         </div>
+        </>
     );
 }
 
