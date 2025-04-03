@@ -1,6 +1,9 @@
-import React from 'react';
-import './Register.css';
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
+
+    const navigate = useNavigate();
+
     return (
         <>
             <div className="register-form">
@@ -19,7 +22,7 @@ const Register = () => {
                         <input type="password" name="contraseña" id="user-password" placeholder="Contraseña" required/>
                         <input type="password" name="confirmar" id="user-confirm-password" placeholder="Confirmar contraseña" required/>
                         <button type="submit">Crear</button>
-                        <button>Ya tengo una cuenta</button>
+                        <button onClick={() => navigate("/login")}>Ya tengo una cuenta</button>
                     </form>
                 </div>
             </div>
