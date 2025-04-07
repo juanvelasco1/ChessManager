@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
-import { LoginScreen, RegisterScreen, HomeScreen, LoadingScreen, QuizScreen, HomeTeacherScreen, SettingsTournamentScreen } from '../pages';
+import { LoginScreen, RegisterScreen, HomeScreen, LoadingScreen, QuizScreen, HomeTeacherScreen, SettingsTournamentScreen, LobbyScreen, GameTournamentScreen } from '../pages';
 
 const Router = () => {
     return (
@@ -13,6 +13,8 @@ const Router = () => {
                 <Route path="/quiz" element={<QuizScreen />} />
                 <Route path="/home-teacher" element={<HomeTeacherScreen />} />
                 <Route path="/settings-tournament" element={<SettingsTournamentScreen />} />
+                <Route path="/lobby" element={<LobbyScreen />} />
+                <Route path="/game-tournament" element={<GameTournamentScreen />} />
             </Routes>
         </BrowserRouter>
     );
