@@ -5,7 +5,7 @@ const QuizQuestion = () => {
 
     const handleAnswer = (answer) => {
         if (currentQuestion === 1 && answer === "Caballo") {
-            setCurrentQuestion(2); // Navega a la segunda pregunta
+            setCurrentQuestion(2);
         }
     };
 
@@ -53,7 +53,7 @@ const QuizQuestion = () => {
                     <div>
                         <h1>Juega blancas y da mate en 1</h1>
                     </div>
-                    
+
                     <div>
                         <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Tablero%20pregunta%201.svg" alt="" />
                     </div>
