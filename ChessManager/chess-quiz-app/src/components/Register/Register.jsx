@@ -177,6 +177,7 @@ const Register = () => {
         <Button
           type="submit"
           variant="contained"
+          onClick={() => navigate("/quiz")}
           sx={{
             mt: 3,
             bgcolor: "rgba(0, 0, 57, 1)",
