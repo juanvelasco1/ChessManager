@@ -1,15 +1,26 @@
 import { ToggleButtonGroup, ToggleButton, Box } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [selected, setSelected] = useState("home");
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (location.pathname.includes("/home-teacher")) {
+      setSelected("home");
+    } else if (location.pathname.includes("/settings-tournament")) {
+      setSelected("chess");
+    }
+  }, [location.pathname]);
 
   const handleChange = (event, newSelection) => {
-    if (newSelection !== null) {
+    if (newSelection) {
       setSelected(newSelection);
+      if (newSelection === "home") navigate("/home-teacher");
+      if (newSelection === "chess") navigate("/settings-tournament");
     }
   };
 
@@ -49,14 +60,30 @@ const NavBar = () => {
           },
         }}
       >
-        <ToggleButton value="home" onClick={() => navigate("/home-teacher")}>
-          <svg xmlns="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/60acd42c40fbe6f3ca84d22e06cfa1e915e00a4c/%F0%9F%A6%86%20icon%20_home_.svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
-          </svg>
+        <ToggleButton value="home">
+          <img
+            src={
+              selected === "home"
+                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/WHITE%20icon%20_home_.svg"
+                : "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/%F0%9F%A6%86%20icon%20_home_.svg"
+            }
+            alt="Home"
+            width={28}
+            height={28}
+          />
         </ToggleButton>
 
-        <ToggleButton value="chess" onClick={() => navigate("/settings-tournament")}>
-          <svg xmlns="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/60acd42c40fbe6f3ca84d22e06cfa1e915e00a4c/%F0%9F%A6%86%20icon%20_Chess_.svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24">
-          </svg>
+        <ToggleButton value="chess">
+          <img
+            src={
+              selected === "chess"
+                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/WHITE%20icon%20_Chess_.svg"
+                : "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/%F0%9F%A6%86%20icon%20_Chess_.svg"
+            }
+            alt="Chess"
+            width={28}
+            height={28}
+          />
         </ToggleButton>
       </ToggleButtonGroup>
     </Box>
