@@ -1,47 +1,54 @@
 import React, { useEffect } from "react";
-import { View, ActivityIndicator, Image, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigate } from "react-router-dom";
 
 const LoadingScreen = ({ loading, duration = 3000 }) => {
-    const navigation = useNavigation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (loading) {
             const timer = setTimeout(() => {
-                navigation.navigate("Login");
+                navigate("/login");
             }, duration);
 
             return () => clearTimeout(timer);
         }
-    }, [loading, navigation, duration]);
+    }, [loading, navigate, duration]);
 
     if (loading) {
         return (
-            <View style={styles.container}>
-                <Image
-                    source={require("https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/994864e6d407751510742627ffb6c58aa3d305d5/LOGO%20AZUL.svg")} // Ruta de tu logo
+            <div style={styles.container}>
+                <img
+                    src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/994864e6d407751510742627ffb6c58aa3d305d5/LOGO%20AZUL.svg" // Ruta de tu logo
+                    alt="App Logo"
                     style={styles.logo}
                 />
-                <ActivityIndicator size="large" color="#ffffff" />
-            </View>
+                <div style={styles.spinner}>
+                    <div className="loader"></div>
+                </div>
+            </div>
         );
     }
 
     return null;
 };
 
-const styles = StyleSheet.create({
+const styles = {
     container: {
-        flex: 1,
-        backgroundColor: "black",
+        display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        height: "100vh",
+        backgroundColor: "black",
     },
     logo: {
-        width: 150, // Ajusta el tamaño del logo
-        height: 150,
-        marginBottom: 20,
+        width: "150px",
+        height: "150px",
+        marginBottom: "20px",
     },
-});
+    spinner: {
+        color: "#ffffff",
+    },
+};
 
 export default LoadingScreen;
