@@ -114,7 +114,7 @@ import {
           <Box
             sx={{
               border: "none",
-              bgcolor: "#2f2f77",
+              bgcolor: "#000039",
               color: "white",
               display: "flex",
               alignItems: "center",
