@@ -6,12 +6,13 @@ const SettingTournamentScreen = () => {
     <>
       <Box
         sx={{
-          mt: "75px", // espacio desde arriba
+          mt: "75px", 
           width: 420,
           mx: "auto",
           display: "flex",
-          gap: "10px", // separación entre botones
+          gap: "10px", 
           justifyContent: "center",
+
         }}
       >
         {/* Botón Crear */}
@@ -56,11 +57,14 @@ const SettingTournamentScreen = () => {
             alignItems: "center",
             justifyContent: "center",
             color: "#000039",
-            fontWeight: "bold",
             fontSize: "16px",
+            fontWeight: "bold", 
             boxShadow: 1,
             "&:hover": {
               backgroundColor: "#f5f5f5",
+            },
+            "& .MuiTypography-root": {
+              fontWeight: "bold", 
             },
           }}
         >
