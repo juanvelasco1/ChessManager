@@ -1,7 +1,11 @@
 import { Box, Button, Typography } from "@mui/material";
 import NavBar from "../../components/Navbar/Navbar";
+import { useNavigate } from "react-router-dom";
 
 const SettingTournamentScreen = () => {
+
+    const navigate = useNavigate();
+
   return (
     <>
       <Box
@@ -47,6 +51,7 @@ const SettingTournamentScreen = () => {
 
         {/* Botón Todos vs todos */}
         <Button
+            onClick={() => navigate("/lobby")}
           sx={{
             width: 190,
             height: 190,
