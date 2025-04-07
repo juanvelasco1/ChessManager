@@ -64,8 +64,8 @@ const NavBar = () => {
           <img
             src={
               selected === "home"
-                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/WHITE%20icon%20_home_.svg"
-                : "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/%F0%9F%A6%86%20icon%20_home_.svg"
+                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/%F0%9F%A6%86%20icon%20_home_.svg"
+                : "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/21a8fc4001d1b768f0dde1c460e6cf29ca42c960/%F0%9F%A6%86%20icon%20_home_%20dark.svg"
             }
             alt="Home"
             width={28}
@@ -77,7 +77,7 @@ const NavBar = () => {
           <img
             src={
               selected === "chess"
-                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/WHITE%20icon%20_Chess_.svg"
+                ? "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/21a8fc4001d1b768f0dde1c460e6cf29ca42c960/%F0%9F%A6%86%20icon%20_Chess_white.svg"
                 : "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/main/%F0%9F%A6%86%20icon%20_Chess_.svg"
             }
             alt="Chess"
