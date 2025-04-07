@@ -18,13 +18,6 @@ const LobbyScreen = () => {
                 </div>
                 <div>
                     <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
-                    <UserLobby />
                 </div>
                 <button onClick={() => navigate("/game-tournament")}>Iniciar</button>
             </div>

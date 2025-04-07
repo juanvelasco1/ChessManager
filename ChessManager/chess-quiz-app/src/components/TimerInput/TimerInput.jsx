@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
 
-const TimerInput = ({ top = "50%" }) => {
+const TimerInput = ({ top = "32%" }) => {
   const [timeLeft, setTimeLeft] = useState(15 * 24 * 60 * 60);
 
   useEffect(() => {

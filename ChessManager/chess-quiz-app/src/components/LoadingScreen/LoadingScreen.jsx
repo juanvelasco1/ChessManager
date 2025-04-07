@@ -39,7 +39,7 @@ const styles = {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "black",
+        backgroundColor: "white",
     },
     logo: {
         width: "150px",
