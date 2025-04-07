@@ -27,11 +27,6 @@ const Podium = ({ nickname, score }) => {
                     <span>2000</span>
                 </div>
             </div>
-
-            <div>
-                <button>General</button>
-                <button>1vs1</button>
-            </div>
         </>
     )
 }

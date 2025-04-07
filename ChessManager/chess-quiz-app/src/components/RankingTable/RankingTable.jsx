@@ -2,6 +2,11 @@ const RankingTable = () => {
     return(
         <>
             <div>
+                <button>General</button>
+                <button>1vs1</button>
+            </div>
+
+            <div>
                 <div>
                     <ul>
                         <li>
