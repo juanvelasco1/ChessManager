@@ -5,30 +5,25 @@ import RankingTable from "../../components/RankingTable/RankingTable";
 import NavBar from "../../components/Navbar/Navbar";
 
 const HomeTeacherScreen = () => {
-    return(
-        <>
-        <div>
-            <UserTeacher/>
-        </div>
-        <div>
-            <TimerInput/>
-        </div>
-        <div>
-            <Podium
-                sx={{
-                    position:"relative",
-                    top:"80px",
-                }}
-            />
-        </div>
-        <div>
-            <RankingTable/>
-        </div>
-        <div>
-            <NavBar/>
-        </div>
-        </>
-    )
+  return (
+    <>
+      <div>
+        <UserTeacher />
+      </div>
+      <div>
+        <TimerInput top="20%" /> {/* Cambia este valor libremente */}
+      </div>
+      <div>
+        <Podium />
+      </div>
+      <div>
+        <RankingTable />
+      </div>
+      <div>
+        <NavBar />
+      </div>
+    </>
+  );
 };
 
 export default HomeTeacherScreen;
