@@ -1,6 +1,6 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
-import { LoginScreen, RegisterScreen, HomeScreen, LoadingScreen, QuizScreen } from '../pages';
+import { LoginScreen, RegisterScreen, HomeScreen, LoadingScreen, QuizScreen, HomeTeacherScreen } from '../pages';
 
 const Router = () => {
     return (
@@ -11,6 +11,7 @@ const Router = () => {
                 <Route path="/register" element={<RegisterScreen />} />
                 <Route path="/home" element={<HomeScreen />} />
                 <Route path="/quiz" element={<QuizScreen />} />
+                <Route path="/home-teacher" element={<HomeTeacherScreen />} />
             </Routes>
         </BrowserRouter>
     );

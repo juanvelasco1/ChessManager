@@ -1,14 +1,17 @@
+import { Box, Avatar, Typography } from "@mui/material";
 import React from "react";
-import { Box, Avatar, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const UserCard = () => {
-  const navigate = useNavigate();
-  return (
+const UserTeacher = () => {
+    
+    const navigate = useNavigate();
+
+    return (
+        <>
     <Box
       sx={{
         width: 388,
-        height: 177,
+        height: 62,
         bgcolor: "#000039",
         color: "#fff",
         borderRadius: "20px",
@@ -49,44 +52,12 @@ const UserCard = () => {
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">
-          JairoPRo
+          Maestro Shifu
         </Typography>
       </Box>
-
-      {/* Info - estadísticas */}
-      <Box display="flex" justifyContent="space-around" alignItems="center">
-        {/* Trofeos */}
-        <Box textAlign="center">
-          <Typography variant="subtitle2">Trofeos</Typography>
-          <Box fontSize="30px">🏆</Box>
-          <Typography>890</Typography>
-        </Box>
-
-        <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
-
-        {/* Juegos */}
-        <Box textAlign="center">
-          <Typography variant="subtitle2">Juegos</Typography>
-          <Box
-            component="img"
-            src="https://images.vexels.com/media/users/3/143289/isolated/preview/759a1d9598eae60232ca7a56b19f5a7d-figura-de-ajedrez-peon.png"
-            alt="Pieza"
-            sx={{ width: 30, height: 30, mb: 0.5 }}
-          />
-          <Typography>15</Typography>
-        </Box>
-
-        <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
-
-        {/* Rango */}
-        <Box textAlign="center">
-          <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">🥇</Box>
-          <Typography>Oro</Typography>
-        </Box>
       </Box>
-    </Box>
-  );
+        </>
+    )
 };
 
-export default UserCard;
+export default UserTeacher;

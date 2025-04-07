@@ -22,6 +22,13 @@ const Register = () => {
     event.preventDefault();
     console.log("Rol seleccionado:", role);
     console.log("Formulario enviado");
+
+    // Navegar según el rol seleccionado
+    if (role === "administrador") {
+      navigate("/HomeTeacherScreen");
+    } else {
+      navigate("/quiz");
+    }
   };
 
   return (
@@ -45,7 +52,6 @@ const Register = () => {
           alt="Logo"
           sx={{ width: "80%", maxWidth: 200, mx: "auto", mb: 1 }}
         />
-       
       </Box>
 
       {/* Frase */}
@@ -61,33 +67,33 @@ const Register = () => {
 
       {/* Selector de rol */}
       <ToggleButtonGroup
-  value={role}
-  exclusive
-  onChange={handleRoleChange}
-  sx={{
-    backgroundColor: "#e0e0e0",
-    borderRadius: "10px",
-    mb: 3,
-    width: "100%",
-    "& .MuiToggleButtonGroup-grouped": {
-      flex: 1,
-      border: "none",
-      borderRadius: "10px !important",
-      padding: "10px 0",
-      fontWeight: "bold",
-      fontSize: "14px",
-      color: "rgba(0, 0, 57, 1)",
-      transition: "all 0.3s ease-in-out",
-      "&.Mui-selected, &.Mui-selected:hover": {
-        backgroundColor: "rgba(0, 0, 57, 1)",
-        color: "#fff",
-      },
-    },
-  }}
->
-  <ToggleButton value="jugador">Jugador</ToggleButton>
-  <ToggleButton value="administrador">Administrador</ToggleButton>
-</ToggleButtonGroup>
+        value={role}
+        exclusive
+        onChange={handleRoleChange}
+        sx={{
+          backgroundColor: "#e0e0e0",
+          borderRadius: "10px",
+          mb: 3,
+          width: "100%",
+          "& .MuiToggleButtonGroup-grouped": {
+            flex: 1,
+            border: "none",
+            borderRadius: "10px !important",
+            padding: "10px 0",
+            fontWeight: "bold",
+            fontSize: "14px",
+            color: "rgba(0, 0, 57, 1)",
+            transition: "all 0.3s ease-in-out",
+            "&.Mui-selected, &.Mui-selected:hover": {
+              backgroundColor: "rgba(0, 0, 57, 1)",
+              color: "#fff",
+            },
+          },
+        }}
+      >
+        <ToggleButton value="jugador">Jugador</ToggleButton>
+        <ToggleButton value="administrador">Administrador</ToggleButton>
+      </ToggleButtonGroup>
 
       {/* Formulario */}
       <Box
@@ -177,7 +183,7 @@ const Register = () => {
         <Button
           type="submit"
           variant="contained"
-          onClick={() => navigate("/quiz")}
+          onClick={() => navigate("/home-teacher")}
           sx={{
             mt: 3,
             bgcolor: "rgba(0, 0, 57, 1)",
