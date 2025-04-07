@@ -1,5 +1,7 @@
 import UserCard from "../../components/UserCard/UserCard";
 import Podium from "../../components/Podium/Podium";
+import RankingTable from "../../components/RankingTable/RankingTable";
+import TimerInput from "../../components/TimerInput/TimerInput";
 
 const HomeScreen = () => {
     return (
@@ -8,7 +10,13 @@ const HomeScreen = () => {
                 <UserCard />
             </div>
             <div>
+                <TimerInput />
+            </div>
+            <div>
                 <Podium />
+            </div>
+            <div>
+                <RankingTable />
             </div>
         </>
     );

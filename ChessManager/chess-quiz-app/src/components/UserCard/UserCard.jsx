@@ -9,7 +9,7 @@ const UserCard = ({nickname, score, games, range}) => {
                 </div>
                 <div>
                     <div>
-                        <span>Trofeos</span>
+                        <span>Trofeos:</span>
                         <img src="#" alt="" />
                         <span>{score || undefined}</span>
                     </div>

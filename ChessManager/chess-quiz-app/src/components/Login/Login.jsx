@@ -49,6 +49,7 @@ const Login = () => {
         <TextField
           type="email"
           label="Correo"
+          required
           fullWidth
           variant="outlined"
           sx={{
@@ -68,6 +69,7 @@ const Login = () => {
         <TextField
           type="password"
           label="Contraseña"
+          required
           fullWidth
           variant="outlined"
           sx={{
