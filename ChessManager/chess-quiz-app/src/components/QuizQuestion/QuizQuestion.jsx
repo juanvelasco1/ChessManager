@@ -57,15 +57,28 @@ const QuizQuestion = () => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          px: 3,
+          px: 2,
           textAlign: "center",
         }}
       >
-        <Typography fontWeight="bold" fontSize={28} color="#000039" mb={1}>
+        <Typography
+          fontWeight="bold"
+          fontSize={28}
+          color="#000039"
+          mb={1}
+          textAlign="center"
+          width="100%"
+        >
           ¡Quiz terminado!
         </Typography>
   
-        <Typography fontSize={20} color="#000000" mb={4}>
+        <Typography
+          fontSize={20}
+          color="#000000"
+          mb={4}
+          textAlign="center"
+          width="100%"
+        >
           Tu rango: <strong>Bronce</strong> 🥉
         </Typography>
   
@@ -85,7 +98,6 @@ const QuizQuestion = () => {
             },
           }}
           onClick={() => {
-            // Redirige o ejecuta alguna acción al finalizar
             console.log("Continuar");
           }}
         >
