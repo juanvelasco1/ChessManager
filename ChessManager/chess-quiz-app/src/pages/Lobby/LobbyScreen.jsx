@@ -1,4 +1,5 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserLobby from "../../components/UserLobby/UserLobby";
 import { useNavigate } from "react-router-dom";
 
@@ -17,7 +18,21 @@ const LobbyScreen = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ width: 410, mx: "auto", mt: 8, textAlign: "center" }}>
+    <Box sx={{ width: 410, mx: "auto", mt: 8, textAlign: "center", position: "relative" }}>
+      {/* Flecha de retroceso */}
+      <IconButton
+        onClick={() => navigate(-1)}
+        sx={{
+          position: "absolute",
+          top: -30,
+          left: 0,
+          zIndex: 1000,
+          color: "#000039",
+        }}
+      >
+        <ArrowBackIcon sx={{ fontSize: 28 }} />
+      </IconButton>
+
       {/* Título */}
       <Typography fontWeight="bold" color="#000039" fontSize="40px" mb={2}>
         Todos vs todos
