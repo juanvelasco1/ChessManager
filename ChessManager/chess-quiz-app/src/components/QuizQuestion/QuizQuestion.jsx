@@ -40,8 +40,8 @@ const QuizQuestion = () => {
 
   const getColor = (option) => {
     if (!selected) return "#2f2f77";
-    if (option === question.correct) return "#8BC34A"; // Verde
-    if (option === selected) return "#D32F2F"; // Rojo
+    if (option === question.correct) return "#8BC34A"; 
+    if (option === selected) return "#D32F2F"; 
     return "#2f2f77";
   };
 
@@ -79,14 +79,16 @@ const QuizQuestion = () => {
         textAlign: "center",
       }}
     >
-      {/* Encabezado y contador */}
-      <Box sx={{ position: "absolute", top: 20, right: 20 }}>
+      {/* Contador */}
+      <Box sx={{ position: "absolute", top: 80, right: 20 }}>
         <Typography color="#000039" fontWeight="bold" fontSize="22px">
           {current + 1}/{questions.length}
         </Typography>
       </Box>
 
-      {/* Texto de la pregunta */}
+      
+
+      {/* pregunta */}
       <Typography
         fontWeight="bold"
         fontSize="24px"

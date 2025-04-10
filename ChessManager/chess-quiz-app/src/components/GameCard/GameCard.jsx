@@ -1,6 +1,32 @@
 import { Box, Typography, Avatar, Button } from "@mui/material";
+import { useState } from "react";
 
 const GameCard = () => {
+  const [result, setResult] = useState(null); // null, "left", "right", "draw"
+
+  const getColors = () => {
+    switch (result) {
+      case "left":
+        return ["#8BC34A", "#434379", "#D32F2F"];
+      case "right":
+        return ["#D32F2F", "#434379", "#8BC34A"];
+      case "draw":
+        return ["#9E9E9E", "#434379", "#9E9E9E"];
+      default:
+        return ["#434379", "#434379", "#434379"];
+    }
+  };
+
+  const getPoints = () => {
+    if (result === "left") return ["1", "Empate", "0"];
+    if (result === "right") return ["0", "Empate", "1"];
+    if (result === "draw") return ["0.5", "Empate", "0.5"];
+    return ["Ganador", "Empate", "Ganador"];
+  };
+
+  const [leftColor, middleColor, rightColor] = getColors();
+  const [leftText, middleText, rightText] = getPoints();
+
   return (
     <Box
       sx={{
@@ -30,7 +56,7 @@ const GameCard = () => {
       >
         <Box display="flex" flexDirection="column" alignItems="center">
           <Avatar
-            src="https://www.smashbros.com/images/og/lucas.jpg"
+            src="https://cdn-icons-png.flaticon.com/512/701/701967.png"
             sx={{ width: 40, height: 40, mb: 0.5 }}
           />
           <Typography fontSize={14} fontWeight="bold">
@@ -44,7 +70,7 @@ const GameCard = () => {
 
         <Box display="flex" flexDirection="column" alignItems="center">
           <Avatar
-            src="https://resizer.glanacion.com/resizer/v2/san-lucas-se-celebra-todos-los-18-de-WIMO3P5PTVDDRMIVCMSDCCOKLI.png"
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
             sx={{ width: 40, height: 40, mb: 0.5 }}
           />
           <Typography fontSize={14} fontWeight="bold">
@@ -58,54 +84,54 @@ const GameCard = () => {
         sx={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
-          backgroundColor: "#434379",
-          color: "#fff",
           flexGrow: 1,
         }}
       >
         <Button
+          onClick={() => setResult("left")}
           sx={{
             borderRadius: 0,
             fontWeight: "bold",
+            fontSize: 16,
+            backgroundColor: leftColor,
             color: "#fff",
-            height: "100%",
             borderRight: "1px solid white",
-            backgroundColor: "#434379",
-            "&:hover": {
-              backgroundColor: "#000039",
-            },
-          }}
-        >
-          Ganador
-        </Button>
-        <Button
-          sx={{
-            borderRadius: 0,
-            fontWeight: "bold",
             height: "100%",
-            color: "#000039",
-            backgroundColor: "#fff",
-            "&:hover": {
-              backgroundColor: "#ddd",
-            },
+            "&:hover": { backgroundColor: leftColor },
           }}
         >
-          Empate
+          {leftText}
         </Button>
+
         <Button
+          onClick={() => setResult("draw")}
           sx={{
             borderRadius: 0,
             fontWeight: "bold",
+            fontSize: 16,
+            backgroundColor: middleColor,
             color: "#fff",
             height: "100%",
-            borderLeft: "1px solid white",
-            backgroundColor: "#434379",
-            "&:hover": {
-              backgroundColor: "#000039",
-            },
+            "&:hover": { backgroundColor: middleColor },
           }}
         >
-          Ganador
+          {middleText}
+        </Button>
+
+        <Button
+          onClick={() => setResult("right")}
+          sx={{
+            borderRadius: 0,
+            fontWeight: "bold",
+            fontSize: 16,
+            backgroundColor: rightColor,
+            color: "#fff",
+            borderLeft: "1px solid white",
+            height: "100%",
+            "&:hover": { backgroundColor: rightColor },
+          }}
+        >
+          {rightText}
         </Button>
       </Box>
     </Box>
