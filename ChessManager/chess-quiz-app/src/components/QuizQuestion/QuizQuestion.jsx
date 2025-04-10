@@ -15,19 +15,29 @@ const questions = [
     image:
       "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Tablero%20pregunta%201.svg",
     options: [
-      { icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Caballo.svg", label: "E-7" },
-      { icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Reina.svg", label: "H-7" },
-      { icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Alfil.svg", label: "H-6" },
-      { icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Caballo.svg", label: "F-6" },
+      {
+        icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Caballo.svg",
+        label: "E-7",
+      },
+      {
+        icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Reina.svg",
+        label: "H-7",
+      },
+      {
+        icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Alfil.svg",
+        label: "H-6",
+      },
+      {
+        icon: "https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/b5e9ef3f4890b8f7eaa62c49eee7372e43bea001/Caballo.svg",
+        label: "F-6",
+      },
     ],
     correct: "H-7",
   },
 ];
 
 const QuizQuestion = () => {
-
   const navigate = useNavigate();
-
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
 
@@ -35,7 +45,6 @@ const QuizQuestion = () => {
 
   const handleClick = (option) => {
     setSelected(option);
-
     setTimeout(() => {
       setSelected(null);
       setCurrent((prev) => prev + 1);
@@ -44,8 +53,8 @@ const QuizQuestion = () => {
 
   const getColor = (option) => {
     if (!selected) return "#2f2f77";
-    if (option === question.correct) return "#8BC34A"; 
-    if (option === selected) return "#D32F2F"; 
+    if (option === question.correct) return "#8BC34A";
+    if (option === selected) return "#D32F2F";
     return "#2f2f77";
   };
 
@@ -71,21 +80,19 @@ const QuizQuestion = () => {
           color="#000039"
           mb={1}
           textAlign="center"
-          width="100%"
         >
           ¡Quiz terminado!
         </Typography>
-  
+
         <Typography
           fontSize={20}
           color="#000000"
           mb={4}
           textAlign="center"
-          width="100%"
         >
           Tu rango: <strong>Bronce</strong> 🥉
         </Typography>
-  
+
         <Button
           variant="contained"
           onClick={() => navigate("/home")}
@@ -130,9 +137,7 @@ const QuizQuestion = () => {
         </Typography>
       </Box>
 
-      
-
-      {/* pregunta */}
+      {/* Pregunta */}
       <Typography
         fontWeight="bold"
         fontSize="24px"
@@ -181,7 +186,7 @@ const QuizQuestion = () => {
                 width: "100%",
                 height: 70,
                 backgroundColor: getColor(label),
-                color: "#fff",
+                color: "#fff !important", // Asegura contraste
                 fontWeight: "bold",
                 borderRadius: "10px",
                 boxShadow: 2,
