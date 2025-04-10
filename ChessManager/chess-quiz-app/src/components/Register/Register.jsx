@@ -14,20 +14,11 @@ const Register = () => {
   const navigate = useNavigate();
   const [role, setRole] = useState("jugador");
 
-  const handleRoleChange = (event, newRole) => {
-    if (newRole !== null) setRole(newRole);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("Rol seleccionado:", role);
-    console.log("Formulario enviado");
-
-    // Navegar según el rol seleccionado
-    if (role === "administrador") {
-      navigate("/HomeTeacherScreen");
-    } else {
+  const handleCreate = () => {
+    if (role === "jugador") {
       navigate("/quiz");
+    } else if (role === "administrador") {
+      navigate("/home-teacher");
     }
   };
 
@@ -69,7 +60,7 @@ const Register = () => {
       <ToggleButtonGroup
         value={role}
         exclusive
-        onChange={handleRoleChange}
+        onChange={(e) => setRole(e.target.value)}
         sx={{
           backgroundColor: "#e0e0e0",
           borderRadius: "10px",
@@ -98,7 +89,7 @@ const Register = () => {
       {/* Formulario */}
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={handleCreate}
         display="flex"
         flexDirection="column"
         gap={2}
@@ -107,7 +98,6 @@ const Register = () => {
         <TextField
           type="text"
           label="Apodo"
-          required
           fullWidth
           variant="outlined"
           sx={{
@@ -126,7 +116,6 @@ const Register = () => {
         <TextField
           type="email"
           label="Correo"
-          required
           fullWidth
           variant="outlined"
           sx={{
@@ -145,7 +134,6 @@ const Register = () => {
         <TextField
           type="password"
           label="Contraseña"
-          required
           fullWidth
           variant="outlined"
           sx={{
@@ -164,7 +152,6 @@ const Register = () => {
         <TextField
           type="password"
           label="Confirmar Contraseña"
-          required
           fullWidth
           variant="outlined"
           sx={{
@@ -183,7 +170,7 @@ const Register = () => {
         <Button
           type="submit"
           variant="contained"
-          onClick={() => navigate("/home-teacher")}
+          onClick={handleCreate}
           sx={{
             mt: 3,
             bgcolor: "rgba(0, 0, 57, 1)",
