@@ -1,22 +1,35 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NavBar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 
 const SettingTournamentScreen = () => {
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <>
+      {/* Botón de retroceso */}
+      <IconButton
+        onClick={() => navigate(-1)}
+        sx={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          zIndex: 999,
+          color: "#000039",
+        }}
+      >
+        <ArrowBackIcon sx={{ fontSize: 28 }} />
+      </IconButton>
+
       <Box
         sx={{
-          mt: "75px", 
+          mt: "75px",
           width: 420,
           mx: "auto",
           display: "flex",
-          gap: "10px", 
+          gap: "10px",
           justifyContent: "center",
-
         }}
       >
         {/* Botón Crear */}
@@ -51,7 +64,7 @@ const SettingTournamentScreen = () => {
 
         {/* Botón Todos vs todos */}
         <Button
-            onClick={() => navigate("/lobby")}
+          onClick={() => navigate("/lobby")}
           sx={{
             width: 190,
             height: 190,
@@ -63,13 +76,13 @@ const SettingTournamentScreen = () => {
             justifyContent: "center",
             color: "#000039",
             fontSize: "16px",
-            fontWeight: "bold", 
+            fontWeight: "bold",
             boxShadow: 1,
             "&:hover": {
               backgroundColor: "#f5f5f5",
             },
             "& .MuiTypography-root": {
-              fontWeight: "bold", 
+              fontWeight: "bold",
             },
           }}
         >
@@ -80,7 +93,11 @@ const SettingTournamentScreen = () => {
             height={50}
             style={{ marginBottom: 8 }}
           />
-          <Typography align="center">Todos vs<br />todos</Typography>
+          <Typography align="center">
+            Todos vs
+            <br />
+            todos
+          </Typography>
         </Button>
       </Box>
 
