@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const questions = [
   {
@@ -24,6 +25,9 @@ const questions = [
 ];
 
 const QuizQuestion = () => {
+
+  const navigate = useNavigate();
+
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState(null);
 
@@ -54,13 +58,53 @@ const QuizQuestion = () => {
           maxWidth: 420,
           mx: "auto",
           display: "flex",
-          alignItems: "center",
+          flexDirection: "column",
           justifyContent: "center",
+          alignItems: "center",
+          px: 2,
+          textAlign: "center",
         }}
       >
-        <Typography fontWeight="bold" fontSize={24}>
+        <Typography
+          fontWeight="bold"
+          fontSize={28}
+          color="#000039"
+          mb={1}
+          textAlign="center"
+          width="100%"
+        >
           ¡Quiz terminado!
         </Typography>
+  
+        <Typography
+          fontSize={20}
+          color="#000000"
+          mb={4}
+          textAlign="center"
+          width="100%"
+        >
+          Tu rango: <strong>Bronce</strong> 🥉
+        </Typography>
+  
+        <Button
+          variant="contained"
+          onClick={() => navigate("/home")}
+          sx={{
+            backgroundColor: "#000039",
+            borderRadius: "10px",
+            fontWeight: "bold",
+            fontSize: "16px",
+            width: "100%",
+            maxWidth: 280,
+            height: "55px",
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#000039",
+            },
+          }}
+        >
+          CONTINUAR
+        </Button>
       </Box>
     );
   }
