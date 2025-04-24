@@ -1,4 +1,4 @@
-import Router from './router'
+import Router from './components/router'
 import {Provider} from 'react-redux'
 import {store} from './redux/store'
 import './App.css'
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <Provider store={store}>
-        <Router/>
+      <Router />
     </Provider>
   )
 };
