@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth"
 import { getFirestore, doc, getDoc, collection, getDocs, updateDoc, addDoc, setDoc, Firestore, onSnapshot, arrayUnion, arrayRemove } from "firebase/firestore";
 import { Auth, browserLocalPersistence, createUserWithEmailAndPassword, EmailAuthProvider, getAuth, reauthenticateWithCredential, setPersistence, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
 
@@ -12,7 +13,7 @@ const firebaseConfig = {
 };
 
 const db = Firestore | undefined;
-const auth = Auth | undefined;
+export const auth = getAuth(app);
 
 export const getFirebaseInstance = async () => {
     if(!db || !auth ) {

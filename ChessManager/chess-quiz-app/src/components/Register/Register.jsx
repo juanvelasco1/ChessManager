@@ -8,7 +8,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
