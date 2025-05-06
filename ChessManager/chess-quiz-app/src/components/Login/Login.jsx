@@ -6,11 +6,48 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { loginUser } from "../../services/firebaseConfig";
 import React, { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../services/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      // Inicia sesión con Firebase Authentication
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Obtén el rol del usuario desde Firestore
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const role = userData.role;
+
+        // Redirige según el rol
+        if (role === "jugador") {
+          navigate("/home");
+        } else if (role === "administrador") {
+          navigate("/home-teacher");
+        } else {
+          console.error("Rol desconocido:", role);
+          setError("Rol desconocido. Contacta al administrador.");
+        }
+      } else {
+        console.error("No se encontró información del usuario en Firestore.");
+        setError("No se encontró información del usuario. Contacta al administrador.");
+      }
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err.message);
+      setError("Correo o contraseña incorrectos");
+    }
+  };
+
 
   return (
     <Container
@@ -54,6 +91,8 @@ const Login = () => {
           required
           fullWidth
           variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             borderRadius: "10px",
             "& .MuiOutlinedInput-root": {
@@ -74,6 +113,8 @@ const Login = () => {
           required
           fullWidth
           variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           sx={{
             borderRadius: "10px",
             "& .MuiOutlinedInput-root": {
@@ -90,10 +131,7 @@ const Login = () => {
 
         <Button
           variant="contained"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate("/home");
-          }}
+          onClick={handleLogin}
           sx={{
             mt: 3,
             bgcolor: "rgba(0, 0, 57, 1)",

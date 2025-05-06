@@ -9,16 +9,50 @@ import {
   ToggleButtonGroup,
 } from "@mui/material";
 import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../services/firebaseConfig";
+import { db } from "../../services/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmar contraseña
+  const [nickname, setNickname] = useState("");
   const [role, setRole] = useState("jugador");
+  const [error, setError] = useState("");
 
-  const handleCreate = () => {
-    if (role === "jugador") {
-      navigate("/quiz");
-    } else if (role === "administrador") {
-      navigate("/home-teacher");
+  const handleRegister = async () => {
+    // Verifica si las contraseñas coinciden
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      // Registra al usuario con Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Guarda el nickname y el rol en Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        nickname: nickname,
+        email: email,
+        role: role,
+      });
+
+      console.log("Usuario registrado y datos guardados en Firestore:", user);
+
+      // Redirige según el rol seleccionado
+      if (role === "jugador") {
+        navigate("/quiz");
+      } else if (role === "administrador") {
+        navigate("/home-teacher");
+      }
+    } catch (err) {
+      console.error("Error al registrar usuario:", err.message);
+      setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
     }
   };
 
@@ -89,7 +123,10 @@ const Register = () => {
       {/* Formulario */}
       <Box
         component="form"
-        onSubmit={handleCreate}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
         display="flex"
         flexDirection="column"
         gap={2}
@@ -100,6 +137,8 @@ const Register = () => {
           label="Apodo"
           fullWidth
           variant="outlined"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "10px",
@@ -118,6 +157,8 @@ const Register = () => {
           label="Correo"
           fullWidth
           variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "10px",
@@ -136,6 +177,8 @@ const Register = () => {
           label="Contraseña"
           fullWidth
           variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "10px",
@@ -154,6 +197,8 @@ const Register = () => {
           label="Confirmar Contraseña"
           fullWidth
           variant="outlined"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           sx={{
             "& .MuiOutlinedInput-root": {
               borderRadius: "10px",
@@ -170,7 +215,7 @@ const Register = () => {
         <Button
           type="submit"
           variant="contained"
-          onClick={handleCreate}
+          onClick={handleRegister}
           sx={{
             mt: 3,
             bgcolor: "rgba(0, 0, 57, 1)",
