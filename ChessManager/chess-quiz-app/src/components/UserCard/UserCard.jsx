@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { auth, db } from "../../services/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
-const UserCard = () => {
+const UserCard = ({ uid }) => {
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const ref = doc(db, 'users', uid);
+      const snapshot = await getDoc(ref);
+      if (snapshot.exists()) setUser(snapshot.data());
+    };
+    fetchUser();
+  }, [uid]);
+
+  if (!user) return <div>Cargando...</div>;
+
   return (
     <Box
       sx={{
@@ -49,7 +64,7 @@ const UserCard = () => {
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">
-          JairoPRo
+          {user.nickname || "Usuario"}
         </Typography>
       </Box>
 
@@ -59,7 +74,7 @@ const UserCard = () => {
         <Box textAlign="center">
           <Typography variant="subtitle2">Trofeos</Typography>
           <Box fontSize="30px">🏆</Box>
-          <Typography>890</Typography>
+          <Typography>{user.trophies}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -73,7 +88,7 @@ const UserCard = () => {
             alt="Pieza"
             sx={{ width: 30, height: 30, mb: 0.5 }}
           />
-          <Typography>15</Typography>
+          <Typography>{user.games}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -82,7 +97,7 @@ const UserCard = () => {
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
           <Box fontSize="30px">🥇</Box>
-          <Typography>Oro</Typography>
+          <Typography>{user.rank}</Typography>
         </Box>
       </Box>
     </Box>
