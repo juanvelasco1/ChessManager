@@ -14,13 +14,3 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-
-export const getFirebaseInstance = async () => {
-    return { db, auth };
-};
-
-export const getUsers = async (userId) => {
-    const { db } = await getFirebaseInstance();
-    const docRef = doc(db, "users", userId);
-    const userData = await getDoc(docRef);
-};

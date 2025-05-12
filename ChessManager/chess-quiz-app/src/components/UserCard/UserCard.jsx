@@ -1,66 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
 import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
-
-const updateUserFields = async (uid) => {
-  try {
-    const userDocRef = doc(db, "users", uid);
-    const userSnapshot = await getDoc(userDocRef);
-
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      if (!userData.trophies || !userData.games || !userData.rank) {
-        await updateDoc(userDocRef, {
-          trophies: userData.trophies || 0,
-          games: userData.games || 0,
-          rank: userData.rank || 0,
-        });
-        console.log("Campos actualizados correctamente.");
-      }
-    }
-  } catch (error) {
-    console.error("Error al actualizar los campos:", error);
-  }
-};
 
 const UserCard = () => {
   const uid = useSelector((state) => state.auth.uid);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  const updateUserFields = async () => {
+    try {
+      const userDocRef = doc(db, "users", uid);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        if (!userData.trophies || !userData.games || !userData.rank) {
+          await updateDoc(userDocRef, {
+            trophies: userData.trophies || 0,
+            games: userData.games || 0,
+            rank: userData.rank || 0,
+          });
+          console.log("Campos actualizados correctamente.");
+        }
+      }
+    } catch (error) {
+      console.error("Error al actualizar los campos:", error);
+    }
+  };
+
   useEffect(() => {
     if (uid) {
-      updateUserFields(uid);
+      updateUserFields();
     }
   }, [uid]);
 
   useEffect(() => {
     if (uid) {
-        const userDocRef = doc(db, 'users', uid);
+      const userDocRef = doc(db, "users", uid);
 
-        const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
-            if (docSnapshot.exists()) {
-                console.log("Datos del usuario:", docSnapshot.data());
-                setUser(docSnapshot.data());
-            } else {
-                console.log("No se encontró el documento del usuario.");
-            }
-        });
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setUser(docSnapshot.data());
+        } else {
+          console.log("No se encontró el documento del usuario.");
+        }
+      });
 
-        return () => unsubscribe(); 
+      return () => unsubscribe();
     }
-}, [uid]);
+  }, [uid]);
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
       navigate("/login");
     } catch (error) {
-      console.error("Error signing out: ", error);
+      console.error("Error al cerrar sesión:", error.message);
     }
   };
 
