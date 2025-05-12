@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,38 +8,48 @@ import {
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import { login } from "../../store/authSlice.js";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+  
     try {
-      // Inicia sesión con Firebase Authentication
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", email));
+      const querySnapshot = await getDocs(q);
+  
+      if (querySnapshot.empty) {
+        setError("El correo no está registrado");
+        return;
+      }
+  
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+  
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
-      // Obtén el rol del usuario desde Firestore
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        const role = userData.role;
-
-        // Redirige según el rol
-        if (role === "jugador") {
-          navigate("/home");
-        } else if (role === "administrador") {
-          navigate("/home-teacher");
-        } else {
-          console.error("Rol desconocido:", role);
-          setError("Rol desconocido. Contacta al administrador.");
-        }
+  
+      dispatch(login({ uid: user.uid }));
+  
+      const role = userData.role;
+      if (role === "jugador") {
+        navigate("/home");
+      } else if (role === "administrador") {
+        navigate("/home-teacher");
       } else {
-        console.error("No se encontró información del usuario en Firestore.");
-        setError("No se encontró información del usuario. Contacta al administrador.");
+        console.error("Rol desconocido:", role);
+        setError("Rol desconocido. Contacta al administrador.");
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err.message);

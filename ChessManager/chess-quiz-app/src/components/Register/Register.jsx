@@ -40,6 +40,9 @@ const Register = () => {
         nickname: nickname,
         email: email,
         role: role,
+        trophies: 0,
+        games: 0,
+        rank: 0,
       });
 
       console.log("Usuario registrado y datos guardados en Firestore:", user);

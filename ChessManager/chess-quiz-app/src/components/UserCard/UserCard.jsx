@@ -1,23 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { signOut } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
 
-const UserCard = ({ uid }) => {
+const updateUserFields = async (uid) => {
+  try {
+    const userDocRef = doc(db, "users", uid);
+    const userSnapshot = await getDoc(userDocRef);
+
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      if (!userData.trophies || !userData.games || !userData.rank) {
+        await updateDoc(userDocRef, {
+          trophies: userData.trophies || 0,
+          games: userData.games || 0,
+          rank: userData.rank || 0,
+        });
+        console.log("Campos actualizados correctamente.");
+      }
+    }
+  } catch (error) {
+    console.error("Error al actualizar los campos:", error);
+  }
+};
+
+const UserCard = () => {
+  const uid = useSelector((state) => state.auth.uid);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const ref = doc(db, 'users', uid);
-      const snapshot = await getDoc(ref);
-      if (snapshot.exists()) setUser(snapshot.data());
-    };
-    fetchUser();
+    if (uid) {
+      updateUserFields(uid);
+    }
   }, [uid]);
 
-  if (!user) return <div>Cargando...</div>;
+  useEffect(() => {
+    if (uid) {
+        const userDocRef = doc(db, 'users', uid);
+
+        const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+            if (docSnapshot.exists()) {
+                console.log("Datos del usuario:", docSnapshot.data());
+                setUser(docSnapshot.data());
+            } else {
+                console.log("No se encontró el documento del usuario.");
+            }
+        });
+
+        return () => unsubscribe(); 
+    }
+}, [uid]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error signing out: ", error);
+    }
+  };
+
+  if (!user) {
+    return <Typography>Cargando datos del usuario...</Typography>;
+  }
 
   return (
     <Box
@@ -37,7 +86,7 @@ const UserCard = ({ uid }) => {
     >
       {/* SVG */}
       <Box
-        onClick={() => navigate("/login")}
+        onClick={handleLogout}
         sx={{
           position: "absolute",
           top: 30,
@@ -59,7 +108,6 @@ const UserCard = ({ uid }) => {
       {/* Header - avatar + nombre */}
       <Box display="flex" alignItems="center" gap={2} mb={2}>
         <Avatar
-          alt="Carlos Belcast"
           src="https://www.sdpnoticias.com/resizer/v2/RRPPNBJ33FC67GUBP5ZZUHGWLI.jpg?smart=true&auth=a78337d6179f738a790f5c4eeee41708be1b14db95a7a8de583937aa5aa4de60&width=640&height=360"
           sx={{ width: 60, height: 60 }}
         />
@@ -74,7 +122,7 @@ const UserCard = ({ uid }) => {
         <Box textAlign="center">
           <Typography variant="subtitle2">Trofeos</Typography>
           <Box fontSize="30px">🏆</Box>
-          <Typography>{user.trophies}</Typography>
+          <Typography>{user.trophies || 0}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -88,7 +136,7 @@ const UserCard = ({ uid }) => {
             alt="Pieza"
             sx={{ width: 30, height: 30, mb: 0.5 }}
           />
-          <Typography>{user.games}</Typography>
+          <Typography>{user.games || 0}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -97,7 +145,7 @@ const UserCard = ({ uid }) => {
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
           <Box fontSize="30px">🥇</Box>
-          <Typography>{user.rank}</Typography>
+          <Typography>{user.rank || 0}</Typography>
         </Box>
       </Box>
     </Box>

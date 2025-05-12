@@ -1,10 +1,11 @@
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebaseConfig";
+export const isAuthenticated = () => {
+  return localStorage.getItem('authenticated') === 'true';
+}
 
-export const registerUser = async (email, password) => {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  };
+export const login = () => {
+  localStorage.setItem('authenticated', 'true');
+}
 
-export const loginUser = async (email, password) => {
-    return await signInWithEmailAndPassword(auth, email, password);
-  };
+export const logout = () => {
+  localStorage.removeItem('authenticated');
+}
