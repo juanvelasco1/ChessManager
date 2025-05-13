@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, browserLocalPersistence, createUserWithEmailAndPassword, EmailAuthProvider, reauthenticateWithCredential, setPersistence, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
-import { getFirestore, doc, getDoc, collection, getDocs, updateDoc, addDoc, setDoc, onSnapshot, arrayUnion, arrayRemove } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
