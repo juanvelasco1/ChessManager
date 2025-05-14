@@ -57,6 +57,7 @@ const UserCard = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      alert("Sesión cerrada exitosamente");
       navigate("/login");
     } catch (error) {
       console.error("Error al cerrar sesión:", error.message);

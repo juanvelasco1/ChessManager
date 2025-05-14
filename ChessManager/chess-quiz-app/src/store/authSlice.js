@@ -4,24 +4,30 @@ const initialState = {
   uid: null,
   email: null,
   nickname: null,
+  rol: "jugador",
 };
 
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
+    setUser: (state, action) => {
+      state.uid = action.payload;
+      localStorage.setItem("uid", action.payload);
+    },
+    setTypeRol: (state, action) => {
+      state.rol = action.payload;
+      localStorage.setItem("rol", action.payload);
+    },
+
     login: (state, action) => {
       state.uid = action.payload.uid;
-      state.email = action.payload.email;
-      state.nickname = action.payload.nickname;
     },
     logout: (state) => {
       state.uid = null;
-      state.email = null;
-      state.nickname = null;
     },
   },
 });
 
-export const { login, logout } = AuthSlice.actions;
+export const { login, logout, setUser, setTypeRol } = AuthSlice.actions;
 export default AuthSlice.reducer;

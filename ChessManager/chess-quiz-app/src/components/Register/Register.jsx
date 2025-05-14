@@ -37,9 +37,9 @@ const Register = () => {
       const user = userCredential.user;
 
       await setDoc(doc(db, "users", user.uid), {
-        nickname,
-        email,
-        role,
+        nickname: nickname,
+        email: email,
+        role: role || "jugador",
         trophies: 0,
         games: 0,
         rank: 0,
@@ -51,21 +51,13 @@ const Register = () => {
         navigate("/home-teacher");
       }
     } catch (err) {
-      console.error("Error al registrar usuario:", err.message);
-      setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
+      if (err.code === "auth/email-already-in-use") {
+        setError("El correo ya está registrado. Intenta iniciar sesión.");
+      } else {
+        console.error("Error al registrar usuario:", err.message);
+        setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
+      }
     }
-  };
-
-  const inputStyles = {
-    "& .MuiOutlinedInput-root": {
-      borderRadius: "10px",
-      "& fieldset": {
-        borderColor: "rgba(0,0,57,1)",
-      },
-      "&:hover fieldset": {
-        borderColor: "rgba(0,0,57,0.8)",
-      },
-    },
   };
 
   return (
