@@ -6,31 +6,66 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  ToggleButton,
+  ToggleButtonGroup,
 } from "@mui/material";
-import { useState } from "react";
+import React, { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../services/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const [formData, setFormData] = useState({
-    apodo: "",
-    correo: "",
-    contraseña: "",
-    confirmar: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [role, setRole] = useState("jugador");
+  const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), {
+        nickname,
+        email,
+        role,
+        trophies: 0,
+        games: 0,
+        rank: 0,
+      });
+
+      if (role === "jugador") {
+        navigate("/quiz");
+      } else if (role === "administrador") {
+        navigate("/home-teacher");
+      }
+    } catch (err) {
+      console.error("Error al registrar usuario:", err.message);
+      setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
+    }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/quiz");
+  const inputStyles = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+      "& fieldset": {
+        borderColor: "rgba(0,0,57,1)",
+      },
+      "&:hover fieldset": {
+        borderColor: "rgba(0,0,57,0.8)",
+      },
+    },
   };
 
   return (
@@ -47,7 +82,10 @@ const Register = () => {
     >
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleRegister();
+        }}
         sx={{
           position: "fixed",
           top: "50%",
@@ -83,95 +121,119 @@ const Register = () => {
           The strategy, in your hands.
         </Typography>
 
-        <TextField
-          label="Apodo"
-          name="apodo"
-          value={formData.apodo}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={inputStyles}
-        />
-        <TextField
-          label="Correo"
-          name="correo"
-          type="email"
-          value={formData.correo}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={inputStyles}
-        />
-        <TextField
-          label="Contraseña"
-          name="contraseña"
-          type="password"
-          value={formData.contraseña}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={inputStyles}
-        />
-        <TextField
-          label="Confirmar Contraseña"
-          name="confirmar"
-          type="password"
-          value={formData.confirmar}
-          onChange={handleChange}
-          fullWidth
-          required
-          sx={inputStyles}
-        />
-
-        <Button
-          type="submit"
-          variant="contained"
+        {/* Selector de rol */}
+        <ToggleButtonGroup
+          value={role}
+          exclusive
+          onChange={(e, newRole) => {
+            if (newRole !== null) setRole(newRole);
+          }}
           sx={{
-            mt: 3,
-            bgcolor: "rgba(0, 0, 57, 1)",
-            color: "#fff",
+            backgroundColor: "#e0e0e0",
             borderRadius: "10px",
-            height: "50px",
-            fontWeight: "bold",
+            mb: 3,
             width: "100%",
-            "&:hover": {
-              bgcolor: "rgba(0, 0, 57, 0.8)",
+            "& .MuiToggleButtonGroup-grouped": {
+              flex: 1,
+              border: "none",
+              borderRadius: "10px !important",
+              padding: "10px 0",
+              fontWeight: "bold",
+              fontSize: "14px",
+              color: "rgba(0, 0, 57, 1)",
+              transition: "all 0.3s ease-in-out",
+              "&.Mui-selected, &.Mui-selected:hover": {
+                backgroundColor: "rgba(0, 0, 57, 1)",
+                color: "#fff",
+              },
             },
           }}
         >
-          Crear
-        </Button>
+          <ToggleButton value="jugador">Jugador</ToggleButton>
+          <ToggleButton value="administrador">Administrador</ToggleButton>
+        </ToggleButtonGroup>
 
-        <Button
-  variant="text"
-  onClick={() => navigate("/login")}
-  sx={{
-    mt: 1,
-    color: "rgba(0, 0, 57, 1)",
-    fontWeight: "bold",
-    display: "flex",
-    justifyContent: "center",
-    width: "100%", // ← centrado total
-  }}
->
-  Ya tengo cuenta
-</Button>
+        {/* Formulario */}
+        <Box display="flex" flexDirection="column" gap={2} width="100%">
+          <TextField
+            label="Apodo"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={inputStyles}
+          />
+          <TextField
+            label="Correo"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={inputStyles}
+          />
+          <TextField
+            label="Contraseña"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={inputStyles}
+          />
+          <TextField
+            label="Confirmar Contraseña"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            fullWidth
+            variant="outlined"
+            sx={inputStyles}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{
+              mt: 3,
+              bgcolor: "rgba(0, 0, 57, 1)",
+              color: "#fff",
+              borderRadius: "10px",
+              height: "50px",
+              fontWeight: "bold",
+              width: "100%",
+              "&:hover": {
+                bgcolor: "rgba(0, 0, 57, 0.8)",
+              },
+            }}
+          >
+            Crear
+          </Button>
+
+          <Button
+            variant="text"
+            onClick={() => navigate("/login")}
+            sx={{
+              mt: 1,
+              color: "rgba(0, 0, 57, 1)",
+              fontWeight: "bold",
+              display: "flex",
+              justifyContent: "center",
+              width: "100%",
+            }}
+          >
+            Ya tengo cuenta
+          </Button>
+
+          {error && (
+            <Typography textAlign="center" color="error" mt={1}>
+              {error}
+            </Typography>
+          )}
+        </Box>
       </Box>
     </Box>
   );
-};
-
-const inputStyles = {
-  mt: 2,
-  "& .MuiOutlinedInput-root": {
-    borderRadius: "10px",
-    "& fieldset": {
-      borderColor: "rgba(0,0,57,1)",
-    },
-    "&:hover fieldset": {
-      borderColor: "rgba(0,0,57,0.8)",
-    },
-  },
 };
 
 export default Register;

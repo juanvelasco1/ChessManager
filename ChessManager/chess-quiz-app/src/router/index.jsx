@@ -4,7 +4,6 @@ import { LoginScreen, RegisterScreen, HomeScreen, LoadingScreen, QuizScreen, Hom
 
 const Router = () => {
     return (
-        <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoadingScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
@@ -16,7 +15,6 @@ const Router = () => {
                 <Route path="/lobby" element={<LobbyScreen />} />
                 <Route path="/game-tournament" element={<GameTournamentScreen />} />
             </Routes>
-        </BrowserRouter>
     );
 };
 
