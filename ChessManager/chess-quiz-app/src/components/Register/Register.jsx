@@ -6,8 +6,6 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@mui/material";
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -23,7 +21,6 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [nickname, setNickname] = useState("");
-  const [role, setRole] = useState("jugador");
   const [error, setError] = useState("");
 
   const handleRegister = async () => {
@@ -36,10 +33,12 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
+      const role = email === "administrador@gmail.com" ? "administrador" : "jugador";
+
       await setDoc(doc(db, "users", user.uid), {
         nickname: nickname,
         email: email,
-        role: role || "jugador",
+        role: role,
         trophies: 0,
         games: 0,
         rank: 0,
@@ -124,38 +123,6 @@ const Register = () => {
         >
           The strategy, in your hands.
         </Typography>
-
-        {/* Selector de rol */}
-        <ToggleButtonGroup
-          value={role}
-          exclusive
-          onChange={(e, newRole) => {
-            if (newRole !== null) setRole(newRole);
-          }}
-          sx={{
-            backgroundColor: "#e0e0e0",
-            borderRadius: "10px",
-            mb: 3,
-            width: "100%",
-            "& .MuiToggleButtonGroup-grouped": {
-              flex: 1,
-              border: "none",
-              borderRadius: "10px !important",
-              padding: "10px 0",
-              fontWeight: "bold",
-              fontSize: "14px",
-              color: "rgba(0, 0, 57, 1)",
-              transition: "all 0.3s ease-in-out",
-              "&.Mui-selected, &.Mui-selected:hover": {
-                backgroundColor: "rgba(0, 0, 57, 1)",
-                color: "#fff",
-              },
-            },
-          }}
-        >
-          <ToggleButton value="jugador">Jugador</ToggleButton>
-          <ToggleButton value="administrador">Administrador</ToggleButton>
-        </ToggleButtonGroup>
 
         {/* Formulario */}
         <Box display="flex" flexDirection="column" gap={2} width="100%">
