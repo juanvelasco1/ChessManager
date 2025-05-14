@@ -60,6 +60,18 @@ const Register = () => {
     }
   };
 
+  const inputStyles = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+      "& fieldset": {
+        borderColor: "rgba(0,0,57,1)",
+      },
+      "&:hover fieldset": {
+        borderColor: "rgba(0,0,57,0.8)",
+      },
+    },
+  };
+
   return (
     <Box
       sx={{

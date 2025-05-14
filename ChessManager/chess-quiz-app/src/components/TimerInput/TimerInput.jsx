@@ -1,15 +1,33 @@
 import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
-import firebase from "firebase/compat/app";
-import 'firebase/firestore';
+import { db } from "../../services/firebaseConfig";
+import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
 const TimerInput = ({ top = "32%" }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
-  const [dateStart, setDateStart] = useState(new Date());
+  const [dateStart, setDateStart] = useState(null);
 
+  // Obtiene la fecha de inicio desde Firestore
+  useEffect(() => {
+    const fetchStartDate = async () => {
+      const timerDocRef = doc(db, "configuracionGlobal", "timerHome");
+      const docSnapshot = await getDoc(timerDocRef);
+
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        setDateStart(new Date(data.dateStart.toDate()));
+      } else {
+        console.error("El documento ");
+      }
+    };
+
+    fetchStartDate();
+  }, []);
 
   useEffect(() => {
+    if (!dateStart) return;
+
     const interval = setInterval(() => {
       const currentlyDate = new Date();
       const timeRemaining = 15 * 24 * 60 * 60 * 1000 - (currentlyDate.getTime() - dateStart.getTime());
@@ -18,20 +36,25 @@ const TimerInput = ({ top = "32%" }) => {
         restartPointsAndRanking();
       }
     }, 1000);
+
     return () => clearInterval(interval);
   }, [dateStart]);
 
+  // Reinicia puntos y ranking al terminar los 15 días
   const restartPointsAndRanking = async () => {
     try {
-      const db = firebase.firestore();
-      const usuariosRef = db.collection('usuarios');
-      const querySnapshot = await usuariosRef.get();
-      querySnapshot.forEach((doc) => {
-        doc.ref.update({
+      const usuariosRef = collection(db, "usuarios");
+      const querySnapshot = await getDocs(usuariosRef);
+      for (const docSnap of querySnapshot.docs) {
+        await updateDoc(docSnap.ref, {
           score: 0,
           rank: 0,
         });
-      });
+      }
+
+      const timerDocRef = doc(db, "configuracionGlobal", "timerHome");
+      const now = new Date();
+      await setDoc(timerDocRef, { dateStart: now });
     } catch (error) {
       console.error("Error al reiniciar puntos y ranking:", error);
     }
