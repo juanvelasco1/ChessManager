@@ -39,7 +39,7 @@ const Router = () => {
                 uid,
                 email: user.email || userData.email || null,
                 nickname: userData.nickname,
-                rol: userData.role || "jugador",
+                rol: user.email === "administrador@gmail.com" ? "administrador" : "jugador",
               })
             );
           }
@@ -50,7 +50,7 @@ const Router = () => {
         dispatch(logout());
       }
 
-      dispatch(setLoading(false)); // Finaliza la carga
+      dispatch(setLoading(false)); 
     });
 
     return () => unsubscribe();

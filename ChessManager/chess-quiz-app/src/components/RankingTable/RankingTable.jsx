@@ -15,8 +15,9 @@ const RankingTable = ({ showCurrentUser = false }) => {
   const [rankingData, setRankingData] = useState([]);
   const currentUser = useSelector((state) => ({
     nickname: state.auth.nickname,
-    points: 500, // Puedes reemplazar esto con el puntaje real del usuario
-    avatar: "https://via.placeholder.com/150", // Puedes reemplazar esto con el avatar real del usuario
+    points: state.auth.points,
+    rank: state.auth.rank,
+    avatar: state.auth.avatar || "https://via.placeholder.com/150",
   }));
 
   // Obtener datos de los usuarios desde Firestore
@@ -24,17 +25,17 @@ const RankingTable = ({ showCurrentUser = false }) => {
     const fetchRankingData = async () => {
       try {
         const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("points", "desc")); // Ordenar por puntos en orden descendente
+        const q = query(usersRef, orderBy("rank", "asc")); // Ordenar por rank en orden ascendente
         const querySnapshot = await getDocs(q);
 
-        const users = querySnapshot.docs.map((doc, index) => ({
-          rank: index + 1,
+        const users = querySnapshot.docs.map((doc) => ({
+          rank: doc.data().rank || 0,
           name: doc.data().nickname || "Sin nombre",
           points: doc.data().points || 0,
           avatar: doc.data().avatar || "https://via.placeholder.com/150",
         }));
 
-        setRankingData(users);
+        setRankingData(users.filter((user) => user.rank > 3));
       } catch (error) {
         console.error("Error al obtener los datos del ranking:", error);
       }
@@ -144,7 +145,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
               mt: 2,
             }}
           >
-            <Typography fontWeight="bold">-</Typography>
+            <Typography fontWeight="bold">#{currentUser.rank}</Typography>
             <Box display="flex" alignItems="center" gap={1}>
               <Avatar src={currentUser.avatar} sx={{ width: 30, height: 30 }} />
               <Typography fontWeight="medium">{currentUser.nickname}</Typography>
