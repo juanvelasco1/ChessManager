@@ -1,18 +1,10 @@
-import { useSelector } from "react";
-import { useEffect } from "react";
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const PrivateRoute = ({ children }) => {
-    const userId = useSelector((state) => state.auth.userId);
+const ProtectedRoute = ({ children }) => {
+  const user = useSelector((state) => state.auth.user);
 
-    useEffect(() => {
-        if (!userId) {
-            navigate("/login");
-        }
-    }, [userId]);
-
-    if (!userId) {
-        return children;
-    }
+  return user ? children : <Navigate to="/login" />;
 };
 
-export default PrivateRoute;
+export default ProtectedRoute;

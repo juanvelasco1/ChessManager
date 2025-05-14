@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../services/firebaseConfig.js';
 import { useDispatch } from 'react-redux';
@@ -34,19 +34,19 @@ const Router = () => {
     }, [dispatch]);
 
     return (
+        <BrowserRouter>
             <Routes>
                 <Route path="/" element={<LoadingScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/register" element={<RegisterScreen />} />
-                    <PrivateRoute path="/home">
-                    
-                    </PrivateRoute>
-                    <PrivateRoute path="/quiz" element={<QuizScreen />} />
-                    <PrivateRoute path="/home-teacher" element={<HomeTeacherScreen />} />
-                    <PrivateRoute path="/settings-tournament" element={<SettingsTournamentScreen />} />
-                    <PrivateRoute path="/lobby" element={<LobbyScreen />} />
-                    <PrivateRoute path="/game-tournament" element={<GameTournamentScreen />} />
+                <Route path="/home" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
+                <Route path="/quiz" element={<PrivateRoute><QuizScreen /></PrivateRoute>} />
+                <Route path="/home-teacher" element={<PrivateRoute><HomeTeacherScreen /></PrivateRoute>} />
+                <Route path="/settings-tournament" element={<PrivateRoute><SettingsTournamentScreen /></PrivateRoute>} />
+                <Route path="/lobby" element={<PrivateRoute><LobbyScreen /></PrivateRoute>} />
+                <Route path="/game-tournament" element={<PrivateRoute><GameTournamentScreen /></PrivateRoute>} />
             </Routes>
+        </BrowserRouter>
     );
 };
 
