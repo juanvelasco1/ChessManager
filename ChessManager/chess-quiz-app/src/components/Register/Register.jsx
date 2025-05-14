@@ -8,14 +8,23 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 
+const avatars = [
+    "/avatars/avatar1.jpg",
+    "/avatars/avatar2.jpg",
+    "/avatars/avatar3.jpg",
+];
 const Register = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const uid = useSelector((state) => state.auth.uid);
+  const [selectedAvatar, setSelectedAvatar] = useState(avatars[0]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +45,7 @@ const Register = () => {
       const role = email === "administrador@gmail.com" ? "administrador" : "jugador";
 
       await setDoc(doc(db, "users", user.uid), {
+        avatar: selectedAvatar,
         nickname: nickname,
         email: email,
         role: role,
@@ -161,6 +171,28 @@ const Register = () => {
             variant="outlined"
             sx={inputStyles}
           />
+
+          {/* Selección de avatar */}
+          <Typography variant="body2" color="rgba(0, 0, 57, 1)" fontWeight="bold">
+            Selecciona un avatar:
+          </Typography>
+          <div style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
+            {avatars.map((avatar) => (
+              <img
+                key={avatar}
+                src={avatar}
+                alt="Avatar"
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  border: selectedAvatar === avatar ? "2px solid blue" : "1px solid gray",
+                  borderRadius: "50%",
+                  cursor: "pointer",
+                }}
+                onClick={() => setSelectedAvatar(avatar)}
+              />
+            ))}
+          </div>
 
           <Button
             type="submit"

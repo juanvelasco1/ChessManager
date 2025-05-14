@@ -108,7 +108,7 @@ const UserCard = () => {
       {/* Header - avatar + nombre */}
       <Box display="flex" alignItems="center" gap={2} mb={2}>
         <Avatar
-          src="https://www.sdpnoticias.com/resizer/v2/RRPPNBJ33FC67GUBP5ZZUHGWLI.jpg?smart=true&auth=a78337d6179f738a790f5c4eeee41708be1b14db95a7a8de583937aa5aa4de60&width=640&height=360"
+          src={user.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">
