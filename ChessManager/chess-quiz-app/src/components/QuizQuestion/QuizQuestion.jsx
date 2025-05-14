@@ -200,7 +200,6 @@ const QuizQuestion = () => {
   });
 
   useEffect(() => {
-    // On mount, recalculate score and correctCount based on current progress to ensure consistency
     let recalculatedScore = 0;
     let recalculatedCorrect = 0;
     for (let i = 0; i < current; i++) {
@@ -257,7 +256,6 @@ const QuizQuestion = () => {
       localStorage.removeItem("quizScore");
       localStorage.removeItem("quizCurrent");
       localStorage.removeItem("quizCorrect");
-      // Remove saved answers
       for(let i = 0; i < questions.length; i++) {
         localStorage.removeItem(`quizAnswer_${i}`);
       }
