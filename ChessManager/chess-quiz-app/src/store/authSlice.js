@@ -27,7 +27,9 @@ const AuthSlice = createSlice({
       state.rol = action.payload.rol;
       state.loading = false;
       localStorage.setItem("uid", action.payload.uid);
-      localStorage.setItem("email", action.payload.email);
+      if (action.payload.email !== null) {
+        localStorage.setItem("email", action.payload.email);
+      }
       localStorage.setItem("nickname", action.payload.nickname);
       localStorage.setItem("rol", action.payload.rol);
     },

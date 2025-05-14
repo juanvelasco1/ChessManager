@@ -266,7 +266,8 @@ const QuizQuestion = () => {
       <Box
         sx={{
           width: "100%",
-          height: "100vh",
+          height: "100dvh",
+          overflow: "hidden",
           maxWidth: 420,
           mx: "auto",
           display: "flex",
@@ -319,7 +320,9 @@ const QuizQuestion = () => {
       sx={{
         width: "100%",
         maxWidth: { xs: 420, sm: 600, md: 800 },
-        height: "100vh",
+        height: "100dvh",
+        overflowY: "hidden",
+        overflowX: "hidden",
         mx: "auto",
         px: { xs: 2, sm: 4, md: 6 },
         position: "relative",
@@ -327,7 +330,6 @@ const QuizQuestion = () => {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        overflow: "hidden",
       }}
     >
       {/* Contador */}
@@ -345,15 +347,19 @@ const QuizQuestion = () => {
 
       {/* Contenido */}
       <Box sx={{ width: "100%", maxWidth: 600 }}>
-        <Typography
-          fontWeight="bold"
-          fontSize={{ xs: 24, sm: 28 }}
-          color="#000039"
-          mb={2}
-          sx={{ textAlign: "center", px: 2 }}
-        >
-          {question.text}
-        </Typography>
+        <Box mb={2} sx={{ textAlign: "center", px: 2 }}>
+          {question.text.split("\n").map((line, idx) => (
+            <Typography
+              key={idx}
+              fontWeight="bold"
+              fontSize={{ xs: 24, sm: 28 }}
+              color="#000039"
+              mb={0.5}
+            >
+              {`${idx + 1}. ${line}`}
+            </Typography>
+          ))}
+        </Box>
 
         {question.image && (
           <Box
@@ -395,11 +401,15 @@ const QuizQuestion = () => {
                 disabled={!!selected}
                 sx={{
                   width: "100%",
-                  height: { xs: 72, sm: 80 },
+                  maxWidth: 250,
+                  mx: "auto",
+                  minWidth: 0,
+                  height: { xs: 100, sm: 100, md: 120 },
+                  aspectRatio: "3 / 4",
                   backgroundColor: getColor(label),
                   color: "#fff",
                   fontWeight: "bold",
-                  borderRadius: "10px",
+                  borderRadius: "14px",
                   boxShadow: 2,
                   fontSize: { xs: 16, sm: 18 },
                   display: "flex",
@@ -432,7 +442,17 @@ const QuizQuestion = () => {
                     sx={{ width: 28, height: 28, mb: 0.5 }}
                   />
                 )}
-                {label}
+                {question.image ? (
+                  label.split(/(?=\d+\.\s)/).map((line, index) => (
+                    <Typography key={index} component="div">
+                      {line.trim()}
+                    </Typography>
+                  ))
+                ) : (
+                  label.split("\\n").map((line, index) => (
+                    <span key={index}>{line}</span>
+                  ))
+                )}
               </Button>
             );
           })}

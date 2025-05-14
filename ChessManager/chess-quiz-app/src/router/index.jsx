@@ -38,7 +38,7 @@ const Router = () => {
             dispatch(
               login({
                 uid,
-                email: userData.email,
+                email: user.email || userData.email || null,
                 nickname: userData.nickname,
                 rol: userData.role || null, // Asegúrate de que el rol se obtenga correctamente
               })
