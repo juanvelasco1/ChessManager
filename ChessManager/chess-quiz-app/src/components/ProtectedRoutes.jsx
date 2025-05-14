@@ -1,10 +1,18 @@
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const ProtectedRoute = ({ children }) => {
-  const user = useSelector((state) => state.auth.user);
+const ProtectedRoute = ({ children, requiredRole }) => {
+  const { uid, rol } = useSelector((state) => state.auth);
 
-  return user ? children : <Navigate to="/login" />;
+  if (!uid) {
+    return <Navigate to="/login" />;
+  }
+
+  if (requiredRole && rol !== requiredRole) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;

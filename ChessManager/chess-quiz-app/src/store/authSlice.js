@@ -4,6 +4,7 @@ const initialState = {
   uid: null,
   email: null,
   nickname: null,
+  rol: "jugador",
 };
 
 const AuthSlice = createSlice({
@@ -13,6 +14,10 @@ const AuthSlice = createSlice({
     setUser: (state, action) => {
       state.uid = action.payload;
       localStorage.setItem("uid", action.payload);
+    },
+    setTypeRol: (state, action) => {
+      state.rol = action.payload;
+      localStorage.setItem("rol", action.payload);
     },
 
     login: (state, action) => {
@@ -24,5 +29,5 @@ const AuthSlice = createSlice({
   },
 });
 
-export const { login, logout, setUser } = AuthSlice.actions;
+export const { login, logout, setUser, setTypeRol } = AuthSlice.actions;
 export default AuthSlice.reducer;
