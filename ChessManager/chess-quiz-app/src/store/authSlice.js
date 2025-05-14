@@ -17,13 +17,9 @@ const AuthSlice = createSlice({
 
     login: (state, action) => {
       state.uid = action.payload.uid;
-      state.email = action.payload.email;
-      state.nickname = action.payload.nickname;
     },
     logout: (state) => {
       state.uid = null;
-      state.email = null;
-      state.nickname = null;
     },
   },
 });

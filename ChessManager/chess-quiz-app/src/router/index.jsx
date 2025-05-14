@@ -39,7 +39,7 @@ const Router = () => {
                 <Route path="/" element={<LoadingScreen />} />
                 <Route path="/login" element={<LoginScreen />} />
                 <Route path="/register" element={<RegisterScreen />} />
-                <Route path="/home" element={<PrivateRoute><HomeScreen /></PrivateRoute>} />
+                <Route path="/home" element={<HomeScreen />} />
                 <Route path="/quiz" element={<PrivateRoute><QuizScreen /></PrivateRoute>} />
                 <Route path="/home-teacher" element={<PrivateRoute><HomeTeacherScreen /></PrivateRoute>} />
                 <Route path="/settings-tournament" element={<PrivateRoute><SettingsTournamentScreen /></PrivateRoute>} />

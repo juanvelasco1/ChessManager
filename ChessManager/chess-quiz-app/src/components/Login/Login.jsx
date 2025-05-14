@@ -23,6 +23,11 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!email || !password) {
+      setError("Por favor, ingresa un correo y una contraseña.");
+      return;
+    }
   
     try {
       const usersRef = collection(db, "users");
@@ -42,18 +47,26 @@ const Login = () => {
   
       dispatch(login({ uid: user.uid }));
   
-      const role = userData.role;
+      const role = userData.role || "jugador";
       if (role === "jugador") {
         navigate("/home");
       } else if (role === "administrador") {
         navigate("/home-teacher");
       } else {
-        console.error("Rol desconocido:", role);
-        setError("Rol desconocido. Contacta al administrador.");
+        console.error("Rol desconocido o no definido:", role);
+        setError("Rol desconocido o no definido. Contacta al administrador.");
       }
     } catch (err) {
-      console.error("Error al iniciar sesión:", err.message);
-      setError("Correo o contraseña incorrectos");
+      console.error("Error al iniciar sesión:", err.code, err.message);
+      if (err.code === "auth/user-not-found") {
+        setError("El usuario no existe.");
+      } else if (err.code === "auth/wrong-password") {
+        setError("Contraseña incorrecta.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("El correo electrónico no es válido.");
+      } else {
+        setError("Error al iniciar sesión. Intenta de nuevo.");
+      }
     }
   };
 

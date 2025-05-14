@@ -39,7 +39,7 @@ const Register = () => {
       await setDoc(doc(db, "users", user.uid), {
         nickname: nickname,
         email: email,
-        role: role,
+        role: role || "jugador",
         trophies: 0,
         games: 0,
         rank: 0,
@@ -54,8 +54,12 @@ const Register = () => {
         navigate("/home-teacher");
       }
     } catch (err) {
-      console.error("Error al registrar usuario:", err.message);
-      setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
+      if (err.code === "auth/email-already-in-use") {
+        setError("El correo ya está registrado. Intenta iniciar sesión.");
+      } else {
+        console.error("Error al registrar usuario:", err.message);
+        setError("No se pudo registrar el usuario. Inténtalo de nuevo.");
+      }
     }
   };
 

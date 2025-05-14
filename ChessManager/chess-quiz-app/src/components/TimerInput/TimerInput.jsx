@@ -1,22 +1,50 @@
 import { Box } from "@mui/material";
 import { useState, useEffect } from "react";
+import firebase from "firebase/compat/app";
+import 'firebase/firestore';
+
 
 const TimerInput = ({ top = "32%" }) => {
-  const [timeLeft, setTimeLeft] = useState(15 * 24 * 60 * 60);
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const [dateStart, setDateStart] = useState(new Date());
+
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimeLeft((prev) => (prev <= 1 ? 15 * 24 * 60 * 60 : prev - 1));
+      const currentlyDate = new Date();
+      const timeRemaining = 15 * 24 * 60 * 60 * 1000 - (currentlyDate.getTime() - dateStart.getTime());
+      setTimeRemaining(timeRemaining);
+      if (timeRemaining <= 0) {
+        restartPointsAndRanking();
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [dateStart]);
 
-  const formatTime = (s) => {
-    const d = Math.floor(s / (24 * 60 * 60));
-    const h = Math.floor((s % (24 * 60 * 60)) / (60 * 60));
-    const m = Math.floor((s % (60 * 60)) / 60);
-    return `${d}d-${h}h-${m}m`;
+  const restartPointsAndRanking = async () => {
+    try {
+      const db = firebase.firestore();
+      const usuariosRef = db.collection('usuarios');
+      const querySnapshot = await usuariosRef.get();
+      querySnapshot.forEach((doc) => {
+        doc.ref.update({
+          score: 0,
+          rank: 0,
+        });
+      });
+    } catch (error) {
+      console.error("Error al reiniciar puntos y ranking:", error);
+    }
   };
+
+  const formatTime = (time) => {
+    const day = Math.floor(time / (24 * 60 * 60 * 1000));
+    const hours = Math.floor((time % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+    const minutes = Math.floor((time % (60 * 60 * 1000)) / (60 * 1000));
+    const seconds = Math.floor((time % (60 * 1000)) / 1000);
+    return `${day}d ${hours}h ${minutes}m ${seconds}s`;
+  };
+
 
   return (
     <Box
@@ -40,7 +68,7 @@ const TimerInput = ({ top = "32%" }) => {
         textAlign: "center",
       }}
     >
-      {formatTime(timeLeft)}
+      {formatTime(timeRemaining)}
     </Box>
   );
 };
