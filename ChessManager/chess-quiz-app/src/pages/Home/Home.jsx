@@ -16,7 +16,7 @@ const HomeScreen = () => {
                 <Podium />
             </div>
             <div>
-                <RankingTable />
+                <RankingTable showCurrentUser={true} />
             </div>
         </>
     );

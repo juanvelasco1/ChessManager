@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../services/firebaseConfig.js";
 import { useDispatch } from "react-redux";
-import { logout, setUser, setTypeRol } from "../store/authSlice.js";
+import { logout, setUser, login, setLoading } from "../store/authSlice.js";
 import { useEffect } from "react";
-import { doc, getDoc } from "firebase/firestore"; // Importar Firestore
+import { doc, getDoc } from "firebase/firestore";
 import ProtectedRoute from "../components/ProtectedRoutes.jsx";
 
 import {
@@ -23,17 +23,25 @@ const Router = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(setLoading(true)); // Inicia la carga
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        dispatch(setUser(user.uid));
+        const uid = user.uid;
+        dispatch(setUser(uid));
 
         try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
+          const userDoc = await getDoc(doc(db, "users", uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
-            dispatch(setTypeRol(userData.role || "jugador"));
-          } else {
-            console.error("El documento del usuario no existe en Firestore.");
+            dispatch(
+              login({
+                uid,
+                email: userData.email,
+                nickname: userData.nickname,
+                rol: userData.role || "jugador",
+              })
+            );
           }
         } catch (error) {
           console.error("Error al obtener el rol del usuario desde Firestore:", error);
@@ -41,6 +49,8 @@ const Router = () => {
       } else {
         dispatch(logout());
       }
+
+      dispatch(setLoading(false)); // Finaliza la carga
     });
 
     return () => unsubscribe();

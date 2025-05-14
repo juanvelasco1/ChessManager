@@ -1,10 +1,46 @@
 import { Box, Avatar, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { signOut } from "firebase/auth";
+import { auth, db } from "../../services/firebaseConfig";
+import { doc, onSnapshot } from "firebase/firestore";
+
 
 const UserTeacher = () => {
-    
+    const uid = useSelector((state) => state.auth.uid);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (!uid) return;
+  
+      const userDocRef = doc(db, "users", uid);
+  
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setUser(docSnapshot.data());
+        } else {
+          console.error("El documento del usuario no existe.");
+        }
+      });
+  
+      return () => unsubscribe();
+    }, [uid]);
+
+    const handleLogout = async () => {
+        try {
+          await signOut(auth);
+          alert("Sesión cerrada exitosamente");
+          navigate("/login");
+        } catch (error) {
+          console.error("Error al cerrar sesión:", error.message);
+        }
+      };
+    
+      if (!user) {
+        return <Typography>Cargando datos del usuario...</Typography>;
+      }
 
     return (
         <>
@@ -25,7 +61,8 @@ const UserTeacher = () => {
     >
       {/* SVG */}
       <Box
-        onClick={() => navigate("/login")}
+        coursor="pointer"
+        onClick={handleLogout}
         sx={{
           position: "absolute",
           top: 30,
@@ -52,7 +89,7 @@ const UserTeacher = () => {
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">
-          Maestro Shifu
+          {user.nickname || "Usuario"}
         </Typography>
       </Box>
       </Box>

@@ -17,7 +17,7 @@ const HomeTeacherScreen = () => {
         <Podium />
       </div>
       <div>
-        <RankingTable />
+        <RankingTable showCurrentUser={false} />
       </div>
       <div>
         <NavBar />
