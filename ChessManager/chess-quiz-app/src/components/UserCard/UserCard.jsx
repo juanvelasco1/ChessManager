@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
-import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, getDoc, collection, getDocs, query, orderBy } from "firebase/firestore";
 
 const UserCard = () => {
   const uid = useSelector((state) => state.auth.uid);
   const [user, setUser] = useState(null);
+  const [topPlayers, setTopPlayers] = useState([]);
   const navigate = useNavigate();
 
   const updateUserFields = async () => {
@@ -54,6 +55,24 @@ const UserCard = () => {
     }
   }, [uid]);
 
+  useEffect(() => {
+    const fetchTopPlayers = async () => {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, orderBy("rank", "asc"));
+      const querySnapshot = await getDocs(q);
+
+      const users = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        nickname: doc.data().nickname || "Jugador",
+        rank: doc.data().rank || 0
+      }));
+
+      setTopPlayers(users.slice(0, 3));
+    };
+
+    fetchTopPlayers();
+  }, []);
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -67,6 +86,13 @@ const UserCard = () => {
   if (!user) {
     return <Typography>Cargando datos del usuario...</Typography>;
   }
+
+  const getRankImage = (rank) => {
+    if (rank >= 90) return "🥇"; // Oro
+    if (rank >= 60) return "🥈"; // Plata
+    if (rank >= 30) return "🏵️"; // Bronce
+    return "🪵"; // Madera
+  };
 
   return (
     <Box
@@ -144,9 +170,23 @@ const UserCard = () => {
         {/* Rango */}
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">🥇</Box>
+          <Box fontSize="30px">
+            {getRankImage(user.rank)}
+          </Box>
           <Typography>{user.rank || 0}</Typography>
         </Box>
+      </Box>
+
+      {/* Podio */}
+      <Box display="flex" justifyContent="center" mt={3} gap={4}>
+        {topPlayers.map((player) => (
+          <Box key={player.id} textAlign="center" sx={{ width: 100 }}>
+            <Typography variant="subtitle1" fontWeight="bold">
+              {player.nickname}
+            </Typography>
+            <Typography variant="h6">{player.rank}</Typography>
+          </Box>
+        ))}
       </Box>
     </Box>
   );
