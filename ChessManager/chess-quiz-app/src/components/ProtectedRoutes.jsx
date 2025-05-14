@@ -3,10 +3,12 @@ import { useSelector } from "react-redux";
 import { CircularProgress, Box } from "@mui/material";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const { uid, rol, loading } = useSelector((state) => state.auth);
+  const authState = useSelector((state) => state.auth); // Obtén todo el estado auth
+  console.log("Estado global auth:", authState); // Depuración
+
+  const { uid, rol, loading } = authState;
 
   if (loading) {
-    // Mostrar un indicador de carga mientras los datos se sincronizan
     return (
       <Box
         sx={{

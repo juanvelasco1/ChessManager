@@ -34,14 +34,17 @@ const Router = () => {
           const userDoc = await getDoc(doc(db, "users", uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
+            console.log("Datos del usuario desde Firestore:", userData); // Depuración
             dispatch(
               login({
                 uid,
                 email: userData.email,
                 nickname: userData.nickname,
-                rol: userData.role || "jugador",
+                rol: userData.role || null, // Asegúrate de que el rol se obtenga correctamente
               })
             );
+          } else {
+            console.error("El documento del usuario no existe en Firestore.");
           }
         } catch (error) {
           console.error("Error al obtener el rol del usuario desde Firestore:", error);

@@ -4,7 +4,7 @@ const initialState = {
   uid: localStorage.getItem("uid") || null,
   email: localStorage.getItem("email") || null,
   nickname: localStorage.getItem("nickname") || null,
-  rol: localStorage.getItem("rol") || "jugador",
+  rol: localStorage.getItem("rol") || null,
   loading: true,
 };
 
