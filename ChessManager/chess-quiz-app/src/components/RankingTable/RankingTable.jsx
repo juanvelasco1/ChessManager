@@ -26,18 +26,18 @@ const RankingTable = ({ showCurrentUser = false }) => {
     const fetchRankingData = async () => {
       try {
         const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("rank", "asc")); // Ordenar por rank en orden ascendente
+        const q = query(usersRef, orderBy("points", "desc")); // Ordenar por puntos en orden descendente
         const querySnapshot = await getDocs(q);
 
-        const users = querySnapshot.docs.map((doc) => ({
+        const users = querySnapshot.docs.map((doc, index) => ({
           uid: doc.id, // Usar el ID del documento como identificador único
-          rank: doc.data().rank || 0,
+          rank: index + 4, // El top inicia en la posición 4
           name: doc.data().nickname || "Sin nombre",
           points: doc.data().points || 0,
           avatar: doc.data().avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
         }));
 
-        setRankingData(users.filter((user) => user.rank > 3));
+        setRankingData(users);
       } catch (error) {
         console.error("Error al obtener los datos del ranking:", error);
       }
@@ -46,7 +46,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
     fetchRankingData();
   }, []);
 
-  // Sincronizar datos del usuario actual
+  // Sincronizar datos del usuario actual y calcular su rango
   useEffect(() => {
     if (uid) {
       const userDocRef = doc(db, "users", uid);
@@ -54,19 +54,24 @@ const RankingTable = ({ showCurrentUser = false }) => {
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
-          setCurrentUser((prev) => ({
-            ...prev,
-            rank: userData.rank || "N/A",
-            points: userData.points || 0,
+
+          // Calcular el rango del usuario actual basado en rankingData
+          const userRank = rankingData.findIndex((user) => user.uid === uid);
+          const calculatedRank = userRank !== -1 ? userRank + 4 : "N/A"; // Sumar 4 si el usuario está en la lista
+
+          setCurrentUser({
+            uid: uid,
             nickname: userData.nickname || "Sin nombre",
+            points: userData.points || 0,
             avatar: userData.avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
-          }));
+            rank: calculatedRank,
+          });
         }
       });
 
       return () => unsubscribe();
     }
-  }, [uid]);
+  }, [uid, rankingData]); // Dependemos de rankingData para calcular el rango dinámicamente
 
   return (
     <Box
