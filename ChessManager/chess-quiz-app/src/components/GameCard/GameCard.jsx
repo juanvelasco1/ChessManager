@@ -30,7 +30,8 @@ const GameCard = () => {
   return (
     <Box
       sx={{
-        width: 410,
+        width: "100%",
+        maxWidth: { xs: 410, md: 700 },
         mx: "auto",
         height: 195,
         borderRadius: "12px",
@@ -40,6 +41,7 @@ const GameCard = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        px: { xs: 0, md: 2 },
       }}
     >
       {/* Jugadores */}
@@ -51,10 +53,10 @@ const GameCard = () => {
           backgroundColor: "#000039",
           color: "#fff",
           py: 1.5,
-          px: 2,
+          px: { xs: 2, md: 4 },
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
           <Avatar
             src="https://cdn-icons-png.flaticon.com/512/701/701967.png"
             sx={{ width: 40, height: 40, mb: 0.5 }}
@@ -64,11 +66,11 @@ const GameCard = () => {
           </Typography>
         </Box>
 
-        <Typography fontWeight="bold" fontSize={18}>
+        <Typography fontWeight="bold" fontSize={{ xs: 18, md: 24 }} sx={{ textAlign: "center", flex: 1 }}>
           Vs
         </Typography>
 
-        <Box display="flex" flexDirection="column" alignItems="center">
+        <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
           <Avatar
             src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
             sx={{ width: 40, height: 40, mb: 0.5 }}
@@ -92,7 +94,7 @@ const GameCard = () => {
           sx={{
             borderRadius: 0,
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: { xs: 16, md: 20 },
             backgroundColor: leftColor,
             color: "#fff",
             borderRight: "1px solid white",
@@ -108,7 +110,7 @@ const GameCard = () => {
           sx={{
             borderRadius: 0,
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: { xs: 16, md: 20 },
             backgroundColor: middleColor,
             color: "#fff",
             height: "100%",
@@ -123,7 +125,7 @@ const GameCard = () => {
           sx={{
             borderRadius: 0,
             fontWeight: "bold",
-            fontSize: 16,
+            fontSize: { xs: 16, md: 20 },
             backgroundColor: rightColor,
             color: "#fff",
             borderLeft: "1px solid white",

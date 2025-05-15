@@ -18,7 +18,7 @@ const HomeScreen = () => {
         isMobile ? (
             <div style={{ padding: "10px 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <UserCard />
-                <TimerInput />
+                <TimerInput topMobile="40%" topDesktop="0%" />
                 <Podium />
                 <RankingTable showCurrentUser={true} />
             </div>
@@ -69,7 +69,7 @@ const HomeScreen = () => {
                                 <UserCard />
                             </div>
                             <div style={{ flex: "1", minWidth: "388px", display: "flex", justifyContent: "flex-end" }}>
-                                <TimerInput />
+                                <TimerInput topMobile="40%" topDesktop="0%" />
                             </div>
                         </div>
 

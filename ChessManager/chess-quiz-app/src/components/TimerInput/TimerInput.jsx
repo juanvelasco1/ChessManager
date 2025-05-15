@@ -1,12 +1,15 @@
-import { Box } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { useState, useEffect } from "react";
 import { db } from "../../services/firebaseConfig";
 import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
-const TimerInput = () => {
+const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "32%", topPcUser = "340px", role = "user" }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [dateStart, setDateStart] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   // Obtiene la fecha de inicio desde Firestore
   useEffect(() => {
@@ -68,17 +71,15 @@ const TimerInput = () => {
     return `${day}d ${hours}h ${minutes}m ${seconds}s`;
   };
 
-
   return (
     <Box
       sx={{
         position: "absolute",
-        top: 340,
+        top: isMobile
+          ? (role === "admin" ? topMobileAdmin : topMobileUser)
+          : (role === "admin" ? topPcAdmin : topPcUser),
         right: 0,
-        transform: {
-          xs: "translateY(-50%)",
-          md: "translateY(-370%)", // Raise position by ~30% more on desktop
-        },
+        transform: "none",
         bgcolor: "#000039",
         color: "white",
         px: 3,
