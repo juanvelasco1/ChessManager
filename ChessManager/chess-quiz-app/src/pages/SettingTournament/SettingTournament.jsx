@@ -7,7 +7,16 @@ const SettingTournamentScreen = () => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        minHeight: "100vh",
+        paddingTop: "90px",
+      }}
+    >
       {/* Botón de retroceso */}
       <IconButton
         onClick={() => navigate(-1)}
@@ -24,12 +33,23 @@ const SettingTournamentScreen = () => {
 
       <Box
         sx={{
-          mt: "75px",
-          width: 420,
-          mx: "auto",
+          width: "100%",
+          maxWidth: 480,
           display: "flex",
-          gap: "10px",
-          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+          justifyContent: {
+            xs: "center", // mobile
+            md: "flex-start", // desktop
+          },
+          paddingLeft: {
+            xs: 0,
+            md: "100px", // margen izquierdo en pc
+          },
+          transform: {
+            xs: "none",
+            md: "translateX(-160px)",
+          },
         }}
       >
         {/* Botón Crear */}
@@ -102,7 +122,7 @@ const SettingTournamentScreen = () => {
       </Box>
 
       <NavBar />
-    </>
+    </Box>
   );
 };
 

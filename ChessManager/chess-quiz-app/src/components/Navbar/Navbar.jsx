@@ -29,9 +29,13 @@ const NavBar = () => {
       sx={{
         position: "fixed",
         bottom: 50,
-        left: "49%",
+        left: "50%",
         transform: "translateX(-50%)",
-        width: 400,
+        width: {
+          xs: "90%",      // Mobile
+          md: "120%",       // Desktop/tablet breakpoint
+        },
+        maxWidth: 700,
         zIndex: 1000,
       }}
     >
