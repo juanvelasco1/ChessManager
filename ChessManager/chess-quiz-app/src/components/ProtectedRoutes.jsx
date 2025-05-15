@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   const { uid, rol, email, loading } = useSelector((state) => state.auth);
 
   if (loading) {
-    // Mostrar un indicador de carga mientras los datos se sincronizan
     return (
       <Box
         sx={{
