@@ -1,23 +1,25 @@
 import {
   Box,
   Typography,
-  Avatar,
-  ToggleButton,
-  ToggleButtonGroup,
+  Avatar
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
 const RankingTable = ({ showCurrentUser = false }) => {
   const [rankingData, setRankingData] = useState([]);
-  const currentUser = useSelector((state) => ({
-    nickname: state.auth.nickname,
-    points: state.auth.points,
-    rank: state.auth.rank,
-    avatar: state.auth.avatar || "https://via.placeholder.com/150",
-  }));
+  const [currentUser, setCurrentUser] = useState({
+    uid: "",
+    nickname: "",
+    points: 0,
+    avatar: "ChessManager/chess-quiz-app/public/avatars/default.jpg",
+    rank: "N/A",
+  });
+
+  // Dividir el selector en múltiples llamadas
+  const uid = useSelector((state) => state.auth.uid);
 
   // Obtener datos de los usuarios desde Firestore
   useEffect(() => {
@@ -28,10 +30,11 @@ const RankingTable = ({ showCurrentUser = false }) => {
         const querySnapshot = await getDocs(q);
 
         const users = querySnapshot.docs.map((doc) => ({
+          uid: doc.id, // Usar el ID del documento como identificador único
           rank: doc.data().rank || 0,
           name: doc.data().nickname || "Sin nombre",
           points: doc.data().points || 0,
-          avatar: doc.data().avatar || "https://via.placeholder.com/150",
+          avatar: doc.data().avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
         }));
 
         setRankingData(users.filter((user) => user.rank > 3));
@@ -42,6 +45,28 @@ const RankingTable = ({ showCurrentUser = false }) => {
 
     fetchRankingData();
   }, []);
+
+  // Sincronizar datos del usuario actual
+  useEffect(() => {
+    if (uid) {
+      const userDocRef = doc(db, "users", uid);
+
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          setCurrentUser((prev) => ({
+            ...prev,
+            rank: userData.rank || "N/A",
+            points: userData.points || 0,
+            nickname: userData.nickname || "Sin nombre",
+            avatar: userData.avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
+          }));
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [uid]);
 
   return (
     <Box
@@ -99,7 +124,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
       >
         {rankingData.map((user) => (
           <Box
-            key={user.rank}
+            key={user.uid} // Usar uid como clave única
             sx={{
               border: "1.5px solid #000039",
               bgcolor: "white",
@@ -115,7 +140,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
           >
             <Typography fontWeight="bold">#{user.rank}</Typography>
             <Box display="flex" alignItems="center" gap={1}>
-              <Avatar src={user.avatar} sx={{ width: 30, height: 30 }} />
+              <Avatar src={user.avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg"} sx={{ width: 30, height: 30 }} />
               <Typography fontWeight="medium">{user.name}</Typography>
             </Box>
             <Typography fontWeight="medium">{user.points}</Typography>
@@ -123,7 +148,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
         ))}
 
         {/* Usuario actual (solo si showCurrentUser es true) */}
-        {showCurrentUser && (
+        {showCurrentUser && currentUser.rank && (
           <Box
             sx={{
               border: "none",
