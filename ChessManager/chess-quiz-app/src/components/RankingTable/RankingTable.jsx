@@ -120,6 +120,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
           maxHeight: { xs: 230, md: 400 },
           overflowY: "auto",
           pr: 1,
+          position: "relative", // Necesario para que sticky funcione
         }}
       >
         {rankingData.map((user) => (
@@ -147,7 +148,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
           </Box>
         ))}
 
-        {/* Usuario actual (solo si showCurrentUser es true) */}
+        {/* Usuario actual (fijado visualmente) */}
         {showCurrentUser && currentUser.rank && (
           <Box
             sx={{
@@ -161,6 +162,9 @@ const RankingTable = ({ showCurrentUser = false }) => {
               py: 1,
               borderRadius: "10px",
               mt: 2,
+              position: "sticky", // Hace que el elemento se quede fijo
+              bottom: 0, // Fijado en la parte inferior del contenedor
+              zIndex: 1, // Asegura que esté por encima de otros elementos
             }}
           >
             <Typography fontWeight="bold">#{currentUser.rank}</Typography>
