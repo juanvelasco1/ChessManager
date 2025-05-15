@@ -4,7 +4,7 @@ import { db } from "../../services/firebaseConfig";
 import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
-const TimerInput = ({ top = "32%" }) => {
+const TimerInput = () => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [dateStart, setDateStart] = useState(null);
 
@@ -72,10 +72,13 @@ const TimerInput = ({ top = "32%" }) => {
   return (
     <Box
       sx={{
-        position: "fixed",
-        top: top,
+        position: "absolute",
+        top: 340,
         right: 0,
-        transform: "translateY(-50%)",
+        transform: {
+          xs: "translateY(-50%)",
+          md: "translateY(-370%)", // Raise position by ~30% more on desktop
+        },
         bgcolor: "#000039",
         color: "white",
         px: 3,
@@ -86,7 +89,6 @@ const TimerInput = ({ top = "32%" }) => {
         fontFamily: "Roboto",
         fontWeight: "bold",
         fontSize: "1.1rem",
-        zIndex: 1000,
         maxWidth: 180,
         textAlign: "center",
       }}

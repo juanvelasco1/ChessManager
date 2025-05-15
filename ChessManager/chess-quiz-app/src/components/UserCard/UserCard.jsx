@@ -95,7 +95,7 @@ const UserCard = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: 40,
+        top: { xs: 40, md: 105 }, // Puedes modificar `-20` para ajustar la posición vertical en desktop (md)
         mx: "auto",
       }}
     >

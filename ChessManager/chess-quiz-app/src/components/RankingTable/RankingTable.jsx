@@ -11,7 +11,6 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
 const RankingTable = ({ showCurrentUser = false }) => {
-  const [mode, setMode] = useState("general");
   const [rankingData, setRankingData] = useState([]);
   const currentUser = useSelector((state) => ({
     nickname: state.auth.nickname,
@@ -45,36 +44,30 @@ const RankingTable = ({ showCurrentUser = false }) => {
   }, []);
 
   return (
-    <Box sx={{ width: 412, mx: "auto", mt: 3, top: 40, position: "relative" }}>
-      {/* Selector */}
-      <ToggleButtonGroup
-        exclusive
-        value={mode}
-        onChange={(e, newMode) => newMode && setMode(newMode)}
+    <Box
+      sx={{
+        width: { xs: 412, md: "500px" },
+        mx: "auto",
+        mt: { xs: 3, md: -17 },
+        top: { xs: 40, md: 0 },
+        position: { xs: "relative", md: "relative" },
+      }}
+    >
+      <Typography
         sx={{
-          width: "100%",
-          borderRadius: "12px",
-          mb: 2,
-          backgroundColor: "#e0e0e0",
-          "& .MuiToggleButtonGroup-grouped": {
-            minWidth: "50%",
-            border: "none",
-            borderRadius: "12px !important",
-            paddingY: 1.5,
-            fontWeight: "bold",
-            fontSize: "16px",
-            color: "rgba(0, 0, 57, 1)",
-            transition: "all 0.3s ease-in-out",
-            "&.Mui-selected, &.Mui-selected:hover": {
-              backgroundColor: "rgba(0, 0, 57, 1)",
-              color: "#fff",
-            },
-          },
+          width: "fit-content",
+          mt: { xs: -4, md: -1 },
+          mb: 1,
+          p: 1.5,
+          textAlign: "center",
+          fontWeight: 900,
+          fontSize: "37px",
+          color: "#000039",
+          mx: "auto",
         }}
       >
-        <ToggleButton value="general">General</ToggleButton>
-        <ToggleButton value="1vs1">1vs1</ToggleButton>
-      </ToggleButtonGroup>
+        Tabla de puntos
+      </Typography>
 
       {/* Encabezado fijo */}
       <Box
@@ -99,7 +92,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
       {/* Participantes scrollables */}
       <Box
         sx={{
-          maxHeight: 230,
+          maxHeight: { xs: 230, md: 400 },
           overflowY: "auto",
           pr: 1,
         }}

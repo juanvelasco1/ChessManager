@@ -28,7 +28,7 @@ const Podium = () => {
   return (
     <Box
       sx={{
-        top: "38px",
+        top: { xs: "38px", md: "110px" },
         width: 415,
         mx: "auto",
         mt: "100px",
@@ -122,7 +122,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
+          src={topPlayers[0]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60, mb: 1 }}
         />
         <Typography fontSize={14}>{topPlayers[0]?.nickname || "-"}</Typography>
@@ -146,7 +146,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
+          src={topPlayers[2]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
         <Typography fontSize={14}>{topPlayers[2]?.nickname || "-"}</Typography>
