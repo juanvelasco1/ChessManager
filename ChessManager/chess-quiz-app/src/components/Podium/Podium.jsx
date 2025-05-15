@@ -1,10 +1,34 @@
+import { useEffect, useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
 const Podium = () => {
+  const [topPlayers, setTopPlayers] = useState([]);
+
+  useEffect(() => {
+    const fetchTopPlayers = async () => {
+      try {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, orderBy("rank", "asc"));
+        const querySnapshot = await getDocs(q);
+        const players = [];
+        querySnapshot.forEach((doc) => {
+          players.push(doc.data());
+        });
+        setTopPlayers(players.slice(0, 3));
+      } catch (error) {
+        console.error("Error fetching top players: ", error);
+      }
+    };
+
+    fetchTopPlayers();
+  }, []);
+
   return (
     <Box
       sx={{
-        top: "38px",
+        top: { xs: "38px", md: "110px" },
         width: 415,
         mx: "auto",
         mt: "100px",
@@ -74,11 +98,11 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/black-chess-pawn-3d-icon-download-in-png-blend-fbx-gltf-file-formats--piece-strategy-ui-vol-54-pack-user-interface-icons-5639635.png?f=webp"
+          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
-        <Typography fontSize={14}>kks47</Typography>
-        <Typography fontSize={14}>899</Typography>
+        <Typography fontSize={14}>{topPlayers[1]?.nickname || "-"}</Typography>
+        <Typography fontSize={14}>{topPlayers[1]?.points ?? 0}</Typography>
       </Box>
 
       {/* Primer lugar */}
@@ -98,11 +122,11 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://images.icon-icons.com/651/PNG/512/Icon_Business_Set_00016_A_icon-icons.com_59848.png"
+          src={topPlayers[0]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60, mb: 1 }}
         />
-        <Typography fontSize={14}>JairoPRo</Typography>
-        <Typography fontSize={14}>1000</Typography>
+        <Typography fontSize={14}>{topPlayers[0]?.nickname || "-"}</Typography>
+        <Typography fontSize={14}>{topPlayers[0]?.points ?? 0}</Typography>
       </Box>
 
       {/* Tercer lugar */}
@@ -122,11 +146,11 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://i.pinimg.com/736x/5b/f7/40/5bf7403b4aae04f260c56ec19f7c4bda.jpg"
+          src={topPlayers[2]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
-        <Typography fontSize={14}>Rodrigo49</Typography>
-        <Typography fontSize={14}>895</Typography>
+        <Typography fontSize={14}>{topPlayers[2]?.nickname || "-"}</Typography>
+        <Typography fontSize={14}>{topPlayers[2]?.points ?? 0}</Typography>
       </Box>
     </Box>
   );

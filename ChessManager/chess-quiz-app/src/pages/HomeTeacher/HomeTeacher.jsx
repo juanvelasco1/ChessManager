@@ -11,13 +11,13 @@ const HomeTeacherScreen = () => {
         <UserTeacher />
       </div>
       <div>
-        <TimerInput top="21%" /> {/* Cambia este valor libremente */}
+        <TimerInput top="21%" /> {/* Cambia*/}
       </div>
       <div>
         <Podium />
       </div>
       <div>
-        <RankingTable />
+        <RankingTable showCurrentUser={false} />
       </div>
       <div>
         <NavBar />

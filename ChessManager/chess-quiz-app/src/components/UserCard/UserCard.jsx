@@ -1,9 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Avatar, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { signOut } from "firebase/auth";
+import { auth, db } from "../../services/firebaseConfig";
+import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
 
 const UserCard = () => {
+  const uid = useSelector((state) => state.auth.uid);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
+  const updateUserFields = async () => {
+    try {
+      const userDocRef = doc(db, "users", uid);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        if (!userData.trophies || !userData.games || !userData.rank) {
+          await updateDoc(userDocRef, {
+            trophies: userData.trophies || 0,
+            games: userData.games || 0,
+            rank: userData.rank || 0,
+          });
+          console.log("Campos actualizados correctamente.");
+        }
+      }
+    } catch (error) {
+      console.error("Error al actualizar los campos:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (uid) {
+      updateUserFields();
+    }
+  }, [uid]);
+
+  useEffect(() => {
+    if (uid) {
+      const userDocRef = doc(db, "users", uid);
+
+      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          setUser(docSnapshot.data());
+        } else {
+          console.log("No se encontró el documento del usuario.");
+        }
+      });
+
+      return () => unsubscribe();
+    }
+  }, [uid]);
+
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      alert("Sesión cerrada exitosamente");
+      navigate("/login");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error.message);
+    }
+  };
+
+  if (!user) {
+    return <Typography>Cargando datos del usuario...</Typography>;
+  }
+
+  const getRankImage = (rank) => {
+    if (rank >= 90) return "🥇"; // Oro
+    if (rank >= 60) return "🥈"; // Plata
+    if (rank >= 30) return "🏵️"; // Bronce
+    return "🪵"; // Madera
+  };
+
+  const getRankText = (rank) => {
+    if (rank >= 90) return "Oro"; // Rango Oro
+    if (rank >= 60) return "Plata"; // Rango Plata
+    if (rank >= 30) return "Bronce"; // Rango Bronce
+    return "Madera"; // Rango Madera
+  };
+
   return (
     <Box
       sx={{
@@ -16,13 +95,13 @@ const UserCard = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: 40,
+        top: { xs: 40, md: 105 }, // Puedes modificar `-20` para ajustar la posición vertical en desktop (md)
         mx: "auto",
       }}
     >
       {/* SVG */}
       <Box
-        onClick={() => navigate("/login")}
+        onClick={handleLogout}
         sx={{
           position: "absolute",
           top: 30,
@@ -44,12 +123,11 @@ const UserCard = () => {
       {/* Header - avatar + nombre */}
       <Box display="flex" alignItems="center" gap={2} mb={2}>
         <Avatar
-          alt="Carlos Belcast"
-          src="https://www.sdpnoticias.com/resizer/v2/RRPPNBJ33FC67GUBP5ZZUHGWLI.jpg?smart=true&auth=a78337d6179f738a790f5c4eeee41708be1b14db95a7a8de583937aa5aa4de60&width=640&height=360"
+          src={user.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">
-          JairoPRo
+          {user.nickname || "Usuario"}
         </Typography>
       </Box>
 
@@ -59,7 +137,7 @@ const UserCard = () => {
         <Box textAlign="center">
           <Typography variant="subtitle2">Trofeos</Typography>
           <Box fontSize="30px">🏆</Box>
-          <Typography>890</Typography>
+          <Typography>{user.trophies || 0}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -73,7 +151,7 @@ const UserCard = () => {
             alt="Pieza"
             sx={{ width: 30, height: 30, mb: 0.5 }}
           />
-          <Typography>15</Typography>
+          <Typography>{user.games || 0}</Typography>
         </Box>
 
         <Divider orientation="vertical" flexItem sx={{ bgcolor: "#ccc", mx: 2 }} />
@@ -81,8 +159,12 @@ const UserCard = () => {
         {/* Rango */}
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">🥇</Box>
-          <Typography>Oro</Typography>
+          <Box fontSize="30px">
+            {getRankImage(user.rank)}
+          </Box>
+          <Typography variant="body2" fontWeight="regular">
+            {getRankText(user.rank)} {/* Muestra el rango como texto */}
+          </Typography>
         </Box>
       </Box>
     </Box>
