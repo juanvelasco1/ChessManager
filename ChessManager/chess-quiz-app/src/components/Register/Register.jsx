@@ -51,6 +51,7 @@ const Register = () => {
         trophies: 0,
         games: 0,
         rank: 0,
+        points: 0,
       });
 
       if (role === "jugador") {

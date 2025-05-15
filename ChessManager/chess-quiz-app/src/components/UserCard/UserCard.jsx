@@ -11,6 +11,7 @@ const UserCard = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  // Actualizar campos del usuario si no existen
   const updateUserFields = async () => {
     try {
       const userDocRef = doc(db, "users", uid);
@@ -18,13 +19,14 @@ const UserCard = () => {
 
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data();
+        // Inicializar valores si no existen
         if (!userData.trophies || !userData.games || !userData.rank) {
           await updateDoc(userDocRef, {
-            trophies: userData.trophies || 0,
-            games: userData.games || 0,
-            rank: userData.rank || 0,
+            trophies: userData.trophies || 0, // Inicializa trofeos en 0
+            games: userData.games || 0, // Inicializa juegos en 0
+            rank: userData.rank || 0, // Inicializa rango en 0
           });
-          console.log("Campos actualizados correctamente.");
+          console.log("Campos inicializados correctamente.");
         }
       }
     } catch (error) {
@@ -32,14 +34,11 @@ const UserCard = () => {
     }
   };
 
+  // Sincronizar datos del usuario en tiempo real
   useEffect(() => {
     if (uid) {
-      updateUserFields();
-    }
-  }, [uid]);
+      updateUserFields(); // Inicializar campos si es necesario
 
-  useEffect(() => {
-    if (uid) {
       const userDocRef = doc(db, "users", uid);
 
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
@@ -54,7 +53,7 @@ const UserCard = () => {
     }
   }, [uid]);
 
-
+  // Manejar cierre de sesión
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -69,6 +68,7 @@ const UserCard = () => {
     return <Typography>Cargando datos del usuario...</Typography>;
   }
 
+  // Obtener imagen y texto del rango
   const getRankImage = (rank) => {
     if (rank >= 90) return "🥇"; // Oro
     if (rank >= 60) return "🥈"; // Plata
@@ -95,11 +95,11 @@ const UserCard = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: { xs: 40, md: 105 }, // Puedes modificar `-20` para ajustar la posición vertical en desktop (md)
+        top: { xs: 40, md: 105 },
         mx: "auto",
       }}
     >
-      {/* SVG */}
+      {/* Botón de cierre de sesión */}
       <Box
         onClick={handleLogout}
         sx={{
@@ -116,7 +116,7 @@ const UserCard = () => {
           viewBox="0 0 24 24"
           fill="currentColor"
         >
-          <path d="M13.34 8.17c-.93 0-1.69-.77-1.69-1.7a1.69 1.69 0 0 1 1.69-1.69c.94 0 1.7.76 1.7 1.69s-.76 1.7-1.7 1.7M10.3 19.93l-5.93-1.18l.34-1.7l4.15.85l1.35-6.86l-1.52.6v2.86H7v-3.96l4.4-1.87l.67-.08c.6 0 1.1.34 1.43.85l.86 1.35c.68 1.21 2.03 2.03 3.64 2.03v1.68c-1.86 0-3.56-.83-4.66-2.1l-.5 2.54l1.77 1.69V23h-1.69v-5.1l-1.78-1.69zM21 23h-2V3H6v13.11l-2-.42V1h17zM6 23H4v-3.22l2 .42z"/>
+          <path d="M13.34 8.17c-.93 0-1.69-.77-1.69-1.7a1.69 1.69 0 0 1 1.69-1.69c.94 0 1.7.76 1.7 1.69s-.76 1.7-1.7 1.7M10.3 19.93l-5.93-1.18l.34-1.7l4.15.85l1.35-6.86l-1.52.6v2.86H7v-3.96l4.4-1.87l.67-.08c.6 0 1.1.34 1.43.85l.86 1.35c.68 1.21 2.03 2.03 3.64 2.03v1.68c-1.86 0-3.56-.83-4.66-2.1l-.5 2.54l1.77 1.69V23h-1.69v-5.1l-1.78-1.69zM21 23h-2V3H6v13.11l-2-.42V1h17zM6 23H4v-3.22l2 .42z" />
         </svg>
       </Box>
 
@@ -159,11 +159,9 @@ const UserCard = () => {
         {/* Rango */}
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">
-            {getRankImage(user.rank)}
-          </Box>
+          <Box fontSize="30px">{getRankImage(user.rank)}</Box>
           <Typography variant="body2" fontWeight="regular">
-            {getRankText(user.rank)} {/* Muestra el rango como texto */}
+            {getRankText(user.rank)}
           </Typography>
         </Box>
       </Box>
