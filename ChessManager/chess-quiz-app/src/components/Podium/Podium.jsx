@@ -98,7 +98,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://cdn3d.iconscout.com/3d/premium/thumb/black-chess-pawn-3d-icon-download-in-png-blend-fbx-gltf-file-formats--piece-strategy-ui-vol-54-pack-user-interface-icons-5639635.png?f=webp"
+          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
         <Typography fontSize={14}>{topPlayers[1]?.nickname || "-"}</Typography>
@@ -122,7 +122,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://images.icon-icons.com/651/PNG/512/Icon_Business_Set_00016_A_icon-icons.com_59848.png"
+          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60, mb: 1 }}
         />
         <Typography fontSize={14}>{topPlayers[0]?.nickname || "-"}</Typography>
@@ -146,7 +146,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src="https://i.pinimg.com/736x/5b/f7/40/5bf7403b4aae04f260c56ec19f7c4bda.jpg"
+          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
         <Typography fontSize={14}>{topPlayers[2]?.nickname || "-"}</Typography>

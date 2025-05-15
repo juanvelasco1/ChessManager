@@ -94,6 +94,13 @@ const UserCard = () => {
     return "🪵"; // Madera
   };
 
+  const getRankText = (rank) => {
+    if (rank >= 90) return "Oro"; // Rango Oro
+    if (rank >= 60) return "Plata"; // Rango Plata
+    if (rank >= 30) return "Bronce"; // Rango Bronce
+    return "Madera"; // Rango Madera
+  };
+
   return (
     <Box
       sx={{
@@ -173,7 +180,9 @@ const UserCard = () => {
           <Box fontSize="30px">
             {getRankImage(user.rank)}
           </Box>
-          <Typography>{user.rank || 0}</Typography>
+          <Typography variant="body2" fontWeight="regular">
+            {getRankText(user.rank)} {/* Muestra el rango como texto */}
+          </Typography>
         </Box>
       </Box>
 
