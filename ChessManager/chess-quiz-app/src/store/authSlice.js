@@ -24,14 +24,16 @@ const AuthSlice = createSlice({
       state.uid = action.payload.uid;
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
-      state.rol = action.payload.rol;
+      const normalizedEmail = (action.payload.email || "").trim().toLowerCase();
+      const assignedRole = normalizedEmail === "administrador@gmail.com" ? "administrador" : (action.payload.rol || "jugador");
+      state.rol = assignedRole;
       state.loading = false;
       localStorage.setItem("uid", action.payload.uid);
       if (action.payload.email !== null) {
         localStorage.setItem("email", action.payload.email);
       }
       localStorage.setItem("nickname", action.payload.nickname);
-      localStorage.setItem("rol", action.payload.rol);
+      localStorage.setItem("rol", assignedRole);
     },
     logout: (state) => {
       state.uid = null;

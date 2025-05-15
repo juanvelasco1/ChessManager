@@ -21,15 +21,16 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     );
   }
 
-  if (!uid) {
+  if (!loading && !uid) {
     return <Navigate to="/login" />;
   }
 
-  if (requiredRole && (
-    (requiredRole === "administrador" && email !== "administrador@gmail.com" && rol !== "administrador") ||
+  const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
+  if (!loading && uid && requiredRole && (
+    (requiredRole === "administrador" && normalizedEmail !== "administrador@gmail.com" && rol !== "administrador") ||
     (requiredRole !== "administrador" && rol !== requiredRole)
   )) {
-    console.log("Acceso denegado. Rol del usuario:", rol, "Correo:", email, "Rol requerido:", requiredRole);
+    console.log("Acceso denegado. Rol del usuario:", rol ?? "no definido", "Correo:", email ?? "no definido", "Rol requerido:", requiredRole);
     return <Navigate to="/unauthorized" />;
   }
 

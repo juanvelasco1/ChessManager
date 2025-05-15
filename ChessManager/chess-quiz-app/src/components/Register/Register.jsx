@@ -33,7 +33,8 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const role = email === "administrador@gmail.com" ? "administrador" : "jugador";
+      const normalizedEmail = email.trim().toLowerCase();
+      const role = normalizedEmail === "administrador@gmail.com" ? "administrador" : "jugador";
 
       await setDoc(doc(db, "users", user.uid), {
         nickname: nickname,

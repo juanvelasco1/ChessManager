@@ -17,7 +17,7 @@ import {
   SettingsTournamentScreen,
   LobbyScreen,
   GameTournamentScreen,
-} from "../pages";
+} from "../pages/index.jsx";
 
 const Router = () => {
   const dispatch = useDispatch();
@@ -34,23 +34,24 @@ const Router = () => {
           const userDoc = await getDoc(doc(db, "users", uid));
           if (userDoc.exists()) {
             const userData = userDoc.data();
+            const normalizedEmail = (user.email || "").trim().toLowerCase();
             dispatch(
               login({
                 uid,
                 email: user.email || userData.email || null,
-                nickname: userData.nickname,
-                rol: user.email === "administrador@gmail.com" ? "administrador" : "jugador",
+                rol: normalizedEmail === "administrador@gmail.com" ? "administrador" : "jugador",
               })
             );
+            dispatch(setLoading(false));
           }
         } catch (error) {
           console.error("Error al obtener el rol del usuario desde Firestore:", error);
+          dispatch(setLoading(false));
         }
       } else {
         dispatch(logout());
+        dispatch(setLoading(false));
       }
-
-      dispatch(setLoading(false)); 
     });
 
     return () => unsubscribe();

@@ -60,9 +60,16 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      dispatch(login({ uid: user.uid }));
+      const normalizedEmail = (user.email || "").trim().toLowerCase();
+      const role = normalizedEmail === "administrador@gmail.com" ? "administrador" : (userData.role || "jugador");
+
+      dispatch(login({
+        uid: user.uid,
+        email: user.email,
+        nickname: userData.nickname || "",
+        rol: role,
+      }));
   
-      const role = userData.role || "jugador";
       if (role === "jugador") {
         navigate("/home");
       } else if (role === "administrador") {
