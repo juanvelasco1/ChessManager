@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  <em><strong>Strategy, at your fingertips ♟️</strong></em>
+  <em><strong>Strategy, at your hands ♟️</strong></em>
 </p>
 
 ---
