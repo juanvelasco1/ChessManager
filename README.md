@@ -1,29 +1,37 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg" alt="Project Logo" width="150"/>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager%20-%20Dark.svg">
+    <img alt="ChessManager Logo" src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg" width="300">
+  </picture>
 </p>
 
-<h1 align="center">⚔️ Welcome to Chess Manager ⚔️</h1>
-
-<p align="center">
-  <b>Your ultimate solution for [short project purpose, e.g., managing book recommendations or analyzing poker games].</b><br/>
-  Built with using React, Firebase, and AI.
-</p>
-
-<p align="center">
-  <a href="#features">Features</a> • 
-  <a href="#installation">Installation</a> • 
-  <a href="#usage">Usage</a> • 
-  <a href="#license">License</a>
-</p>
+<h2 align="center"><strong>ChessManager</strong></h2>
+<p align="center"><em>Strategy, at your fingertips ♟️</em></p>
 
 ---
 
-## 📌 Overview
+🎯 **What is ChessManager?**
 
-**Chess Manager** is a modern web application designed to help you [briefly describe the goal: "analyze poker hands in real time", "connect students with mentors", etc.]. It combines powerful tools like:
+ChessManager is an educational and competitive web platform built with **React + Material UI**, focused on evaluating theoretical and practical chess knowledge. It is designed for university students, teachers, and chess enthusiasts.
 
-- 🔥 Firebase (for database and authentication)
-- ⚛️ React (for the UI)
-- 🌐 Responsive design, mobile-first
+🔐 **Core Technologies:**
+- React + Vite
+- Firebase (Auth & Firestore)
+- Material UI
+- Responsive Design
 
----
+🧠 **Key Features:**
+- Theoretical chess quizzes with difficulty-based scoring
+- Practice module with visual board exercises
+- Real-time ranking and podium system
+- Visual user ranks (Wood, Bronze, Silver, Gold)
+- Global timer with automatic reset of scores
+- Separate views for admin and player roles
+
+
+
+<p align="center">
+  <img src="https://img.shields.io/badge/React-2025-blue" />
+  <img src="https://img.shields.io/badge/Firebase-integrated-orange" />
+  <img src="https://img.shields.io/badge/Material--UI-responsive%20design-blueviolet" />
+</p>
