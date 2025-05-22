@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/231294777617e81c3a6d077da1056219284070c2/Logo-fondo-readme.svg" alt="ChessManager Logo" width="280" />
+  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/292e0a3706584a97eb345581acc70143b82f7f92/logo-readme-sintexto.svg" alt="ChessManager Logo" width="280" />
 </p>
 
 <h1 align="center" style="font-family:'Archivo', sans-serif;">
