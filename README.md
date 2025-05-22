@@ -1,6 +1,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager%20-%20Dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg">
     <img alt="ChessManager Logo" src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg" width="280" />
   </picture>
 </p>
@@ -25,11 +26,11 @@ University students, professors, and chess enthusiasts who want to measure their
 
 ## 🔧 Technologies Used
 
-- ⚛️ React + Vite
-- 🎨 Material UI
-- 🔥 Firebase Auth & Firestore
-- 📱 Fully responsive (Mobile & Desktop)
-- 📊 Real-time Rankings & Global Timer
+- ⚛️ React + Vite  
+- 🎨 Material UI  
+- 🔥 Firebase Auth & Firestore  
+- 📱 Fully responsive (Mobile & Desktop)  
+- 📊 Real-time Rankings & Global Timer  
 
 ---
 
