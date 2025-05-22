@@ -1,12 +1,8 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager%20-%20Dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg">
-    <img alt="ChessManager Logo" src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg" width="280" />
-  </picture>
+  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/231294777617e81c3a6d077da1056219284070c2/Logo-fondo-readme.svg" alt="ChessManager Logo" width="280" />
 </p>
 
-<h1 align="center" style="color:#000039; font-family:'Archivo', sans-serif;">
+<h1 align="center" style="font-family:'Archivo', sans-serif;">
   <strong>ChessManager</strong>
 </h1>
 
