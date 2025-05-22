@@ -1,11 +1,13 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/292e0a3706584a97eb345581acc70143b82f7f92/Logo-fondo-readme.svg" alt="ChessManager Logo" width="280" />
+  <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/292e0a3706584a97eb345581acc70143b82f7f92/logo-readme-sintexto.svg" alt="ChessManager Logo" width="280" />
 </p>
 
-
+<h1 align="center" style="font-family:'Archivo', sans-serif;">
+  <strong>ChessManager</strong>
+</h1>
 
 <p align="center">
-  <em><strong>Strategy, at your hands ♟️</strong></em>
+  <em><strong>Strategy, at your fingertips ♟️</strong></em>
 </p>
 
 ---
