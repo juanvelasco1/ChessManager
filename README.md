@@ -1,12 +1,46 @@
-# React + Vite
+<p align="center">
+  <img src="[https://yourdomain.com/logo.png](https://github.com/SergioRP18/LOGO-ChessManager/blob/main/Logo%20ChessManager.svg)" alt="Project Logo" width="150"/>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<h1 align="center">⚔️ Welcome to [Chess Manager] ⚔️</h1>
 
-Currently, two official plugins are available:
+<p align="center">
+  <b>Your ultimate solution for [short project purpose, e.g., managing book recommendations or analyzing poker games].</b><br/>
+  Built with using React, Firebase, and AI.
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<p align="center">
+  <a href="#features">Features</a> • 
+  <a href="#installation">Installation</a> • 
+  <a href="#usage">Usage</a> • 
+  <a href="#license">License</a>
+</p>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 📌 Overview
+
+**[Project Name]** is a modern web application designed to help you [briefly describe the goal: "analyze poker hands in real time", "connect students with mentors", etc.]. It combines powerful tools like:
+
+- 🔥 Firebase (for database and authentication)
+- ⚛️ React (for the UI)
+- 🌐 Responsive design, mobile-first
+
+---
+
+## 🚀 Quick Start
+
+1. Clone the repository
+2. Install dependencies
+3. Run the app locally
+
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+npm install
+npm run dev
+
+<p align="center">
+  <img src="https://yourdomain.com/screenshot1.png" width="400"/>
+  <img src="https://yourdomain.com/screenshot2.png" width="400"/>
+</p>
