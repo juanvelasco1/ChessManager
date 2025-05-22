@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/4f20d2c96ebb8842aaa7a08ecfc640d976131f44/Logo%20ChessManager.svg" alt="Project Logo" width="150"/>
 </p>
 
-<h1 align="center">⚔️ Welcome to **Chess Manager** ⚔️</h1>
+<h1 align="center">⚔️ Welcome to Chess Manager ⚔️</h1>
 
 <p align="center">
   <b>Your ultimate solution for [short project purpose, e.g., managing book recommendations or analyzing poker games].</b><br/>
