@@ -1,28 +1,17 @@
 import { useEffect, useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
+import { fetchRankingData } from "../../utils/rankingUtils";
 
 const Podium = () => {
-  const [topPlayers, setTopPlayers] = useState([]);
+  const [podiumData, setPodiumData] = useState([]);
 
   useEffect(() => {
-    const fetchTopPlayers = async () => {
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("rank", "asc"));
-        const querySnapshot = await getDocs(q);
-        const players = [];
-        querySnapshot.forEach((doc) => {
-          players.push(doc.data());
-        });
-        setTopPlayers(players.slice(0, 3));
-      } catch (error) {
-        console.error("Error fetching top players: ", error);
-      }
+    const fetchData = async () => {
+      const { podium } = await fetchRankingData();
+      setPodiumData(podium);
     };
 
-    fetchTopPlayers();
+    fetchData();
   }, []);
 
   return (
@@ -98,11 +87,15 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={topPlayers[1]?.avatar || "https://via.placeholder.com/150"}
+          src={podiumData[1]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
-        <Typography fontSize={14}>{topPlayers[1]?.nickname || "-"}</Typography>
-        <Typography fontSize={14}>{topPlayers[1]?.points ?? 0}</Typography>
+        <Typography fontSize={14}>
+          {podiumData[1]?.nickname || "-"}
+        </Typography>
+        <Typography fontSize={14}>
+          {podiumData[1]?.points ?? 0}
+        </Typography>
       </Box>
 
       {/* Primer lugar */}
@@ -122,11 +115,15 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={topPlayers[0]?.avatar || "https://via.placeholder.com/150"}
+          src={podiumData[0]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 60, height: 60, mb: 1 }}
         />
-        <Typography fontSize={14}>{topPlayers[0]?.nickname || "-"}</Typography>
-        <Typography fontSize={14}>{topPlayers[0]?.points ?? 0}</Typography>
+        <Typography fontSize={14}>
+          {podiumData[0]?.nickname || "-"}
+        </Typography>
+        <Typography fontSize={14}>
+          {podiumData[0]?.points ?? 0}
+        </Typography>
       </Box>
 
       {/* Tercer lugar */}
@@ -146,11 +143,15 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={topPlayers[2]?.avatar || "https://via.placeholder.com/150"}
+          src={podiumData[2]?.avatar || "https://via.placeholder.com/150"}
           sx={{ width: 50, height: 50, mb: 1 }}
         />
-        <Typography fontSize={14}>{topPlayers[2]?.nickname || "-"}</Typography>
-        <Typography fontSize={14}>{topPlayers[2]?.points ?? 0}</Typography>
+        <Typography fontSize={14}>
+          {podiumData[2]?.nickname || "-"}
+        </Typography>
+        <Typography fontSize={14}>
+          {podiumData[2]?.points ?? 0}
+        </Typography>
       </Box>
     </Box>
   );

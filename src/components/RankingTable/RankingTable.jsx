@@ -1,77 +1,26 @@
-import {
-  Box,
-  Typography,
-  Avatar
-} from "@mui/material";
+import { Box, Typography, Avatar } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { collection, getDocs, query, orderBy, doc, onSnapshot } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
+import { fetchRankingData } from "../../utils/rankingUtils";
 
 const RankingTable = ({ showCurrentUser = false }) => {
   const [rankingData, setRankingData] = useState([]);
-  const [currentUser, setCurrentUser] = useState({
-    uid: "",
-    nickname: "",
-    points: 0,
-    avatar: "ChessManager/chess-quiz-app/public/avatars/default.jpg",
-    rank: "N/A",
-  });
-
-  // Dividir el selector en múltiples llamadas
+  const [currentUser, setCurrentUser] = useState(null);
   const uid = useSelector((state) => state.auth.uid);
 
-  // Obtener datos de los usuarios desde Firestore
   useEffect(() => {
-    const fetchRankingData = async () => {
-      try {
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, orderBy("points", "desc")); // Ordenar por puntos en orden descendente
-        const querySnapshot = await getDocs(q);
+    const fetchData = async () => {
+      const { ranking } = await fetchRankingData();
+      setRankingData(ranking);
 
-        const users = querySnapshot.docs.map((doc, index) => ({
-          uid: doc.id, // Usar el ID del documento como identificador único
-          rank: index + 4, // El top inicia en la posición 4
-          name: doc.data().nickname || "Sin nombre",
-          points: doc.data().points || 0,
-          avatar: doc.data().avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
-        }));
-
-        setRankingData(users);
-      } catch (error) {
-        console.error("Error al obtener los datos del ranking:", error);
+      if (uid) {
+        const user = ranking.find((user) => user.uid === uid);
+        setCurrentUser(user || null);
       }
     };
 
-    fetchRankingData();
-  }, []);
-
-  // Sincronizar datos del usuario actual y calcular su rango
-  useEffect(() => {
-    if (uid) {
-      const userDocRef = doc(db, "users", uid);
-
-      const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
-        if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-
-          // Calcular el rango del usuario actual basado en rankingData
-          const userRank = rankingData.findIndex((user) => user.uid === uid);
-          const calculatedRank = userRank !== -1 ? userRank + 4 : "N/A"; // Sumar 4 si el usuario está en la lista
-
-          setCurrentUser({
-            uid: uid,
-            nickname: userData.nickname || "Sin nombre",
-            points: userData.points || 0,
-            avatar: userData.avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
-            rank: calculatedRank,
-          });
-        }
-      });
-
-      return () => unsubscribe();
-    }
-  }, [uid, rankingData]); // Dependemos de rankingData para calcular el rango dinámicamente
+    fetchData();
+  }, [uid]);
 
   return (
     <Box
@@ -146,15 +95,15 @@ const RankingTable = ({ showCurrentUser = false }) => {
           >
             <Typography fontWeight="bold">#{user.rank}</Typography>
             <Box display="flex" alignItems="center" gap={1}>
-              <Avatar src={user.avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg"} sx={{ width: 30, height: 30 }} />
-              <Typography fontWeight="medium">{user.name}</Typography>
+              <Avatar src={user.avatar} sx={{ width: 30, height: 30 }} />
+              <Typography fontWeight="medium">{user.nickname}</Typography>
             </Box>
             <Typography fontWeight="medium">{user.points}</Typography>
           </Box>
         ))}
 
         {/* Usuario actual (fijado visualmente) */}
-        {showCurrentUser && currentUser.rank && (
+        {showCurrentUser && currentUser && (
           <Box
             sx={{
               border: "none",
