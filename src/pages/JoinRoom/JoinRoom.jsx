@@ -10,11 +10,12 @@ const JoinRoomScreen = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.auth.uid); // UID del usuario autenticado
   const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
+  const role = useSelector((state) => state.auth.rol); // Rol del usuario
 
   useEffect(() => {
     const validateAndJoinRoom = async () => {
       if (!uid) {
-        // Si no está autenticado, redirige al login
+        // Si no está autenticado, redirige al login con el parámetro de redirección
         navigate(`/login?redirect=/join-room/${roomId}`);
         return;
       }
@@ -29,11 +30,16 @@ const JoinRoomScreen = () => {
             participants: arrayUnion({ uid, nickname, points: 0 }),
           });
 
-          // Redirige al lobby
-          navigate(`/lobby/${roomId}`);
+          // Si el usuario es un jugador, redirige al lobby
+          if (role === "jugador") {
+            navigate(`/lobby/${roomId}`);
+          } else if (role === "administrador") {
+            // Si es administrador, redirige al home del profesor
+            navigate("/home-teacher");
+          }
         } else {
           alert("La sala no existe.");
-          navigate("/");
+          navigate("/home");
         }
       } catch (error) {
         console.error("Error al unirse a la sala:", error);
@@ -42,7 +48,7 @@ const JoinRoomScreen = () => {
     };
 
     validateAndJoinRoom();
-  }, [uid, roomId, navigate, nickname]);
+  }, [uid, roomId, navigate, nickname, role]);
 
   return (
     <Box textAlign="center" mt={4}>

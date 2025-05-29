@@ -5,7 +5,7 @@ import { auth, db } from "../../services/firebaseConfig";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice.js";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -42,44 +42,25 @@ const Login = () => {
     }
 
     try {
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", email));
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.empty) {
-        setError("El correo no está registrado");
-        return;
-      }
-
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      const normalizedEmail = (user.email || "").trim().toLowerCase();
-      const role = normalizedEmail === "administrador@gmail.com" ? "administrador" : (userData.role || "jugador");
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        dispatch(login({
+          uid: user.uid,
+          email: user.email,
+          nickname: userData.nickname,
+          rol: userData.role,
+        }));
 
-      dispatch(login({
-        uid: user.uid,
-        email: user.email,
-        nickname: userData.nickname || "",
-        rol: role,
-      }));
-
-      // Redirige al path especificado o al home
-      navigate(redirectPath);
-    } catch (err) {
-      console.error("Error al iniciar sesión:", err.code, err.message);
-      if (err.code === "auth/user-not-found") {
-        setError("El usuario no existe.");
-      } else if (err.code === "auth/wrong-password") {
-        setError("Contraseña incorrecta.");
-      } else if (err.code === "auth/invalid-email") {
-        setError("El correo electrónico no es válido.");
-      } else {
-        setError("Error al iniciar sesión. Intenta de nuevo.");
+        // Redirige al path especificado o al home
+        navigate(redirectPath);
       }
+    } catch (err) {
+      console.error("Error al iniciar sesión:", err);
+      setError("Error al iniciar sesión. Intenta de nuevo.");
     }
   };
 

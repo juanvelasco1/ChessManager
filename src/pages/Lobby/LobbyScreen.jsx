@@ -3,6 +3,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserLobby from "../../components/UserLobby/UserLobby";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux"; // Importa useSelector
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import RoomQR from "../../components/RoomQR/RoomQR";
@@ -12,6 +13,9 @@ const LobbyScreen = () => {
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
   const [participants, setParticipants] = useState([]); // Lista dinámica de participantes
   const [isMobile, setIsMobile] = useState(false);
+
+  // Obtén el rol del usuario desde Redux
+  const userRole = useSelector((state) => state.auth.rol);
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
@@ -100,25 +104,28 @@ const LobbyScreen = () => {
         ))}
       </Box>
 
-      <Button
-        variant="contained"
-        onClick={handleStartTournament}
-        sx={{
-          backgroundColor: "#000039",
-          borderRadius: "10px",
-          fontWeight: "bold",
-          fontSize: "16px",
-          width: "93%",
-          height: "63px",
-          py: 1.2,
-          color: "#fff",
-          "&:hover": {
+      {/* Mostrar el botón solo si el usuario es administrador */}
+      {userRole === "administrador" && (
+        <Button
+          variant="contained"
+          onClick={handleStartTournament}
+          sx={{
             backgroundColor: "#000039",
-          },
-        }}
-      >
-        INICIAR
-      </Button>
+            borderRadius: "10px",
+            fontWeight: "bold",
+            fontSize: "16px",
+            width: "93%",
+            height: "63px",
+            py: 1.2,
+            color: "#fff",
+            "&:hover": {
+              backgroundColor: "#000039",
+            },
+          }}
+        >
+          INICIAR
+        </Button>
+      )}
     </Box>
   ) : (
     <Box
@@ -174,25 +181,28 @@ const LobbyScreen = () => {
         ))}
       </Box>
 
-      <Button
-        variant="contained"
-        onClick={handleStartTournament}
-        sx={{
-          backgroundColor: "#000039",
-          borderRadius: "10px",
-          fontWeight: "bold",
-          fontSize: "16px",
-          width: "230px",
-          height: "60px",
-          color: "#fff",
-          mt: 2,
-          "&:hover": {
+      {/* Mostrar el botón solo si el usuario es administrador */}
+      {userRole === "administrador" && (
+        <Button
+          variant="contained"
+          onClick={handleStartTournament}
+          sx={{
             backgroundColor: "#000039",
-          },
-        }}
-      >
-        INICIAR
-      </Button>
+            borderRadius: "10px",
+            fontWeight: "bold",
+            fontSize: "16px",
+            width: "230px",
+            height: "60px",
+            color: "#fff",
+            mt: 2,
+            "&:hover": {
+              backgroundColor: "#000039",
+            },
+          }}
+        >
+          INICIAR
+        </Button>
+      )}
     </Box>
   );
 };

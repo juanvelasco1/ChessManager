@@ -123,7 +123,7 @@ const UserCard = () => {
       {/* Header - avatar + nombre */}
       <Box display="flex" alignItems="center" gap={2} mb={2}>
         <Avatar
-          src={user.avatar || "https://via.placeholder.com/150"}
+          src={user.avatar || "/avatars/default-avatar.png"} // Usa el avatar del usuario o una imagen predeterminada
           sx={{ width: 60, height: 60 }}
         />
         <Typography variant="h6" fontWeight="bold">

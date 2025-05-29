@@ -124,18 +124,11 @@ const QuizQuestion = () => {
         await updateDoc(doc(db, "users", user.uid), {
           rank: score,
           trophies: correctCount,
-          quizScore: score, // Asegura que se guarde quizScore
           games: increment(1),
         });
       }
-      localStorage.removeItem("quizScore");
-      localStorage.removeItem("quizCurrent");
-      localStorage.removeItem("quizCorrect");
-      for (let i = 0; i < questions.length; i++) {
-        localStorage.removeItem(`quizAnswer_${i}`);
-      }
-      // Redirige al path especificado o al home
-      navigate(redirectPath);
+      localStorage.clear();
+      navigate(redirectPath); // Redirige al lobby o al path especificado
     };
 
     return (
