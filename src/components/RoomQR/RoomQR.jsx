@@ -6,7 +6,8 @@ import QRCode from "react-qr-code";
  * @param {string} roomId - ID de la sala.
  */
 const RoomQR = ({ roomId }) => {
-  const roomLink = `${window.location.origin}/join-room/${roomId}`;
+  const ipAddress = "192.168.1.100"; // Reemplaza con tu dirección IP local
+  const roomLink = `http://${ipAddress}:5173/join-room/${roomId}`;
 
   return (
     <Box textAlign="center" mb={4}>

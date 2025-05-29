@@ -3,7 +3,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserLobby from "../../components/UserLobby/UserLobby";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import RoomQR from "../../components/RoomQR/RoomQR";
 
@@ -32,6 +32,30 @@ const LobbyScreen = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  const handleStartTournament = async () => {
+    try {
+      // Mezclar participantes de forma aleatoria
+      const shuffledParticipants = [...participants].sort(() => Math.random() - 0.5);
+
+      // Crear parejas
+      const pairs = [];
+      for (let i = 0; i < shuffledParticipants.length; i += 2) {
+        const pair = shuffledParticipants.slice(i, i + 2);
+        pairs.push(pair);
+      }
+
+      // Actualizar la sala en Firebase con las parejas
+      const roomRef = doc(db, "rooms", roomId);
+      await updateDoc(roomRef, { pairs });
+
+      // Redirigir al profesor a la screen GameTournament
+      navigate(`/game-tournament/${roomId}`);
+    } catch (error) {
+      console.error("Error al iniciar el torneo:", error);
+      alert("Hubo un problema al iniciar el torneo. Inténtalo de nuevo.");
+    }
+  };
 
   return isMobile ? (
     <Box sx={{ width: 410, margin: 0, padding: 0, mt: 8, textAlign: "center", position: "relative" }}>
@@ -78,7 +102,7 @@ const LobbyScreen = () => {
 
       <Button
         variant="contained"
-        onClick={() => navigate("/game-tournament")}
+        onClick={handleStartTournament}
         sx={{
           backgroundColor: "#000039",
           borderRadius: "10px",
@@ -152,7 +176,7 @@ const LobbyScreen = () => {
 
       <Button
         variant="contained"
-        onClick={() => navigate("/game-tournament")}
+        onClick={handleStartTournament}
         sx={{
           backgroundColor: "#000039",
           borderRadius: "10px",

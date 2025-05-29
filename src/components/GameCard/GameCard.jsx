@@ -1,140 +1,33 @@
-import { Box, Typography, Avatar, Button } from "@mui/material";
-import { useState } from "react";
+import { Box, Typography, Avatar } from "@mui/material";
 
-const GameCard = () => {
-  const [result, setResult] = useState(null); // null, "left", "right", "draw"
-
-  const getColors = () => {
-    switch (result) {
-      case "left":
-        return ["#8BC34A", "#434379", "#D32F2F"];
-      case "right":
-        return ["#D32F2F", "#434379", "#8BC34A"];
-      case "draw":
-        return ["#9E9E9E", "#434379", "#9E9E9E"];
-      default:
-        return ["#434379", "#434379", "#434379"];
-    }
-  };
-
-  const getPoints = () => {
-    if (result === "left") return ["1", "Empate", "0"];
-    if (result === "right") return ["0", "Empate", "1"];
-    if (result === "draw") return ["0.5", "Empate", "0.5"];
-    return ["Ganador", "Empate", "Ganador"];
-  };
-
-  const [leftColor, middleColor, rightColor] = getColors();
-  const [leftText, middleText, rightText] = getPoints();
+const GameCard = ({ pair }) => {
+  const [player1, player2] = pair;
 
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: { xs: 410, md: 700 },
-        mx: "auto",
-        height: 195,
-        borderRadius: "12px",
-        boxShadow: 2,
-        overflow: "hidden",
-        mb: 3,
+        border: "1.5px solid #000039",
+        bgcolor: "white",
+        color: "#000039",
         display: "flex",
-        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "space-between",
-        px: { xs: 0, md: 2 },
+        px: 2,
+        py: 1,
+        borderRadius: "10px",
+        mb: 1,
       }}
     >
-      {/* Jugadores */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#000039",
-          color: "#fff",
-          py: 1.5,
-          px: { xs: 2, md: 4 },
-        }}
-      >
-        <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
-          <Avatar
-            src="https://cdn-icons-png.flaticon.com/512/701/701967.png"
-            sx={{ width: 40, height: 40, mb: 0.5 }}
-          />
-          <Typography fontSize={14} fontWeight="bold">
-            Lucas
-          </Typography>
-        </Box>
-
-        <Typography fontWeight="bold" fontSize={{ xs: 18, md: 24 }} sx={{ textAlign: "center", flex: 1 }}>
-          Vs
-        </Typography>
-
-        <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
-          <Avatar
-            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            sx={{ width: 40, height: 40, mb: 0.5 }}
-          />
-          <Typography fontSize={14} fontWeight="bold">
-            JairoPro
-          </Typography>
-        </Box>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Avatar src={player1?.avatar || "/default-avatar.png"} sx={{ width: 30, height: 30 }} />
+        <Typography fontWeight="medium">{player1?.nickname || "Jugador 1"}</Typography>
       </Box>
-
-      {/* Botones */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
-          flexGrow: 1,
-        }}
-      >
-        <Button
-          onClick={() => setResult("left")}
-          sx={{
-            borderRadius: 0,
-            fontWeight: "bold",
-            fontSize: { xs: 16, md: 20 },
-            backgroundColor: leftColor,
-            color: "#fff",
-            borderRight: "1px solid white",
-            height: "100%",
-            "&:hover": { backgroundColor: leftColor },
-          }}
-        >
-          {leftText}
-        </Button>
-
-        <Button
-          onClick={() => setResult("draw")}
-          sx={{
-            borderRadius: 0,
-            fontWeight: "bold",
-            fontSize: { xs: 16, md: 20 },
-            backgroundColor: middleColor,
-            color: "#fff",
-            height: "100%",
-            "&:hover": { backgroundColor: middleColor },
-          }}
-        >
-          {middleText}
-        </Button>
-
-        <Button
-          onClick={() => setResult("right")}
-          sx={{
-            borderRadius: 0,
-            fontWeight: "bold",
-            fontSize: { xs: 16, md: 20 },
-            backgroundColor: rightColor,
-            color: "#fff",
-            borderLeft: "1px solid white",
-            height: "100%",
-            "&:hover": { backgroundColor: rightColor },
-          }}
-        >
-          {rightText}
-        </Button>
+      <Typography fontWeight="bold" color="#000039">
+        VS
+      </Typography>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Avatar src={player2?.avatar || "/default-avatar.png"} sx={{ width: 30, height: 30 }} />
+        <Typography fontWeight="medium">{player2?.nickname || "Jugador 2"}</Typography>
       </Box>
     </Box>
   );
