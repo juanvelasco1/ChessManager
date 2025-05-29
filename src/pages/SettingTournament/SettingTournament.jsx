@@ -65,35 +65,7 @@ const SettingTournamentScreen = () => {
           },
         }}
       >
-        {/* Botón Crear */}
-        <Button
-          sx={{
-            width: 190,
-            height: 190,
-            bgcolor: "#000039",
-            borderRadius: "15px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#ffffff",
-            fontWeight: "bold",
-            fontSize: "16px",
-            boxShadow: 3,
-            "&:hover": {
-              bgcolor: "#000039",
-            },
-          }}
-        >
-          <img
-            src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/60acd42c40fbe6f3ca84d22e06cfa1e915e00a4c/%F0%9F%A6%86%20icon%20_plus%20circle_.svg"
-            alt="Crear"
-            width={50}
-            height={50}
-            style={{ marginBottom: 8 }}
-          />
-          Crear
-        </Button>
+       
 
         {/* Botón Todos vs todos */}
         <Button
