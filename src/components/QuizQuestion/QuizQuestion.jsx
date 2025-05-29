@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { auth } from "../../services/firebaseConfig";
 import { db } from "../../services/firebaseConfig";
 import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
 
 const QuizQuestion = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Obtener el parámetro `redirect` de la URL
+  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/home";
+
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(() => {
     const saved = localStorage.getItem("quizCurrent");
@@ -22,23 +27,23 @@ const QuizQuestion = () => {
     return saved ? parseInt(saved) : 0;
   });
 
-    useEffect(() => {
-      const fetchQuestions = async () => {
-        const docRef = doc(db, "quizQuestions", "set1");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          try {
-            const parsedQuestions = JSON.parse(docSnap.data().questions);
-            setQuestions(parsedQuestions);
-          } catch (error) {
-            console.error("Error al parsear las preguntas:", error);
-          }
-        } else {
-          console.error("No se encontró el documento de preguntas");
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      const docRef = doc(db, "quizQuestions", "set1");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        try {
+          const parsedQuestions = JSON.parse(docSnap.data().questions);
+          setQuestions(parsedQuestions);
+        } catch (error) {
+          console.error("Error al parsear las preguntas:", error);
         }
-      };
-      fetchQuestions();
-    }, []);
+      } else {
+        console.error("No se encontró el documento de preguntas");
+      }
+    };
+    fetchQuestions();
+  }, []);
 
   useEffect(() => {
     if (!questions.length) return;
@@ -107,10 +112,11 @@ const QuizQuestion = () => {
       localStorage.removeItem("quizScore");
       localStorage.removeItem("quizCurrent");
       localStorage.removeItem("quizCorrect");
-      for(let i = 0; i < questions.length; i++) {
+      for (let i = 0; i < questions.length; i++) {
         localStorage.removeItem(`quizAnswer_${i}`);
       }
-      navigate("/home");
+      // Redirige al path especificado o al home
+      navigate(redirectPath);
     };
 
     return (

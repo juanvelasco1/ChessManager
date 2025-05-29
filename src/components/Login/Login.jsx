@@ -1,21 +1,15 @@
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../../store/authSlice.js";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -23,6 +17,9 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  // Obtener la ruta de redirección desde los parámetros de la URL
+  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/home";
 
   const inputStyles = {
     "& .MuiOutlinedInput-root": {
@@ -43,7 +40,7 @@ const Login = () => {
       setError("Por favor, ingresa un correo y una contraseña.");
       return;
     }
-  
+
     try {
       const usersRef = collection(db, "users");
       const q = query(usersRef, where("email", "==", email));
@@ -69,15 +66,9 @@ const Login = () => {
         nickname: userData.nickname || "",
         rol: role,
       }));
-  
-      if (role === "jugador") {
-        navigate("/home");
-      } else if (role === "administrador") {
-        navigate("/home-teacher");
-      } else {
-        console.error("Rol desconocido o no definido:", role);
-        setError("Rol desconocido o no definido. Contacta al administrador.");
-      }
+
+      // Redirige al path especificado o al home
+      navigate(redirectPath);
     } catch (err) {
       console.error("Error al iniciar sesión:", err.code, err.message);
       if (err.code === "auth/user-not-found") {
@@ -91,7 +82,6 @@ const Login = () => {
       }
     }
   };
-
 
   return (
     <Box

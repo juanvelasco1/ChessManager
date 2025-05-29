@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/join-room/:roomId", "destination": "/" },
+    { "source": "/lobby/:roomId", "destination": "/" }
+  ]
+}

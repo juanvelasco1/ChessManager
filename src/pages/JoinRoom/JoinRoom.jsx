@@ -15,7 +15,7 @@ const JoinRoomScreen = () => {
     const validateAndJoinRoom = async () => {
       if (!uid) {
         // Si no está autenticado, redirige al login
-        navigate(`/login?redirect=/join-room/${roomId}`);
+        navigate(`/?redirect=/join-room/${roomId}`);
         return;
       }
 
