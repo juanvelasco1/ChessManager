@@ -4,7 +4,7 @@ import { db } from "../../services/firebaseConfig";
 import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
-const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "32%", topPcUser = "340px", role = "user" }) => {
+const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "38%", topPcUser = "340px", role = "user" }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [dateStart, setDateStart] = useState(null);
 
@@ -36,7 +36,9 @@ const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUse
       const timeRemaining = 15 * 24 * 60 * 60 * 1000 - (currentlyDate.getTime() - dateStart.getTime());
       setTimeRemaining(timeRemaining);
       if (timeRemaining <= 0) {
+        clearInterval(interval);
         restartPointsAndRanking();
+        setTimeRemaining(0);
       }
     }, 1000);
 
@@ -58,6 +60,7 @@ const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUse
       const timerDocRef = doc(db, "configuracionGlobal", "timerHome");
       const now = new Date();
       await setDoc(timerDocRef, { dateStart: now });
+      setDateStart(now);
     } catch (error) {
       console.error("Error al reiniciar puntos y ranking:", error);
     }

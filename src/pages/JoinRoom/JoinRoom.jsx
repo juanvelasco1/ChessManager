@@ -15,7 +15,7 @@ const JoinRoomScreen = () => {
     const validateAndJoinRoom = async () => {
       if (!uid) {
         // Si no está autenticado, redirige al login
-        navigate(`/?redirect=/join-room/${roomId}`);
+        navigate(`/login?redirect=/join-room/${roomId}`);
         return;
       }
 
@@ -33,7 +33,7 @@ const JoinRoomScreen = () => {
           navigate(`/lobby/${roomId}`);
         } else {
           alert("La sala no existe.");
-          navigate("/home");
+          navigate("/");
         }
       } catch (error) {
         console.error("Error al unirse a la sala:", error);

@@ -116,8 +116,8 @@ const Register = () => {
             src="https://raw.githubusercontent.com/SergioRP18/LOGO-ChessManager/994864e6d407751510742627ffb6c58aa3d305d5/LOGO%20AZUL.svg"
             alt="Logo"
             sx={{
-              width: isMobile ? "60%" : "70%",
-              maxWidth: 180,
+              width: isMobile ? "40%" : "50%",
+              maxWidth: 120,
               mx: "auto",
               mb: 1,
             }}

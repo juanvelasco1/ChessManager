@@ -113,7 +113,7 @@ const Router = () => {
           }
         />
         <Route
-          path="/game-tournament"
+          path="/game-tournament/:roomId"
           element={
             <ProtectedRoute requiredRole="administrador">
               <GameTournamentScreen />

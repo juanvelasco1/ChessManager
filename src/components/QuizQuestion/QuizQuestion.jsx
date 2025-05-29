@@ -27,6 +27,24 @@ const QuizQuestion = () => {
     return saved ? parseInt(saved) : 0;
   });
 
+    useEffect(() => {
+      const fetchQuestions = async () => {
+        const docRef = doc(db, "quizQuestions", "set1");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          try {
+            const parsedQuestions = JSON.parse(docSnap.data().questions);
+            setQuestions(parsedQuestions);
+          } catch (error) {
+            console.error("Error al parsear las preguntas:", error);
+          }
+        } else {
+          console.error("No se encontró el documento de preguntas");
+        }
+      };
+      fetchQuestions();
+    }, []);
+
   useEffect(() => {
     const fetchQuestions = async () => {
       const docRef = doc(db, "quizQuestions", "set1");
@@ -106,6 +124,7 @@ const QuizQuestion = () => {
         await updateDoc(doc(db, "users", user.uid), {
           rank: score,
           trophies: correctCount,
+          quizScore: score, // Asegura que se guarde quizScore
           games: increment(1),
         });
       }
