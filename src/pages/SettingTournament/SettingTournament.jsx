@@ -44,6 +44,18 @@ const SettingTournamentScreen = () => {
         <ArrowBackIcon sx={{ fontSize: 28 }} />
       </IconButton>
 
+      <Typography
+        sx={{
+          color: "#000039",
+          textAlign: "center",
+          fontFamily: "Roboto",
+          fontSize: "30px",
+          fontWeight: 600,
+          marginBottom: "32px",
+        }}
+      >
+        Modos de juego
+      </Typography>
       <Box
         sx={{
           width: "100%",

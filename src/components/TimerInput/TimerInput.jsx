@@ -4,7 +4,7 @@ import { db } from "../../services/firebaseConfig";
 import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
-const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "32%", topPcUser = "340px", role = "user" }) => {
+const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "30%", topPcUser = "340px", role = "user" }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [dateStart, setDateStart] = useState(null);
 
