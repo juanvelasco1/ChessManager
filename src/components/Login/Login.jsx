@@ -55,8 +55,16 @@ const Login = () => {
           rol: userData.role,
         }));
 
-        // Redirige al path especificado o al home
-        navigate(redirectPath);
+        // Redirige según el rol del usuario
+        if (userData.role === "administrador") {
+          navigate("/home-teacher");
+        } else if (userData.role === "jugador") {
+          navigate(redirectPath); // Redirige al lobby o al path especificado
+        } else {
+          setError("Rol no válido. Contacta al administrador.");
+        }
+      } else {
+        setError("El usuario no existe en la base de datos.");
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err);

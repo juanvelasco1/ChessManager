@@ -31,11 +31,13 @@ const JoinRoomScreen = () => {
           });
 
           // Si el usuario es un jugador, redirige al lobby
-          if (role === "jugador") {
-            navigate(`/lobby/${roomId}`);
-          } else if (role === "administrador") {
-            // Si es administrador, redirige al home del profesor
+          if (role === "administrador") {
             navigate("/home-teacher");
+          } else if (role === "jugador") {
+            navigate(`/lobby/${roomId}`);
+          } else {
+            alert("Rol no válido. Contacta al administrador.");
+            navigate("/home");
           }
         } else {
           alert("La sala no existe.");
