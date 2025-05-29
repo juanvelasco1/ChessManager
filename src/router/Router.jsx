@@ -17,6 +17,7 @@ import {
   SettingsTournamentScreen,
   LobbyScreen,
   GameTournamentScreen,
+  JoinRoomScreen
 } from "../pages/index.jsx";
 
 const Router = () => {
@@ -120,6 +121,7 @@ const Router = () => {
           }
         />
         <Route path="/unauthorized" element={<div>Acceso denegado</div>} />
+        <Route path="/join-room/:roomId" element={<JoinRoomScreen />} />
       </Routes>
     </BrowserRouter>
   );

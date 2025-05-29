@@ -8,8 +8,8 @@ export default defineConfig({
     include: ['react-qr-code'], // Fuerza la optimización de react-qr-code
   },
   server: {
-    host: true, // Permite que el servidor sea accesible desde la red local
-    port: 5173, // Puerto del servidor
+    host: true,
+    port: 5173, // Cambia el puerto
     historyApiFallback: true, // Redirige todas las rutas al index.html
   },
 });
