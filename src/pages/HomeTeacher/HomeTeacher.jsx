@@ -19,7 +19,7 @@ const HomeTeacherScreen = () => {
     isMobile ? (
       <div style={{ padding: "10px 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <UserTeacher />
-        <TimerInput topMobileUser="17%" />
+        <TimerInput topMobileUser="16%" />
         <Podium />
         <RankingTable showCurrentUser={false} />
         <NavBar />

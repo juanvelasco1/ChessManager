@@ -17,7 +17,7 @@ const Podium = () => {
   return (
     <Box
       sx={{
-        top: { xs: "-28px", md: "110px" },
+        top: { xs: "-16px", md: "110px" },
         width: 415,
         mx: "auto",
         mt: "100px",

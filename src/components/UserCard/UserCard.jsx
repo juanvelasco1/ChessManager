@@ -95,7 +95,7 @@ const UserCard = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: { xs: -20, md: 105 },
+        top: { xs: -21, md: 105 },
         mx: "auto",
       }}
     >
