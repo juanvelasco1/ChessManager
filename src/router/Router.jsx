@@ -104,6 +104,14 @@ const Router = () => {
           }
         />
         <Route
+          path="/lobby/:roomId"
+          element={
+            <ProtectedRoute requiredRole="administrador">
+              <LobbyScreen />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/game-tournament"
           element={
             <ProtectedRoute requiredRole="administrador">

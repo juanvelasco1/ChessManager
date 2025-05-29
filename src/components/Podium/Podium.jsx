@@ -87,7 +87,7 @@ const Podium = () => {
         }}
       >
         <Avatar
-          src={podiumData[1]?.avatar || "https://via.placeholder.com/150"}
+          src={podiumData[1]?.avatar || "/default-avatar.png"} // Cambia el enlace por una imagen local
           sx={{ width: 50, height: 50, mb: 1 }}
         />
         <Typography fontSize={14}>

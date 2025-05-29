@@ -2,9 +2,22 @@ import { Box, Button, Typography, IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import NavBar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
+import { createRoom } from "../../utils/roomUtils";
+import { useSelector } from "react-redux";
 
 const SettingTournamentScreen = () => {
   const navigate = useNavigate();
+  const teacherUid = useSelector((state) => state.auth.uid); // UID del profesor
+
+  const handleCreateRoom = async () => {
+    try {
+      const roomId = await createRoom(teacherUid); // Crea la sala en Firebase
+      navigate(`/lobby/${roomId}`); // Redirige al lobby con el ID de la sala
+    } catch (error) {
+      console.error("Error al crear la sala:", error);
+      alert("Hubo un problema al crear la sala. Inténtalo de nuevo.");
+    }
+  };
 
   return (
     <Box
@@ -84,7 +97,7 @@ const SettingTournamentScreen = () => {
 
         {/* Botón Todos vs todos */}
         <Button
-          onClick={() => navigate("/lobby")}
+          onClick={handleCreateRoom} // Llama a la función para crear la sala
           sx={{
             width: 190,
             height: 190,
@@ -100,9 +113,6 @@ const SettingTournamentScreen = () => {
             boxShadow: 1,
             "&:hover": {
               backgroundColor: "#f5f5f5",
-            },
-            "& .MuiTypography-root": {
-              fontWeight: "bold",
             },
           }}
         >
