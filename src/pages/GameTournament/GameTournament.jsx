@@ -6,6 +6,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 
+// Assumes firebaseDb is globally accessible from window
+
 const GameTournamentScreen = () => {
   const navigate = useNavigate();
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
@@ -14,7 +16,7 @@ const GameTournamentScreen = () => {
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
-    const roomRef = doc(db, "rooms", roomId);
+    const roomRef = doc(window.firebaseDb, "rooms", roomId);
     const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const roomData = docSnapshot.data();
