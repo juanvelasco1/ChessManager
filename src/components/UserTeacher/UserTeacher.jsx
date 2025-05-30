@@ -63,8 +63,9 @@ const UserTeacher = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: -20,
-        mx: "auto",
+        top: isMobile ? -18 : 10,
+        mx: isMobile ? "auto" : 0,
+        left: isMobile ? 0 : 102,
       }}
     >
       {/* SVG */}
