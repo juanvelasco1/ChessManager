@@ -27,9 +27,10 @@ const NavBar = () => {
   return (
     <Box
       sx={{
+        top: 690,
         position: "fixed",
         bottom: 50,
-        left: "50%",
+        left: "47.3%",
         transform: "translateX(-50%)",
         width: {
           xs: "90%",      // Mobile
