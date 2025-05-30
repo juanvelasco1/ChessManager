@@ -68,7 +68,11 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
-      setError("Error al iniciar sesión. Intenta de nuevo.");
+      if (err.code === "auth/user-not-found") {
+        setError("El usuario no está registrado.");
+      } else {
+        setError("Error al iniciar sesión. Intenta de nuevo.");
+      }
     }
   };
 
