@@ -105,7 +105,7 @@ const LobbyScreen = () => {
       </Box>
 
       {/* Mostrar el botón solo si el usuario es administrador */}
-      {userRole === "administrador" && (
+      {userRole === "profesor" && (
         <Button
           variant="contained"
           onClick={handleStartTournament}
@@ -182,7 +182,7 @@ const LobbyScreen = () => {
       </Box>
 
       {/* Mostrar el botón solo si el usuario es administrador */}
-      {userRole === "administrador" && (
+      {userRole === "profesor" && (
         <Button
           variant="contained"
           onClick={handleStartTournament}

@@ -31,7 +31,7 @@ const JoinRoomScreen = () => {
           });
 
           // Si el usuario es un jugador, redirige al lobby
-          if (role === "administrador") {
+          if (role === "profesor") {
             navigate("/home-teacher");
           } else if (role === "jugador") {
             navigate(`/lobby/${roomId}`);

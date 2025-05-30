@@ -25,7 +25,7 @@ const AuthSlice = createSlice({
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
       const normalizedEmail = (action.payload.email || "").trim().toLowerCase();
-      const assignedRole = normalizedEmail === "administrador@gmail.com" ? "administrador" : (action.payload.rol || "jugador");
+      const assignedRole = normalizedEmail === "profesor@gmail.com" ? "profesor" : (action.payload.rol || "jugador");
       state.rol = assignedRole;
       state.loading = false;
       localStorage.setItem("uid", action.payload.uid);

@@ -56,7 +56,7 @@ const Login = () => {
         }));
 
         // Redirige según el rol del usuario
-        if (userData.role === "administrador") {
+        if (userData.role === "profesor") {
           navigate("/home-teacher");
         } else if (userData.role === "jugador") {
           navigate(redirectPath); // Redirige al lobby o al path especificado

@@ -26,8 +26,8 @@ const ProtectedRoute = ({ children, requiredRole }) => {
 
   const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
   if (!loading && uid && requiredRole && (
-    (requiredRole === "administrador" && normalizedEmail !== "administrador@gmail.com" && rol !== "administrador") ||
-    (requiredRole !== "administrador" && rol !== requiredRole)
+    (requiredRole === "profesor" && normalizedEmail !== "profesor@gmail.com" && rol !== "profesor") ||
+    (requiredRole !== "profesor" && rol !== requiredRole)
   )) {
     console.log("Acceso denegado. Rol del usuario:", rol ?? "no definido", "Correo:", email ?? "no definido", "Rol requerido:", requiredRole);
     return <Navigate to="/unauthorized" />;

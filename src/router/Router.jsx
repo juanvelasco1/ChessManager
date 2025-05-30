@@ -83,7 +83,7 @@ const Router = () => {
         <Route
           path="/home-teacher"
           element={
-            <ProtectedRoute requiredRole="administrador">
+            <ProtectedRoute requiredRole="profesor">
               <HomeTeacherScreen />
             </ProtectedRoute>
           }
@@ -91,7 +91,7 @@ const Router = () => {
         <Route
           path="/settings-tournament"
           element={
-            <ProtectedRoute requiredRole="administrador">
+            <ProtectedRoute requiredRole="profesor">
               <SettingsTournamentScreen />
             </ProtectedRoute>
           }
@@ -99,7 +99,7 @@ const Router = () => {
         <Route
           path="/lobby"
           element={
-            <ProtectedRoute requiredRole="administrador">
+            <ProtectedRoute requiredRole="profesor">
               <LobbyScreen />
             </ProtectedRoute>
           }
@@ -107,7 +107,7 @@ const Router = () => {
         <Route
           path="/lobby/:roomId"
           element={
-            <ProtectedRoute requiredRole="administrador">
+            <ProtectedRoute requiredRole="profesor">
               <LobbyScreen />
             </ProtectedRoute>
           }
@@ -115,7 +115,7 @@ const Router = () => {
         <Route
           path="/game-tournament/:roomId"
           element={
-            <ProtectedRoute requiredRole="administrador">
+            <ProtectedRoute requiredRole="profesor">
               <GameTournamentScreen />
             </ProtectedRoute>
           }

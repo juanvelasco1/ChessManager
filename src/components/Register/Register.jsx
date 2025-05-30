@@ -41,7 +41,7 @@ const Register = () => {
       const user = userCredential.user;
 
       const normalizedEmail = email.trim().toLowerCase();
-      const role = normalizedEmail === "administrador@gmail.com" ? "administrador" : "jugador";
+      const role = normalizedEmail === "profesor@gmail.com" ? "profesor" : "jugador";
 
       await setDoc(doc(db, "users", user.uid), {
         avatar: selectedAvatar,
@@ -56,7 +56,7 @@ const Register = () => {
 
       if (role === "jugador") {
         navigate("/quiz");
-      } else if (role === "administrador") {
+      } else if (role === "profesor") {
         navigate("/home-teacher");
       }
     } catch (err) {
