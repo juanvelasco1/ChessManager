@@ -24,8 +24,6 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to="/login" />;
   }
   
-  console.log(requiredRole);
-  
   const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
   if (!loading && uid && requiredRole && (
     (requiredRole === "profesor" && normalizedEmail !== "profesor@gmail.com" && rol !== "profesor") ||
