@@ -10,6 +10,14 @@ import { doc, onSnapshot } from "firebase/firestore";
 const UserTeacher = () => {
     const uid = useSelector((state) => state.auth.uid);
     const [user, setUser] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+      const handleResize = () => setIsMobile(window.innerWidth < 768);
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -55,8 +63,9 @@ const UserTeacher = () => {
         mt: 2,
         boxShadow: 3,
         position: "relative",
-        top: 10,
-        mx: "auto",
+        top: isMobile ? -18 : 10,
+        mx: isMobile ? "auto" : 0,
+        left: isMobile ? 0 : 102,
       }}
     >
       {/* SVG */}

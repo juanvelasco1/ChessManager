@@ -30,15 +30,8 @@ const JoinRoomScreen = () => {
             participants: arrayUnion({ uid, nickname, points: 0 }),
           });
 
-          // Si el usuario es un jugador, redirige al lobby
-          if (role === "profesor") {
-            navigate("/home-teacher");
-          } else if (role === "jugador") {
-            navigate(`/lobby/${roomId}`);
-          } else {
-            alert("Rol no válido. Contacta al administrador.");
-            navigate("/home");
-          }
+          // Redirige al lobby
+          navigate(`/lobby/${roomId}`);
         } else {
           alert("La sala no existe.");
           navigate("/home");
@@ -50,7 +43,7 @@ const JoinRoomScreen = () => {
     };
 
     validateAndJoinRoom();
-  }, [uid, roomId, navigate, nickname, role]);
+  }, [uid, roomId, navigate, nickname]);
 
   return (
     <Box textAlign="center" mt={4}>

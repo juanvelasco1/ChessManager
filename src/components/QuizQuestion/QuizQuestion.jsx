@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../services/firebaseConfig";
 import { db } from "../../services/firebaseConfig";
 import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
@@ -8,8 +8,6 @@ import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
 const QuizQuestion = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Obtener el parámetro `redirect` de la URL
   const redirectPath = new URLSearchParams(location.search).get("redirect") || "/home";
 
   const [questions, setQuestions] = useState([]);
@@ -26,24 +24,6 @@ const QuizQuestion = () => {
     const saved = localStorage.getItem("quizCorrect");
     return saved ? parseInt(saved) : 0;
   });
-
-    useEffect(() => {
-      const fetchQuestions = async () => {
-        const docRef = doc(db, "quizQuestions", "set1");
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          try {
-            const parsedQuestions = JSON.parse(docSnap.data().questions);
-            setQuestions(parsedQuestions);
-          } catch (error) {
-            console.error("Error al parsear las preguntas:", error);
-          }
-        } else {
-          console.error("No se encontró el documento de preguntas");
-        }
-      };
-      fetchQuestions();
-    }, []);
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -128,7 +108,13 @@ const QuizQuestion = () => {
         });
       }
       localStorage.clear();
-      navigate(redirectPath); // Redirige al lobby o al path especificado
+
+      // Redirige al lobby si el parámetro redirect está presente, de lo contrario al home
+      if (redirectPath) {
+        navigate(redirectPath);
+      } else {
+        navigate("/home");
+      }
     };
 
     return (

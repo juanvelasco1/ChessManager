@@ -38,7 +38,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
       sx={{
         width: { xs: 412, md: "500px" },
         mx: "auto",
-        mt: { xs: 3, md: -17 },
+        mt: { xs: -3, md: -17 },
         top: { xs: 40, md: 0 },
         position: { xs: "relative", md: "relative" },
       }}

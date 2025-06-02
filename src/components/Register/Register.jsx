@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -19,6 +19,8 @@ const avatars = [
 ];
 const Register = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectPath = new URLSearchParams(location.search).get("redirect");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -54,10 +56,11 @@ const Register = () => {
         points: 0,
       });
 
-      if (role === "jugador") {
-        navigate("/quiz");
-      } else if (role === "profesor") {
-        navigate("/home-teacher");
+      // Redirige al quiz si el parámetro redirect está presente, de lo contrario al home
+      if (redirectPath) {
+        navigate(`/quiz?redirect=${redirectPath}`);
+      } else {
+        navigate("/home");
       }
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {

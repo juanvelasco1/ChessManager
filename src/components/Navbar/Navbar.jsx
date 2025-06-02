@@ -28,13 +28,22 @@ const NavBar = () => {
     <Box
       sx={{
         position: "fixed",
-        bottom: 50,
-        left: "48%",
-        top: "90%",
+        top: {
+          xs: 690,     // mobile
+          md: 850           // desktop
+        },
+        bottom: {
+          xs: 50,          // mobile
+          md: "unset"
+        },
+        left: {
+          xs: "47.3%",
+          md: "50%"
+        },
         transform: "translateX(-50%)",
         width: {
-          xs: "90%",      // Mobile
-          md: "120%",       // Desktop/tablet breakpoint
+          xs: "90%",
+          md: "120%",
         },
         maxWidth: 700,
         zIndex: 1000,
