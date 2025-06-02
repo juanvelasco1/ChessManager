@@ -57,7 +57,7 @@ const Login = () => {
 
         // Redirige según el rol del usuario
         if (userData.role === "profesor") {
-          navigate("/home-teacher");
+          navigate("/home-teacher"); // Redirige directamente al home del profesor
         } else if (userData.role === "jugador") {
           navigate(redirectPath); // Redirige al lobby o al path especificado
         } else {
@@ -70,6 +70,8 @@ const Login = () => {
       console.error("Error al iniciar sesión:", err);
       if (err.code === "auth/user-not-found") {
         setError("El usuario no está registrado.");
+      } else if (err.code === "auth/wrong-password") {
+        setError("Contraseña incorrecta.");
       } else {
         setError("Error al iniciar sesión. Intenta de nuevo.");
       }
