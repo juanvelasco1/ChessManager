@@ -1,9 +1,9 @@
-import { Box, Typography, Button, IconButton } from "@mui/material";
+import { Box, Typography, Button, IconButton, Modal } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserLobby from "../../components/UserLobby/UserLobby";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux"; // Importa useSelector
+import { useSelector } from "react-redux";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import RoomQR from "../../components/RoomQR/RoomQR";
@@ -13,9 +13,8 @@ const LobbyScreen = () => {
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
   const [participants, setParticipants] = useState([]); // Lista dinámica de participantes
   const [isMobile, setIsMobile] = useState(false);
-
-  // Obtén el rol del usuario desde Redux
-  const userRole = useSelector((state) => state.auth.rol);
+  const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
+  const userRole = useSelector((state) => state.auth.rol); // Obtén el rol del usuario desde Redux
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
@@ -104,27 +103,77 @@ const LobbyScreen = () => {
         ))}
       </Box>
 
-      {/* Mostrar el botón solo si el usuario es administrador */}
+      {/* Mostrar el botón solo si el usuario es profesor */}
       {userRole === "profesor" && (
-        <Button
-          variant="contained"
-          onClick={handleStartTournament}
-          sx={{
-            backgroundColor: "#000039",
-            borderRadius: "10px",
-            fontWeight: "bold",
-            fontSize: "16px",
-            width: "93%",
-            height: "63px",
-            py: 1.2,
-            color: "#fff",
-            "&:hover": {
+        <>
+          <Button
+            variant="contained"
+            onClick={() => setOpenModal(true)} // Abre el modal
+            sx={{
               backgroundColor: "#000039",
-            },
-          }}
-        >
-          INICIAR
-        </Button>
+              borderRadius: "10px",
+              fontWeight: "bold",
+              fontSize: "16px",
+              width: "93%",
+              height: "63px",
+              py: 1.2,
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#000039",
+              },
+            }}
+          >
+            INICIAR
+          </Button>
+
+          {/* Modal de confirmación */}
+          <Modal
+            open={openModal}
+            onClose={() => setOpenModal(false)} // Cierra el modal
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 300,
+                bgcolor: "white",
+                borderRadius: "10px",
+                boxShadow: 24,
+                p: 4,
+                textAlign: "center",
+              }}
+            >
+              <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+                ¿Iniciar torneo?
+              </Typography>
+              <Typography id="modal-description" mb={3}>
+                ¿Estás seguro de que deseas iniciar el torneo? Esta acción no se puede deshacer.
+              </Typography>
+              <Box display="flex" justifyContent="space-around">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setOpenModal(false); // Cierra el modal
+                    handleStartTournament(); // Inicia el torneo
+                  }}
+                >
+                  Sí, iniciar
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setOpenModal(false)} // Cierra el modal
+                >
+                  Cancelar
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+        </>
       )}
     </Box>
   ) : (
@@ -181,27 +230,77 @@ const LobbyScreen = () => {
         ))}
       </Box>
 
-      {/* Mostrar el botón solo si el usuario es administrador */}
+      {/* Mostrar el botón solo si el usuario es profesor */}
       {userRole === "profesor" && (
-        <Button
-          variant="contained"
-          onClick={handleStartTournament}
-          sx={{
-            backgroundColor: "#000039",
-            borderRadius: "10px",
-            fontWeight: "bold",
-            fontSize: "16px",
-            width: "230px",
-            height: "60px",
-            color: "#fff",
-            mt: 2,
-            "&:hover": {
+        <>
+          <Button
+            variant="contained"
+            onClick={() => setOpenModal(true)} // Abre el modal
+            sx={{
               backgroundColor: "#000039",
-            },
-          }}
-        >
-          INICIAR
-        </Button>
+              borderRadius: "10px",
+              fontWeight: "bold",
+              fontSize: "16px",
+              width: "230px",
+              height: "60px",
+              color: "#fff",
+              mt: 2,
+              "&:hover": {
+                backgroundColor: "#000039",
+              },
+            }}
+          >
+            INICIAR
+          </Button>
+
+          {/* Modal de confirmación */}
+          <Modal
+            open={openModal}
+            onClose={() => setOpenModal(false)} // Cierra el modal
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
+          >
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 300,
+                bgcolor: "white",
+                borderRadius: "10px",
+                boxShadow: 24,
+                p: 4,
+                textAlign: "center",
+              }}
+            >
+              <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+                ¿Iniciar torneo?
+              </Typography>
+              <Typography id="modal-description" mb={3}>
+                ¿Estás seguro de que deseas iniciar el torneo? Esta acción no se puede deshacer.
+              </Typography>
+              <Box display="flex" justifyContent="space-around">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    setOpenModal(false); // Cierra el modal
+                    handleStartTournament(); // Inicia el torneo
+                  }}
+                >
+                  Sí, iniciar
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => setOpenModal(false)} // Cierra el modal
+                >
+                  Cancelar
+                </Button>
+              </Box>
+            </Box>
+          </Modal>
+        </>
       )}
     </Box>
   );

@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 
-const UserLobby = ({ name, avatar }) => {
+const UserLobby = ({ nickname, avatar }) => {
   return (
     <Box
       sx={{
@@ -15,7 +15,7 @@ const UserLobby = ({ name, avatar }) => {
         gap: "4px",
       }}
     >
-      <Avatar src={avatar} alt={name} sx={{ width: 36, height: 36 }} />
+      <Avatar src={avatar} alt={nickname} sx={{ width: 36, height: 36 }} />
       <Typography
         variant="caption"
         sx={{
@@ -25,7 +25,7 @@ const UserLobby = ({ name, avatar }) => {
           textAlign: "center",
         }}
       >
-        {name}
+        {nickname}
       </Typography>
     </Box>
   );
