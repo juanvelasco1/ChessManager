@@ -48,7 +48,6 @@ const Login = () => {
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log(userData);
         dispatch(login({
           uid: user.uid,
           email: user.email,
