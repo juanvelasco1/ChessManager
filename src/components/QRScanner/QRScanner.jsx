@@ -5,9 +5,10 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
+  const [isScannerInitialized, setIsScannerInitialized] = useState(false); // Estado para verificar si el escáner está inicializado
 
   useEffect(() => {
-    if (openModal) {
+    if (openModal && !isScannerInitialized) {
       const qrReaderElement = document.getElementById("qr-reader");
       if (qrReaderElement) {
         try {
@@ -28,7 +29,7 @@ const QRScanner = () => {
             }
           );
 
-          return () => qrScanner.clear(); // Limpia el escáner al desmontar el componente
+          setIsScannerInitialized(true); // Marca el escáner como inicializado
         } catch (error) {
           console.error("Error al inicializar el escáner:", error);
           setCameraError("No se pudo inicializar el escáner. Verifica los permisos de cámara.");
@@ -37,14 +38,17 @@ const QRScanner = () => {
         setCameraError("No se encontró el elemento QR Reader en el DOM.");
       }
     }
-  }, [openModal]);
+  }, [openModal, isScannerInitialized]);
 
   return (
     <Box textAlign="center" mt={4}>
       {/* Botón para abrir el modal */}
       <Button
         variant="contained"
-        onClick={() => setOpenModal(true)} // Abre el modal
+        onClick={() => {
+          setOpenModal(true);
+          setIsScannerInitialized(false); // Reinicia el estado de inicialización
+        }}
         sx={{
           bgcolor: "#000039",
           color: "#fff",
