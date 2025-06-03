@@ -4,6 +4,7 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 
 const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
+  const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
 
   useEffect(() => {
     if (openModal) {
@@ -27,6 +28,8 @@ const QRScanner = () => {
         );
 
         return () => qrScanner.clear(); // Limpia el escáner al desmontar el componente
+      } else {
+        setCameraError("No se pudo inicializar el escáner. Verifica los permisos de cámara.");
       }
     }
   }, [openModal]);
@@ -81,6 +84,11 @@ const QRScanner = () => {
             Escaneando QR...
           </Typography>
           <div id="qr-reader" style={{ width: "100%" }}></div>
+          {cameraError && (
+            <Typography color="error" mt={2}>
+              {cameraError}
+            </Typography>
+          )}
           <Button
             variant="outlined"
             onClick={() => setOpenModal(false)} // Cierra el modal
