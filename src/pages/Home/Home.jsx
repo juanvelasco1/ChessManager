@@ -3,6 +3,7 @@ import UserCard from "../../components/UserCard/UserCard";
 import Podium from "../../components/Podium/Podium";
 import RankingTable from "../../components/RankingTable/RankingTable";
 import TimerInput from "../../components/TimerInput/TimerInput";
+import QRScanner from "../../components/QRScanner/QRScanner";
 
 const HomeScreen = () => {
     const [isMobile, setIsMobile] = useState(false);
@@ -18,6 +19,7 @@ const HomeScreen = () => {
         isMobile ? (
             <div style={{ padding: "10px 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <UserCard />
+                <QRScanner></QRScanner>
                 <TimerInput topMobile="40%" topDesktop="20%" />
                 <Podium />
                 <RankingTable showCurrentUser={true} />

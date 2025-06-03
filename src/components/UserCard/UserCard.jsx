@@ -4,16 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
-import { doc, onSnapshot, updateDoc, getDoc, arrayUnion } from "firebase/firestore";
-import { Html5QrcodeScanner } from "html5-qrcode";
+import { doc, onSnapshot, updateDoc, getDoc } from "firebase/firestore";
 
 const UserCard = () => {
   const uid = useSelector((state) => state.auth.uid);
-  const nickname = useSelector((state) => state.auth.nickname);
   const [user, setUser] = useState(null);
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Estado para controlar el Snackbar
-  const [isScanning, setIsScanning] = useState(false); // Estado para controlar el escaneo
   const navigate = useNavigate();
 
   // Actualizar campos del usuario si no existen
@@ -75,44 +72,6 @@ const UserCard = () => {
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
   };
-
-  // Manejar escaneo de QR
-  useEffect(() => {
-    if (isScanning) {
-      const qrScanner = new Html5QrcodeScanner(
-        "qr-reader",
-        { fps: 10, qrbox: { width: 250, height: 250 } },
-        false
-      );
-
-      qrScanner.render(
-        async (decodedText) => {
-          if (decodedText.startsWith("https://chess-manager-jade.vercel.app/join-room/")) {
-            const roomId = decodedText.split("/").pop(); // Obtiene el roomId del QR
-            try {
-              const roomRef = doc(db, "rooms", roomId);
-              await updateDoc(roomRef, {
-                participants: arrayUnion({ uid, nickname, points: 0 }),
-              });
-              qrScanner.clear(); // Limpia el escáner
-              setIsScanning(false); // Detiene el escaneo
-              navigate(`/lobby/${roomId}`); // Redirige al lobby
-            } catch (error) {
-              console.error("Error al unirse a la sala:", error);
-              alert("Hubo un problema al unirse a la sala.");
-            }
-          } else {
-            alert("El QR escaneado no es válido.");
-          }
-        },
-        (errorMessage) => {
-          console.error("Error al escanear el QR:", errorMessage);
-        }
-      );
-
-      return () => qrScanner.clear(); // Limpia el escáner al desmontar el componente
-    }
-  }, [isScanning, navigate, uid, nickname]);
 
   if (!user) {
     return <Typography>Cargando datos del usuario...</Typography>;
@@ -298,51 +257,6 @@ const UserCard = () => {
           </Typography>
         </Box>
       </Box>
-
-      {/* Escaneo de QR */}
-      {!isScanning ? (
-        <Box display="flex" justifyContent="center" mt={2}>
-          <Button
-            variant="contained"
-            onClick={() => setIsScanning(true)} // Activa el escaneo
-            sx={{
-              bgcolor: "#000039",
-              color: "#fff",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              "&:hover": {
-                bgcolor: "#000039",
-              },
-            }}
-          >
-            Escanear QR
-          </Button>
-        </Box>
-      ) : (
-        <Box textAlign="center" mt={2}>
-          <Typography fontWeight="bold" color="#000039" fontSize="20px" mb={2}>
-            Escaneando QR...
-          </Typography>
-          <div id="qr-reader" style={{ width: "100%" }}></div>
-          <Button
-            variant="outlined"
-            onClick={() => setIsScanning(false)} // Detiene el escaneo
-            sx={{
-              mt: 2,
-              borderColor: "#000039",
-              color: "#000039",
-              borderRadius: "10px",
-              fontWeight: "bold",
-              "&:hover": {
-                borderColor: "#000039",
-                bgcolor: "#f0f0f0",
-              },
-            }}
-          >
-            Cancelar
-          </Button>
-        </Box>
-      )}
     </Box>
   );
 };
