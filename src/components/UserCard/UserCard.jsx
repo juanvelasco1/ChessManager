@@ -257,6 +257,25 @@ const UserCard = () => {
           </Typography>
         </Box>
       </Box>
+
+      {/* Botón para escanear QR */}
+      <Box display="flex" justifyContent="center" mt={2}>
+        <Button
+          variant="contained"
+          onClick={() => navigate("/qr-scanner")} // Redirige al escáner de QR
+          sx={{
+            bgcolor: "#000039",
+            color: "#fff",
+            borderRadius: "10px",
+            fontWeight: "bold",
+            "&:hover": {
+              bgcolor: "#000039",
+            },
+          }}
+        >
+          Escanear QR
+        </Button>
+      </Box>
     </Box>
   );
 };
