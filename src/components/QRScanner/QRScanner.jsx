@@ -1,66 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { Html5QrcodeScanner } from "html5-qrcode";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
 
 const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
-  const navigate = useNavigate();
-  const uid = useSelector((state) => state.auth.uid); // UID del jugador
-  const nickname = useSelector((state) => state.auth.nickname); // Nickname del jugador
-  const userRole = useSelector((state) => state.auth.rol); // Rol del usuario
+  const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
 
   useEffect(() => {
     if (openModal) {
       const qrReaderElement = document.getElementById("qr-reader");
       if (qrReaderElement) {
-        const qrScanner = new Html5QrcodeScanner(
-          "qr-reader",
-          { fps: 10, qrbox: { width: 250, height: 250 } },
-          false
-        );
+        try {
+          const qrScanner = new Html5QrcodeScanner(
+            "qr-reader",
+            { fps: 10, qrbox: { width: 250, height: 250 } },
+            false
+          );
 
-        qrScanner.render(
-          async (decodedText) => {
-            console.log("QR escaneado:", decodedText);
-
-            // Verificar si el QR contiene la URL esperada
-            const productionUrl = "https://chess-manager-jade.vercel.app";
-            if (decodedText.startsWith(`${productionUrl}/join-room/`)) {
-              const roomId = decodedText.split("/").pop(); // Obtiene el roomId del QR
-              try {
-                const roomRef = doc(db, "rooms", roomId);
-                await updateDoc(roomRef, {
-                  participants: arrayUnion({ uid, nickname, points: 0 }),
-                });
-                qrScanner.clear(); // Limpia el escáner
-                setOpenModal(false); // Cierra el modal
-                navigate(`/lobby/${roomId}`); // Redirige al lobby
-              } catch (error) {
-                console.error("Error al unirse a la sala:", error);
-                alert("Hubo un problema al unirse a la sala.");
-              }
-            } else {
-              alert("El QR escaneado no es válido.");
+          qrScanner.render(
+            (decodedText) => {
+              console.log("QR escaneado:", decodedText);
+              qrScanner.clear(); // Limpia el escáner
+              setOpenModal(false); // Cierra el modal
+            },
+            (errorMessage) => {
+              console.error("Error al escanear el QR:", errorMessage);
             }
-          },
-          (errorMessage) => {
-            console.error("Error al escanear el QR:", errorMessage);
-          }
-        );
+          );
 
-        return () => qrScanner.clear(); // Limpia el escáner al desmontar el componente
+          return () => qrScanner.clear(); // Limpia el escáner al desmontar el componente
+        } catch (error) {
+          console.error("Error al inicializar el escáner:", error);
+          setCameraError("No se pudo inicializar el escáner. Verifica los permisos de cámara.");
+        }
+      } else {
+        setCameraError("No se encontró el elemento QR Reader en el DOM.");
       }
     }
-  }, [openModal, navigate, uid, nickname]);
-
-  // Mostrar el botón solo si el usuario es un jugador
-  if (userRole !== "jugador") {
-    return null;
-  }
+  }, [openModal]);
 
   return (
     <Box textAlign="center" mt={4}>
@@ -112,6 +89,11 @@ const QRScanner = () => {
             Escaneando QR...
           </Typography>
           <div id="qr-reader" style={{ width: "100%" }}></div>
+          {cameraError && (
+            <Typography color="error" mt={2}>
+              {cameraError}
+            </Typography>
+          )}
           <Button
             variant="outlined"
             onClick={() => setOpenModal(false)} // Cierra el modal
