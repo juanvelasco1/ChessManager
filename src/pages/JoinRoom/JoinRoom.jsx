@@ -10,7 +10,6 @@ const JoinRoomScreen = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.auth.uid); // UID del usuario autenticado
   const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
-  const role = useSelector((state) => state.auth.rol); // Rol del usuario
 
   useEffect(() => {
     const validateAndJoinRoom = async () => {

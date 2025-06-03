@@ -30,19 +30,7 @@ const SettingTournamentScreen = () => {
         paddingTop: "90px",
       }}
     >
-      {/* Botón de retroceso */}
-      <IconButton
-        onClick={() => navigate(-1)}
-        sx={{
-          position: "absolute",
-          top: 16,
-          left: 16,
-          zIndex: 999,
-          color: "#000039",
-        }}
-      >
-        <ArrowBackIcon sx={{ fontSize: 28 }} />
-      </IconButton>
+    
 
       <Typography
         sx={{

@@ -2,8 +2,8 @@ import { Box, Typography } from "@mui/material";
 import QRCode from "react-qr-code";
 
 /**
- * Componente para mostrar el QR de la sala.
- * @param {string} roomId - ID de la sala.
+  Componente para mostrar el QR de la sala.
+  @param {string} roomId - ID de la sala.
  */
 const RoomQR = ({ roomId }) => {
   const productionUrl = "https://chess-manager-jade.vercel.app"; // URL de tu proyecto en Vercel

@@ -91,7 +91,7 @@ const UserTeacher = () => {
         {/* Modal de confirmación */}
         <Modal
           open={openModal}
-          onClose={() => setOpenModal(false)} // Cierra el modal
+          onClose={() => setOpenModal(false)}
           aria-labelledby="modal-title"
           aria-describedby="modal-description"
         >
@@ -102,30 +102,66 @@ const UserTeacher = () => {
               left: "50%",
               transform: "translate(-50%, -50%)",
               width: 300,
-              bgcolor: "white",
-              borderRadius: "10px",
-              boxShadow: 24,
+              bgcolor: "#ffffff",
+              borderRadius: "16px",
+              boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.2)",
               p: 4,
               textAlign: "center",
+              fontFamily: "Roboto",
             }}
           >
-            <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+            <Typography
+              id="modal-title"
+              sx={{
+                color: "#000039",
+                fontFamily: "Roboto",
+                fontSize: "22px",
+                fontWeight: 700,
+                mb: 2,
+              }}
+            >
               ¿Cerrar sesión?
             </Typography>
-            <Typography id="modal-description" mb={3}>
+            <Typography
+              id="modal-description"
+              sx={{
+                color: "#4f4f4f",
+                fontFamily: "Roboto",
+                fontSize: "16px",
+                mb: 3,
+              }}
+            >
               ¿Estás seguro de que deseas cerrar sesión?
             </Typography>
             <Box display="flex" justifyContent="space-around">
               <Button
                 variant="contained"
-                color="error"
-                onClick={handleLogout} // Cierra sesión
+                sx={{
+                  backgroundColor: "#d32f2f",
+                  color: "#fff",
+                  fontWeight: 600,
+                  fontFamily: "Roboto",
+                  "&:hover": {
+                    backgroundColor: "#b71c1c",
+                  },
+                }}
+                onClick={handleLogout}
               >
                 Sí, salir
               </Button>
               <Button
                 variant="outlined"
-                onClick={() => setOpenModal(false)} // Cierra el modal
+                sx={{
+                  borderColor: "#000039",
+                  color: "#000039",
+                  fontWeight: 600,
+                  fontFamily: "Roboto",
+                  "&:hover": {
+                    borderColor: "#000039",
+                    backgroundColor: "#f0f0f0",
+                  },
+                }}
+                onClick={() => setOpenModal(false)}
               >
                 Cancelar
               </Button>

@@ -144,30 +144,55 @@ const UserCard = () => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 300,
-            bgcolor: "white",
-            borderRadius: "10px",
+            bgcolor: "#ffffff",
+            borderRadius: "20px",
             boxShadow: 24,
             p: 4,
             textAlign: "center",
+            fontFamily: "Roboto",
           }}
         >
-          <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+          <Typography
+            id="modal-title"
+            variant="h6"
+            component="h2"
+            mb={2}
+            sx={{ color: "#000039", fontWeight: "700" }}
+          >
             ¿Cerrar sesión?
           </Typography>
-          <Typography id="modal-description" mb={3}>
+          <Typography id="modal-description" mb={3} sx={{ color: "#000039" }}>
             ¿Estás seguro de que deseas cerrar sesión?
           </Typography>
           <Box display="flex" justifyContent="space-around">
             <Button
               variant="contained"
-              color="error"
-              onClick={handleLogout} // Cierra sesión
+              onClick={handleLogout}
+              sx={{
+                bgcolor: "#FF4D4F",
+                color: "#fff",
+                fontWeight: "bold",
+                borderRadius: "12px",
+                "&:hover": {
+                  bgcolor: "#d9373a",
+                },
+              }}
             >
               Sí, salir
             </Button>
             <Button
               variant="outlined"
-              onClick={() => setOpenModal(false)} // Cierra el modal
+              onClick={() => setOpenModal(false)}
+              sx={{
+                color: "#000039",
+                borderColor: "#000039",
+                fontWeight: "bold",
+                borderRadius: "12px",
+                "&:hover": {
+                  bgcolor: "#f5f5f5",
+                  borderColor: "#000039",
+                },
+              }}
             >
               Cancelar
             </Button>

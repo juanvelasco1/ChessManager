@@ -140,26 +140,53 @@ const LobbyScreen = () => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: 300,
-                bgcolor: "white",
-                borderRadius: "10px",
-                boxShadow: 24,
+                bgcolor: "#ffffff",
+                borderRadius: "20px",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.25)",
                 p: 4,
                 textAlign: "center",
+                fontFamily: "Roboto",
               }}
             >
-              <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+              <Typography
+                id="modal-title"
+                variant="h6"
+                component="h2"
+                mb={2}
+                sx={{
+                  fontWeight: "bold",
+                  color: "#000039",
+                  fontFamily: "Roboto",
+                }}
+              >
                 ¿Iniciar torneo?
               </Typography>
-              <Typography id="modal-description" mb={3}>
+              <Typography
+                id="modal-description"
+                mb={3}
+                sx={{
+                  fontSize: "16px",
+                  color: "#434379",
+                  fontFamily: "Roboto",
+                }}
+              >
                 ¿Estás seguro de que deseas iniciar el torneo? Esta acción no se puede deshacer.
               </Typography>
               <Box display="flex" justifyContent="space-around">
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={() => {
                     setOpenModal(false); // Cierra el modal
                     handleStartTournament(); // Inicia el torneo
+                  }}
+                  sx={{
+                    backgroundColor: "#000039",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: "#000039",
+                    },
                   }}
                 >
                   Sí, iniciar
@@ -167,6 +194,15 @@ const LobbyScreen = () => {
                 <Button
                   variant="outlined"
                   onClick={() => setOpenModal(false)} // Cierra el modal
+                  sx={{
+                    color: "#000039",
+                    borderColor: "#000039",
+                    borderRadius: "10px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      borderColor: "#000039",
+                    },
+                  }}
                 >
                   Cancelar
                 </Button>
@@ -267,26 +303,53 @@ const LobbyScreen = () => {
                 left: "50%",
                 transform: "translate(-50%, -50%)",
                 width: 300,
-                bgcolor: "white",
-                borderRadius: "10px",
-                boxShadow: 24,
+                bgcolor: "#ffffff",
+                borderRadius: "20px",
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.25)",
                 p: 4,
                 textAlign: "center",
+                fontFamily: "Roboto",
               }}
             >
-              <Typography id="modal-title" variant="h6" component="h2" mb={2}>
+              <Typography
+                id="modal-title"
+                variant="h6"
+                component="h2"
+                mb={2}
+                sx={{
+                  fontWeight: "bold",
+                  color: "#000039",
+                  fontFamily: "Roboto",
+                }}
+              >
                 ¿Iniciar torneo?
               </Typography>
-              <Typography id="modal-description" mb={3}>
+              <Typography
+                id="modal-description"
+                mb={3}
+                sx={{
+                  fontSize: "16px",
+                  color: "#434379",
+                  fontFamily: "Roboto",
+                }}
+              >
                 ¿Estás seguro de que deseas iniciar el torneo? Esta acción no se puede deshacer.
               </Typography>
               <Box display="flex" justifyContent="space-around">
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={() => {
                     setOpenModal(false); // Cierra el modal
                     handleStartTournament(); // Inicia el torneo
+                  }}
+                  sx={{
+                    backgroundColor: "#000039",
+                    color: "#fff",
+                    borderRadius: "10px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      backgroundColor: "#000039",
+                    },
                   }}
                 >
                   Sí, iniciar
@@ -294,6 +357,15 @@ const LobbyScreen = () => {
                 <Button
                   variant="outlined"
                   onClick={() => setOpenModal(false)} // Cierra el modal
+                  sx={{
+                    color: "#000039",
+                    borderColor: "#000039",
+                    borderRadius: "10px",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      borderColor: "#000039",
+                    },
+                  }}
                 >
                   Cancelar
                 </Button>
