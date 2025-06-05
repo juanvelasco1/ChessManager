@@ -43,12 +43,21 @@ const QRScanner = () => {
                     if (roomSnapshot.exists()) {
                       console.log("Datos de la sala:", roomSnapshot.data()); // Log para depuración
 
+                      // Validar que los valores no sean undefined
+                      if (!uid || !nickname || !avatar) {
+                        alert("Los datos del usuario no están completos.");
+                        return;
+                      }
+
                       // Validar que el campo participants sea un array
                       const roomData = roomSnapshot.data();
                       if (!Array.isArray(roomData.participants)) {
                         alert("El campo 'participants' no es un array.");
                         return;
                       }
+
+                      // Log para depuración
+                      console.log("Datos que se están enviando a Firestore:", { uid, nickname, avatar, points: 0 });
 
                       // Agregar al usuario como participante en la sala
                       await updateDoc(roomRef, {
