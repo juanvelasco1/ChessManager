@@ -35,11 +35,21 @@ const QRScanner = () => {
                 const productionUrl = "https://chess-manager-jade.vercel.app";
                 if (decodedText.startsWith(`${productionUrl}/join-room/`)) {
                   const roomId = decodedText.split("/").pop(); // Obtiene el roomId del QR
+                  console.log("Room ID obtenido del QR:", roomId); // Log para depuración
                   try {
                     const roomRef = doc(db, "rooms", roomId);
                     const roomSnapshot = await getDoc(roomRef);
 
                     if (roomSnapshot.exists()) {
+                      console.log("Datos de la sala:", roomSnapshot.data()); // Log para depuración
+
+                      // Validar que el campo participants sea un array
+                      const roomData = roomSnapshot.data();
+                      if (!Array.isArray(roomData.participants)) {
+                        alert("El campo 'participants' no es un array.");
+                        return;
+                      }
+
                       // Agregar al usuario como participante en la sala
                       await updateDoc(roomRef, {
                         participants: arrayUnion({ uid, nickname, avatar, points: 0 }),
@@ -52,7 +62,7 @@ const QRScanner = () => {
                     }
                   } catch (error) {
                     console.error("Error al unirse a la sala:", error);
-                    alert("Hubo un problema al unirse a la sala.");
+                    alert(`Hubo un problema al unirse a la sala: ${error.message}`);
                   }
                 } else {
                   alert("El QR escaneado no es válido.");
