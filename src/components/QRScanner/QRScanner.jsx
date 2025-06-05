@@ -45,8 +45,9 @@ const QRScanner = () => {
                       console.log("Datos de la sala:", roomSnapshot.data()); // Log para depuración
 
                       // Validar que los valores no sean undefined
-                      if (!uid || !nickname || !avatar || !points) {
+                      if (!uid || !nickname || !avatar || points === undefined || points === null) {
                         alert("Los datos del usuario no están completos.");
+                        console.log("Valores inválidos:", { uid, nickname, avatar, points });
                         return;
                       }
 
@@ -58,11 +59,11 @@ const QRScanner = () => {
                       }
 
                       // Log para depuración
-                      console.log("Datos que se están enviando a Firestore:", { uid, nickname, avatar, points: 0 });
+                      console.log("Datos que se están enviando a Firestore:", { uid, nickname, avatar, points });
 
                       // Agregar al usuario como participante en la sala
                       await updateDoc(roomRef, {
-                        participants: arrayUnion({ uid, nickname, avatar, points: 0 }),
+                        participants: arrayUnion({ uid, nickname, avatar, points }),
                       });
                       qrScanner.clear(); // Limpia el escáner
                       setOpenModal(false); // Cierra el modal

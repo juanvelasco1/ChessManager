@@ -4,8 +4,8 @@ const initialState = {
   uid: localStorage.getItem("uid") || null,
   email: localStorage.getItem("email") || null,
   nickname: localStorage.getItem("nickname") || null,
-  avatar: localStorage.getItem("avatar") || null,
-  points: parseInt(localStorage.getItem("points"), 10) || 0, 
+  avatar: localStorage.getItem("avatar") || "/avatars/default-avatar.png", // Valor predeterminado
+  points: parseInt(localStorage.getItem("points"), 10) || 0, // Valor predeterminado
   rol: localStorage.getItem("rol") || null,
   loading: true,
 };
@@ -26,18 +26,18 @@ const AuthSlice = createSlice({
       state.uid = action.payload.uid;
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
-      state.avatar = action.payload.avatar;
-      state.points = action.payload.points || 0; 
+      state.avatar = action.payload.avatar || "/avatars/default-avatar.png"; // Valor predeterminado
+      state.points = action.payload.points || 0; // Valor predeterminado
       const normalizedEmail = (action.payload.email || "").trim().toLowerCase();
       const assignedRole = normalizedEmail === "administrador@gmail.com" ? "administrador" : (action.payload.rol || "jugador");
       state.rol = assignedRole;
       state.loading = false;
+
+      // Sincronizar con localStorage
       localStorage.setItem("uid", action.payload.uid);
-      if (action.payload.email !== null) {
-        localStorage.setItem("email", action.payload.email);
-      }
-      localStorage.setItem("nickname", action.payload.nickname);
-      localStorage.setItem("avatar", action.payload.avatar);
+      localStorage.setItem("email", action.payload.email || "");
+      localStorage.setItem("nickname", action.payload.nickname || "Anónimo");
+      localStorage.setItem("avatar", action.payload.avatar || "/avatars/default-avatar.png");
       localStorage.setItem("points", action.payload.points || 0);
       localStorage.setItem("rol", assignedRole);
     },
