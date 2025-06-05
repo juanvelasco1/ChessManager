@@ -10,6 +10,7 @@ const JoinRoomScreen = () => {
   const navigate = useNavigate();
   const uid = useSelector((state) => state.auth.uid); // UID del usuario autenticado
   const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
+  const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
 
   useEffect(() => {
     const validateAndJoinRoom = async () => {
@@ -26,7 +27,7 @@ const JoinRoomScreen = () => {
         if (roomSnapshot.exists()) {
           // Agrega al usuario a la sala
           await updateDoc(roomRef, {
-            participants: arrayUnion({ uid, nickname, points: 0 }),
+            participants: arrayUnion({ uid, nickname, avatar, points: 0 }),
           });
 
           // Redirige al lobby
@@ -42,7 +43,7 @@ const JoinRoomScreen = () => {
     };
 
     validateAndJoinRoom();
-  }, [uid, roomId, navigate, nickname]);
+  }, [uid, roomId, navigate, nickname, avatar]);
 
   return (
     <Box textAlign="center" mt={4}>
