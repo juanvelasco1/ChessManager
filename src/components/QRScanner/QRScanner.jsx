@@ -13,6 +13,7 @@ const QRScanner = () => {
   const uid = useSelector((state) => state.auth.uid); // UID del usuario
   const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
   const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
+  const points = useSelector((state) => state.auth.points); // Puntos del usuario
 
   useEffect(() => {
     if (openModal) {
@@ -44,7 +45,7 @@ const QRScanner = () => {
                       console.log("Datos de la sala:", roomSnapshot.data()); // Log para depuración
 
                       // Validar que los valores no sean undefined
-                      if (!uid || !nickname || !avatar) {
+                      if (!uid || !nickname || !avatar || !points) {
                         alert("Los datos del usuario no están completos.");
                         return;
                       }
@@ -88,7 +89,7 @@ const QRScanner = () => {
         }
       }, 100); // Verifica cada 100ms si el elemento está disponible
     }
-  }, [openModal, navigate, uid, nickname, avatar]);
+  }, [openModal, navigate, uid, nickname, avatar, points]);
 
   return (
     <Box textAlign="center" mt={4}>
