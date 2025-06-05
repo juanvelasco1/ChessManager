@@ -81,12 +81,6 @@ const QRScanner = () => {
     }
   }, [openModal, navigate, uid, nickname, avatar]);
 
-  // Validar que los datos del usuario estén completos
-  if (!uid || !nickname || !avatar) {
-    alert("Los datos del usuario no están completos.");
-    return;
-  }
-
   return (
     <Box textAlign="center" mt={4}>
       {/* Botón para abrir el modal */}
