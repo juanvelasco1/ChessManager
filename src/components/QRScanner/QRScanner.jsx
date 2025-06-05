@@ -1,54 +1,82 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { Html5QrcodeScanner } from "html5-qrcode";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
 const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
-  const [isScannerInitialized, setIsScannerInitialized] = useState(false); // Estado para verificar si el escáner está inicializado
+  const navigate = useNavigate();
+  const uid = useSelector((state) => state.auth.uid); // UID del usuario
+  const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
+  const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
 
   useEffect(() => {
-    if (openModal && !isScannerInitialized) {
-      const qrReaderElement = document.getElementById("qr-reader");
-      if (qrReaderElement) {
-        try {
-          const qrScanner = new Html5QrcodeScanner(
-            "qr-reader",
-            { fps: 10, qrbox: { width: 250, height: 250 } },
-            false
-          );
+    if (openModal) {
+      const interval = setInterval(() => {
+        const qrReaderElement = document.getElementById("qr-reader");
+        if (qrReaderElement) {
+          clearInterval(interval); // Detiene el intervalo una vez que el elemento está disponible
+          try {
+            const qrScanner = new Html5QrcodeScanner(
+              "qr-reader",
+              { fps: 10, qrbox: { width: 250, height: 250 } },
+              false
+            );
 
-          qrScanner.render(
-            (decodedText) => {
-              console.log("QR escaneado:", decodedText);
-              qrScanner.clear(); // Limpia el escáner
-              setOpenModal(false); // Cierra el modal
-            },
-            (errorMessage) => {
-              console.error("Error al escanear el QR:", errorMessage);
-            }
-          );
+            qrScanner.render(
+              async (decodedText) => {
+                console.log("QR escaneado:", decodedText);
 
-          setIsScannerInitialized(true); // Marca el escáner como inicializado
-        } catch (error) {
-          console.error("Error al inicializar el escáner:", error);
-          setCameraError("No se pudo inicializar el escáner. Verifica los permisos de cámara.");
+                // Verificar si el QR contiene la URL esperada
+                const productionUrl = "https://chess-manager-jade.vercel.app";
+                if (decodedText.startsWith(`${productionUrl}/join-room/`)) {
+                  const roomId = decodedText.split("/").pop(); // Obtiene el roomId del QR
+                  try {
+                    const roomRef = doc(db, "rooms", roomId);
+                    const roomSnapshot = await getDoc(roomRef);
+
+                    if (roomSnapshot.exists()) {
+                      // Agregar al usuario como participante en la sala
+                      await updateDoc(roomRef, {
+                        participants: arrayUnion({ uid, nickname, avatar, points: 0 }),
+                      });
+                      qrScanner.clear(); // Limpia el escáner
+                      setOpenModal(false); // Cierra el modal
+                      navigate(`/lobby/${roomId}`); // Redirige al lobby
+                    } else {
+                      alert("La sala no existe.");
+                    }
+                  } catch (error) {
+                    console.error("Error al unirse a la sala:", error);
+                    alert("Hubo un problema al unirse a la sala.");
+                  }
+                } else {
+                  alert("El QR escaneado no es válido.");
+                }
+              },
+              (errorMessage) => {
+                console.error("Error al escanear el QR:", errorMessage);
+              }
+            );
+          } catch (error) {
+            console.error("Error al inicializar el escáner:", error);
+            setCameraError("No se pudo inicializar el escáner. Verifica los permisos de cámara.");
+          }
         }
-      } else {
-        setCameraError("No se encontró el elemento QR Reader en el DOM.");
-      }
+      }, 100); // Verifica cada 100ms si el elemento está disponible
     }
-  }, [openModal, isScannerInitialized]);
+  }, [openModal, navigate, uid, nickname, avatar]);
 
   return (
     <Box textAlign="center" mt={4}>
       {/* Botón para abrir el modal */}
       <Button
         variant="contained"
-        onClick={() => {
-          setOpenModal(true);
-          setIsScannerInitialized(false); // Reinicia el estado de inicialización
-        }}
+        onClick={() => setOpenModal(true)}
         sx={{
           bgcolor: "#000039",
           color: "#fff",
@@ -65,7 +93,7 @@ const QRScanner = () => {
       {/* Modal para el escaneo */}
       <Modal
         open={openModal}
-        onClose={() => setOpenModal(false)} // Cierra el modal
+        onClose={() => setOpenModal(false)}
         aria-labelledby="qr-modal-title"
         aria-describedby="qr-modal-description"
       >
@@ -100,7 +128,7 @@ const QRScanner = () => {
           )}
           <Button
             variant="outlined"
-            onClick={() => setOpenModal(false)} // Cierra el modal
+            onClick={() => setOpenModal(false)}
             sx={{
               mt: 2,
               borderColor: "#000039",
