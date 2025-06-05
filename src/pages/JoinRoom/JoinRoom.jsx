@@ -11,6 +11,7 @@ const JoinRoomScreen = () => {
   const uid = useSelector((state) => state.auth.uid); // UID del usuario autenticado
   const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
   const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
+  const points = useSelector((state) => state.auth.points); // Puntos del usuario
 
   useEffect(() => {
     const validateAndJoinRoom = async () => {
@@ -50,7 +51,7 @@ const JoinRoomScreen = () => {
     };
 
     validateAndJoinRoom();
-  }, [uid, roomId, navigate, nickname, avatar]);
+  }, [uid, roomId, navigate, nickname, avatar, points]);
 
   return (
     <Box textAlign="center" mt={4}>
