@@ -120,6 +120,7 @@ const Router = () => {
           }
         />
         <Route path="/unauthorized" element={<div>Acceso denegado</div>} />
+        <Route path="/join-room/:roomId" element={<JoinRoomScreen />} />
       </Routes>
     </BrowserRouter>
   );
