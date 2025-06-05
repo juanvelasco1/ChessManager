@@ -26,8 +26,15 @@ const JoinRoomScreen = () => {
 
         if (roomSnapshot.exists()) {
           // Agrega al usuario a la sala
+          const userData = {
+            uid,
+            nickname: nickname || "Anónimo", // valor por defecto si nickname es undefined
+            avatar: avatar || "default-avatar-url", // valor por defecto si avatar es undefined
+            points: 0
+          };
+          
           await updateDoc(roomRef, {
-            participants: arrayUnion({ uid, nickname, avatar, points: 0 }),
+            participants: arrayUnion(userData),
           });
 
           // Redirige al lobby
