@@ -17,6 +17,7 @@ import {
   SettingsTournamentScreen,
   LobbyScreen,
   GameTournamentScreen,
+  JoinRoomScreen
 } from "../pages/index.jsx";
 
 const Router = () => {
