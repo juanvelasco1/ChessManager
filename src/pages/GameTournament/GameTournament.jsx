@@ -6,8 +6,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 
-// Assumes firebaseDb is globally accessible from window
-
 const GameTournamentScreen = () => {
   const navigate = useNavigate();
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
@@ -20,7 +18,10 @@ const GameTournamentScreen = () => {
     const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const roomData = docSnapshot.data();
+        console.log("Datos de la sala:", roomData); // Log para depuración
         setPairs(roomData.pairs || []); // Actualiza las parejas
+      } else {
+        console.error("El documento de la sala no existe.");
       }
     });
 
@@ -76,9 +77,20 @@ const GameTournamentScreen = () => {
           pr: 1,
         }}
       >
-        {pairs.map((pair, index) => (
-          <GameCard key={index} pair={pair} />
-        ))}
+        {pairs.length > 0 ? (
+          pairs.map((pair, index) => (
+            <GameCard key={index} pair={pair} />
+          ))
+        ) : (
+          <Typography
+            variant="body1"
+            color="#434379"
+            textAlign="center"
+            mt={4}
+          >
+            No hay parejas disponibles para mostrar.
+          </Typography>
+        )}
       </Box>
     </Box>
   );
