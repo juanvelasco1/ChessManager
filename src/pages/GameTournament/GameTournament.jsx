@@ -5,6 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig"; // Importar la instancia de Firestore
 
 const GameTournamentScreen = () => {
   const navigate = useNavigate();
