@@ -49,10 +49,13 @@ const LobbyScreen = () => {
       // Mezclar participantes de forma aleatoria
       const shuffledParticipants = [...participants].sort(() => Math.random() - 0.5);
 
-      // Crear parejas
+      // Crear parejas como objetos
       const pairs = [];
       for (let i = 0; i < shuffledParticipants.length; i += 2) {
-        const pair = shuffledParticipants.slice(i, i + 2);
+        const pair = {
+          player1: shuffledParticipants[i],
+          player2: shuffledParticipants[i + 1] || null, // Si hay un número impar, el último jugador no tendrá pareja
+        };
         pairs.push(pair);
       }
 
