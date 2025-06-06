@@ -99,7 +99,7 @@ const LobbyScreen = () => {
         }}
       >
         {participants.map((user, index) => (
-          <UserLobby key={index} name={user.nickname} avatar={user.avatar} />
+          <UserLobby key={index} nickname={user.nickname} avatar={user.avatar} />
         ))}
       </Box>
 
@@ -262,7 +262,7 @@ const LobbyScreen = () => {
         }}
       >
         {participants.map((user, index) => (
-          <UserLobby key={index} name={user.nickname} avatar={user.avatar} />
+          <UserLobby key={index} nickname={user.nickname} avatar={user.avatar} />
         ))}
       </Box>
 
