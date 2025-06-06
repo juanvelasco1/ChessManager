@@ -14,12 +14,17 @@ const GameTournamentScreen = () => {
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
-    const roomRef = doc(window.firebaseDb, "rooms", roomId);
+    const roomRef = doc(db, "rooms", roomId);
     const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const roomData = docSnapshot.data();
         console.log("Datos de la sala:", roomData); // Log para depuración
-        setPairs(roomData.pairs || []); // Actualiza las parejas
+
+        // Validar estructura de pairs
+        const validPairs = (roomData.pairs || []).filter(
+          (pair) => pair.player1 && pair.player2
+        );
+        setPairs(validPairs);
       } else {
         console.error("El documento de la sala no existe.");
       }
