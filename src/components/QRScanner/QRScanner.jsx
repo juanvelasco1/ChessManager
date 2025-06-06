@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
@@ -10,10 +9,12 @@ const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
   const navigate = useNavigate();
-  const uid = useSelector((state) => state.auth.uid); // UID del usuario
-  const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
-  const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
-  const points = useSelector((state) => state.auth.points); // Puntos del usuario
+
+  // Obtener datos directamente desde localStorage
+  const uid = localStorage.getItem("uid");
+  const nickname = localStorage.getItem("nickname") || "Anónimo"; // Valor predeterminado si no existe
+  const avatar = localStorage.getItem("avatar") || "/avatars/default-avatar.png"; // Valor predeterminado si no existe
+  const points = parseInt(localStorage.getItem("points"), 10) || 0; // Valor predeterminado si no existe
 
   useEffect(() => {
     if (openModal) {
@@ -90,7 +91,7 @@ const QRScanner = () => {
         }
       }, 100); // Verifica cada 100ms si el elemento está disponible
     }
-  }, [openModal, navigate, uid, nickname, avatar, points]);
+  }, [openModal, navigate]);
 
   return (
     <Box textAlign="center" mt={4}>
