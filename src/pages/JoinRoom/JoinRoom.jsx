@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { Box, Typography } from "@mui/material";
@@ -8,10 +7,12 @@ import { Box, Typography } from "@mui/material";
 const JoinRoomScreen = () => {
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
   const navigate = useNavigate();
-  const uid = useSelector((state) => state.auth.uid); // UID del usuario autenticado
-  const nickname = useSelector((state) => state.auth.nickname); // Nickname del usuario
-  const avatar = useSelector((state) => state.auth.avatar); // Avatar del usuario
-  const points = useSelector((state) => state.auth.points); // Puntos del usuario
+
+  // Obtener datos directamente desde localStorage
+  const uid = localStorage.getItem("uid");
+  const nickname = localStorage.getItem("nickname") || "Anónimo"; // Valor predeterminado si no existe
+  const avatar = localStorage.getItem("avatar") || "/avatars/default-avatar.png"; // Valor predeterminado si no existe
+  const points = parseInt(localStorage.getItem("points"), 10) || 0; // Valor predeterminado si no existe
 
   useEffect(() => {
     const validateAndJoinRoom = async () => {
@@ -29,17 +30,17 @@ const JoinRoomScreen = () => {
           // Agrega al usuario a la sala
           const userData = {
             uid,
-            nickname: nickname || "Anónimo", // valor por defecto si nickname es undefined
-            avatar: avatar || "default-avatar-url", // valor por defecto si avatar es undefined
-            points: 0
+            nickname,
+            avatar,
+            points,
           };
-          
+
           await updateDoc(roomRef, {
             participants: arrayUnion(userData),
           });
 
-          // Redirige al lobby
-          navigate(`/lobby/${roomId}`);
+          // Redirige a la pantalla de espera
+          navigate(`/waiting/${roomId}`);
         } else {
           alert("La sala no existe.");
           navigate("/home");
