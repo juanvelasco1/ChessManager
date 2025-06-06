@@ -68,7 +68,7 @@ const QRScanner = () => {
                       });
                       qrScanner.clear(); // Limpia el escáner
                       setOpenModal(false); // Cierra el modal
-                      navigate(`/lobby/${roomId}`); // Redirige al lobby
+                      navigate(`/waiting/${roomId}`); // Redirige a la sala de espera
                     } else {
                       alert("La sala no existe.");
                     }
