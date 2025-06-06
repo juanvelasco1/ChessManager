@@ -8,3 +8,5 @@ export { default as SettingsTournamentScreen } from './SettingTournament/Setting
 export { default as LobbyScreen } from './Lobby/LobbyScreen.jsx';
 export { default as GameTournamentScreen } from './GameTournament/GameTournament.jsx';
 export { default as JoinRoomScreen } from './JoinRoom/JoinRoom.jsx';
+export { default as UnauthorizedScreen } from './UnauthorizedScreen/UnauthorizedScreen.jsx';
+export { default as WaitingScreen } from './WaitingScreen/WaitingScreen.jsx';
