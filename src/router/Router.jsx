@@ -18,7 +18,8 @@ import {
   LobbyScreen,
   GameTournamentScreen,
   JoinRoomScreen,
-  WaitingScreen
+  WaitingScreen,
+  UnauthorizedScreen
 } from "../pages/index.jsx";
 
 const Router = () => {
@@ -121,7 +122,7 @@ const Router = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/unauthorized" element={<div>Acceso denegado</div>} />
+        <Route path="/unauthorized" element={<UnauthorizedScreen />} />
         <Route path="/join-room/:roomId" element={<JoinRoomScreen />} />
         <Route path="/waiting/:roomId" element={<WaitingScreen />} />
       </Routes>
