@@ -38,6 +38,14 @@ const LobbyScreen = () => {
 
   const handleStartTournament = async () => {
     try {
+      // Validar que haya participantes
+      if (participants.length === 0) {
+        alert("No hay suficientes participantes para iniciar el torneo.");
+        return;
+      }
+
+      console.log("Participantes antes de mezclar:", participants);
+
       // Mezclar participantes de forma aleatoria
       const shuffledParticipants = [...participants].sort(() => Math.random() - 0.5);
 
@@ -47,6 +55,8 @@ const LobbyScreen = () => {
         const pair = shuffledParticipants.slice(i, i + 2);
         pairs.push(pair);
       }
+
+      console.log("Parejas creadas:", pairs);
 
       // Actualizar la sala en Firebase con las parejas
       const roomRef = doc(db, "rooms", roomId);
