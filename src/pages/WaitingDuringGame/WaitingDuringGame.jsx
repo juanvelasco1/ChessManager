@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 
-const WaitingDuringGame = () => {
+const WaitingDuringGameScreen = () => {
   return (
     <Box
       sx={{
@@ -29,4 +29,4 @@ const WaitingDuringGame = () => {
   );
 };
 
-export default WaitingDuringGame;
+export default WaitingDuringGameScreen;

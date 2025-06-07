@@ -23,12 +23,17 @@ const ProtectedRoute = ({ children, requiredRole }) => {
   if (!loading && !uid) {
     return <Navigate to="/login" />;
   }
-  
+
   const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
-  if (!loading && uid && requiredRole && (
-    (requiredRole === "profesor" && normalizedEmail !== "profesor@gmail.com" && rol !== "profesor") ||
-    (requiredRole !== "profesor" && rol !== requiredRole)
-  )) {
+  if (
+    !loading &&
+    uid &&
+    requiredRole &&
+    (
+      (requiredRole === "profesor" && normalizedEmail !== "profesor@gmail.com" && rol !== "profesor") ||
+      (requiredRole === "jugador" && rol !== "jugador") // Permitir acceso a jugadores
+    )
+  ) {
     console.log("Acceso denegado. Rol del usuario:", rol ?? "no definido", "Correo:", email ?? "no definido", "Rol requerido:", requiredRole);
     return <Navigate to="/unauthorized" />;
   }

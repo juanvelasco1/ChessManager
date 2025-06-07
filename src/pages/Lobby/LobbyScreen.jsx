@@ -69,7 +69,7 @@ const LobbyScreen = () => {
       if (userRole === "profesor") {
         navigate(`/game-tournament/${roomId}`);
       } else {
-        navigate("/home");
+        navigate("/waiting-during-game"); // Redirigir a la pantalla de espera durante el juego
       }
     } catch (error) {
       console.error("Error al iniciar el torneo:", error);

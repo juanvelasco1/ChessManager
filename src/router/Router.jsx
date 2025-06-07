@@ -24,6 +24,7 @@ import {
   WaitingDuringGameScreen,
 } from "../pages/index.jsx";
 
+
 const Router = () => {
   const dispatch = useDispatch();
 
@@ -129,6 +130,14 @@ const Router = () => {
         <Route path="/waiting/:roomId" element={<WaitingScreen />} />
         <Route path="/waiting-during-game" element={<WaitingDuringGameScreen />} />
         <Route path="/results" element={<ResultsScreen />} />
+        <Route
+          path="/waiting-during-game"
+          element={
+            <ProtectedRoute requiredRole="jugador">
+              <WaitingDuringGameScreen />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
