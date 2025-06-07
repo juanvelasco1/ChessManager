@@ -4,7 +4,7 @@ import { db } from "../../services/firebaseConfig";
 import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 
-const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "30%", topPcUser = "340px", role = "user" }) => {
+const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUser = "30%", topPcUser = "200px", role = "user" }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [dateStart, setDateStart] = useState(null);
 
@@ -85,15 +85,15 @@ const TimerInput = ({ topMobileAdmin = "62%", topPcAdmin = "340px", topMobileUse
         transform: "none",
         bgcolor: "#000039",
         color: "white",
-        px: 3,
-        py: 1.5,
+        px: 2,
+        py: 1.2,
         borderTopLeftRadius: "25px",
         borderBottomLeftRadius: "25px",
         boxShadow: 3,
         fontFamily: "Roboto",
         fontWeight: "bold",
-        fontSize: "1.1rem",
-        maxWidth: 180,
+        fontSize: "0.9rem",
+        maxWidth: 140,
         textAlign: "center",
       }}
     >

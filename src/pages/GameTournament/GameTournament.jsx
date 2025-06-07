@@ -151,6 +151,16 @@ const GameTournamentScreen = () => {
         <ArrowBackIcon />
       </IconButton>
 
+      <Typography
+        variant="h6"
+        color="#2f2f77"
+        fontWeight="medium"
+        textAlign="center"
+        mb={1}
+      >
+        Parejas emparejadas:
+      </Typography>
+
       <Box
         sx={{
           maxHeight: "calc(100vh - 100px)",
