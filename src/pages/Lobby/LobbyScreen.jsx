@@ -3,18 +3,20 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import UserLobby from "../../components/UserLobby/UserLobby";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import RoomQR from "../../components/RoomQR/RoomQR";
+import { setParticipants, setPairs } from "../../store/authSlice";
 
 const LobbyScreen = () => {
   const navigate = useNavigate();
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
-  const [participants, setParticipants] = useState([]); // Lista dinámica de participantes
+  const [participants, setParticipantsState] = useState([]); // Lista dinámica de participantes
   const [isMobile, setIsMobile] = useState(false);
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const userRole = useSelector((state) => state.auth.rol); // Obtén el rol del usuario desde Redux
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
@@ -22,12 +24,13 @@ const LobbyScreen = () => {
     const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const roomData = docSnapshot.data();
-        setParticipants(roomData.participants || []); // Actualiza los participantes
+        setParticipantsState(roomData.participants || []); // Actualiza los participantes
+        dispatch(setParticipants(roomData.participants || [])); // Actualizar Redux
       }
     });
 
     return () => unsubscribe(); // Limpia el listener al desmontar el componente
-  }, [roomId]);
+  }, [roomId, dispatch]);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -37,46 +40,22 @@ const LobbyScreen = () => {
   }, []);
 
   const handleStartTournament = async () => {
-    try {
-      // Validar que haya participantes
-      if (participants.length === 0) {
-        alert("No hay suficientes participantes para iniciar el torneo.");
-        return;
-      }
-
-      console.log("Participantes antes de mezclar:", participants);
-
-      // Mezclar participantes de forma aleatoria
-      const shuffledParticipants = [...participants].sort(() => Math.random() - 0.5);
-
-      // Crear parejas como objetos
-      const pairs = [];
-      for (let i = 0; i < shuffledParticipants.length; i += 2) {
-        const pair = {
-          player1: shuffledParticipants[i],
-          player2: shuffledParticipants[i + 1] || null, // Si hay un número impar, el último jugador no tendrá pareja
-        };
-        pairs.push(pair);
-      }
-
-      console.log("Parejas creadas:", pairs);
-
-      // Actualizar la sala en Firebase con las parejas
-      const roomRef = doc(db, "rooms", roomId);
-      await updateDoc(roomRef, { pairs });
-
-      // Redirigir según el rol del usuario
-      if (userRole === "profesor") {
-        console.log("Redirigiendo al profesor a GameTournament...");
-        navigate(`/game-tournament/${roomId}`);
-      } else {
-        console.log("Redirigiendo al jugador a WaitingDuringGame...");
-        navigate("/waiting-during-game"); // Redirigir a la pantalla de espera durante el juego
-      }
-    } catch (error) {
-      console.error("Error al iniciar el torneo:", error);
-      alert("Hubo un problema al iniciar el torneo. Inténtalo de nuevo.");
+    const pairs = [];
+    for (let i = 0; i < participants.length; i += 2) {
+      const pair = {
+        player1: participants[i],
+        player2: participants[i + 1] || null,
+      };
+      pairs.push(pair);
     }
+
+    const roomRef = doc(db, "rooms", roomId);
+    await updateDoc(roomRef, { pairs });
+
+    // Actualizar Redux con las parejas
+    dispatch(setPairs(pairs));
+
+    navigate(`/game-tournament/${roomId}`);
   };
 
   return isMobile ? (

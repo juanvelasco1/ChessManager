@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  uid: localStorage.getItem("uid") || null,
-  email: localStorage.getItem("email") || null,
-  nickname: localStorage.getItem("nickname") || null,
-  avatar: localStorage.getItem("avatar") || "/avatars/default-avatar.png", // Valor predeterminado
-  points: parseInt(localStorage.getItem("points"), 10) || 0, // Valor predeterminado
-  rol: localStorage.getItem("rol") || null,
+  uid: null,
+  email: null,
+  nickname: null,
+  avatar: null,
+  points: 0,
+  rol: null,
+  participants: [],
+  pairs: [],
+  ranking: [],
   loading: true,
 };
 
@@ -54,8 +57,17 @@ const AuthSlice = createSlice({
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
+    setParticipants: (state, action) => {
+      state.participants = action.payload;
+    },
+    setPairs: (state, action) => {
+      state.pairs = action.payload;
+    },
+    setRanking: (state, action) => {
+      state.ranking = action.payload;
+    },
   },
 });
 
-export const { login, logout, setUser, setTypeRol, setLoading } = AuthSlice.actions;
+export const { login, logout, setUser, setTypeRol, setLoading, setParticipants, setPairs, setRanking } = AuthSlice.actions;
 export default AuthSlice.reducer;

@@ -4,11 +4,14 @@ import { Html5QrcodeScanner } from "html5-qrcode";
 import { useNavigate } from "react-router-dom";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/authSlice";
 
 const QRScanner = () => {
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
   const [cameraError, setCameraError] = useState(null); // Estado para manejar errores de cámara
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // Obtener datos directamente desde localStorage
   const uid = localStorage.getItem("uid");
@@ -62,7 +65,18 @@ const QRScanner = () => {
                       // Log para depuración
                       console.log("Datos que se están enviando a Firestore:", { uid, nickname, avatar, points });
 
-                      // Agregar al usuario como participante en la sala
+                      // Actualizar Redux con los datos del usuario
+                      dispatch(
+                        login({
+                          uid,
+                          nickname,
+                          avatar,
+                          points,
+                          rol: "jugador",
+                        })
+                      );
+
+                      // Agregar al usuario como participante en Firebase
                       await updateDoc(roomRef, {
                         participants: arrayUnion({ uid, nickname, avatar, points }),
                       });
@@ -91,7 +105,7 @@ const QRScanner = () => {
         }
       }, 100); // Verifica cada 100ms si el elemento está disponible
     }
-  }, [openModal, navigate]);
+  }, [openModal, navigate, dispatch]);
 
   return (
     <Box textAlign="center" mt={4}>

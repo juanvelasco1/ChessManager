@@ -1,16 +1,20 @@
 import { Box, Typography, Avatar } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { fetchRankingData } from "../../utils/rankingUtils";
+import { setRanking } from "../../store/authSlice";
 
 const RankingTable = ({ showCurrentUser = false }) => {
   const [rankingData, setRankingData] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const uid = useSelector((state) => state.auth.uid);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
       const { ranking } = await fetchRankingData();
+      dispatch(setRanking(ranking)); // Actualizar Redux
+
       // Reiniciar tabla si el ranking expiró (simulado)
       const now = new Date();
       const lastReset = localStorage.getItem("lastRankingReset");
@@ -31,7 +35,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
     };
 
     fetchData();
-  }, [uid]);
+  }, [uid, dispatch]);
 
   return (
     <Box
