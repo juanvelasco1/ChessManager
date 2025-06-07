@@ -14,7 +14,6 @@ const LobbyScreen = () => {
   const [participants, setParticipants] = useState([]); // Lista dinámica de participantes
   const [isMobile, setIsMobile] = useState(false);
   const [openModal, setOpenModal] = useState(false); // Estado para controlar el modal
-  const [pairs, setPairs] = useState([]);
   const userRole = useSelector((state) => state.auth.rol); // Obtén el rol del usuario desde Redux
 
   useEffect(() => {
@@ -65,8 +64,6 @@ const LobbyScreen = () => {
       // Actualizar la sala en Firebase con las parejas
       const roomRef = doc(db, "rooms", roomId);
       await updateDoc(roomRef, { pairs });
-
-      setPairs(pairs);
 
       // Redirigir según el rol del usuario
       if (userRole === "profesor") {
@@ -122,39 +119,6 @@ const LobbyScreen = () => {
           <UserLobby key={index} nickname={user.nickname} avatar={user.avatar} />
         ))}
       </Box>
-
-      {userRole === "profesor" && pairs && pairs.length > 0 && (
-        <Box sx={{ mt: 4, width: "90%", maxWidth: "600px" }}>
-          <Typography fontSize="28px" fontWeight="bold" color="#000039" mb={2} textAlign="center">
-            Parejas del Torneo
-          </Typography>
-          {pairs.map((pair, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "#F3F3F3",
-                borderRadius: "12px",
-                padding: "16px",
-                mb: 2,
-                fontFamily: "Roboto",
-              }}
-            >
-              <Typography fontWeight="bold" color="#000039">
-                {pair.player1?.nickname || "Jugador 1"}
-              </Typography>
-              <Typography fontWeight="bold" color="#000039">
-                VS
-              </Typography>
-              <Typography fontWeight="bold" color="#000039">
-                {pair.player2?.nickname || "Sin pareja"}
-              </Typography>
-            </Box>
-          ))}
-        </Box>
-      )}
 
       {/* Mostrar el botón solo si el usuario es profesor */}
       {userRole === "profesor" && (
