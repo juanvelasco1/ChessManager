@@ -65,8 +65,12 @@ const LobbyScreen = () => {
       const roomRef = doc(db, "rooms", roomId);
       await updateDoc(roomRef, { pairs });
 
-      // Redirigir al profesor a la screen GameTournament
-      navigate(`/game-tournament/${roomId}`);
+      // Redirigir según el rol del usuario
+      if (userRole === "profesor") {
+        navigate(`/game-tournament/${roomId}`);
+      } else {
+        navigate("/home");
+      }
     } catch (error) {
       console.error("Error al iniciar el torneo:", error);
       alert("Hubo un problema al iniciar el torneo. Inténtalo de nuevo.");
