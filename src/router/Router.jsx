@@ -19,7 +19,9 @@ import {
   GameTournamentScreen,
   JoinRoomScreen,
   WaitingScreen,
-  UnauthorizedScreen
+  UnauthorizedScreen,
+  ResultsScreen,
+  WaitingDuringGameScreen,
 } from "../pages/index.jsx";
 
 const Router = () => {
@@ -125,6 +127,8 @@ const Router = () => {
         <Route path="/unauthorized" element={<UnauthorizedScreen />} />
         <Route path="/join-room/:roomId" element={<JoinRoomScreen />} />
         <Route path="/waiting/:roomId" element={<WaitingScreen />} />
+        <Route path="/waiting-during-game" element={<WaitingDuringGameScreen />} />
+        <Route path="/results" element={<ResultsScreen />} />
       </Routes>
     </BrowserRouter>
   );

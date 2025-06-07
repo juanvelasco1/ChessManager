@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from "@mui/material";
 
 const GameCard = ({ pair }) => {
-  const [player1, player2] = pair;
+  const [player1, player2] = pair || {};
 
   return (
     <Box

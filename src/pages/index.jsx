@@ -10,3 +10,5 @@ export { default as GameTournamentScreen } from './GameTournament/GameTournament
 export { default as JoinRoomScreen } from './JoinRoom/JoinRoom.jsx';
 export { default as UnauthorizedScreen } from './UnauthorizedScreen/UnauthorizedScreen.jsx';
 export { default as WaitingScreen } from './WaitingScreen/WaitingScreen.jsx';
+export { default as ResultsScreen } from './Results/Results.jsx';
+export { default as WaitingDuringGameScreen } from './WaitingDuringGame/WaitingDuringGame.jsx';
