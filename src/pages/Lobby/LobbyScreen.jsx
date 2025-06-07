@@ -67,8 +67,10 @@ const LobbyScreen = () => {
 
       // Redirigir según el rol del usuario
       if (userRole === "profesor") {
+        console.log("Redirigiendo al profesor a GameTournament...");
         navigate(`/game-tournament/${roomId}`);
       } else {
+        console.log("Redirigiendo al jugador a WaitingDuringGame...");
         navigate("/waiting-during-game"); // Redirigir a la pantalla de espera durante el juego
       }
     } catch (error) {
@@ -121,7 +123,7 @@ const LobbyScreen = () => {
       </Box>
 
       {/* Mostrar el botón solo si el usuario es profesor */}
-      {userRole === "profesor" && (
+      {userRole === "profesor" || !userRole ? (
         <>
           <Button
             variant="contained"
@@ -227,7 +229,7 @@ const LobbyScreen = () => {
             </Box>
           </Modal>
         </>
-      )}
+      ) : null}
     </Box>
   ) : (
     <Box
@@ -284,7 +286,7 @@ const LobbyScreen = () => {
       </Box>
 
       {/* Mostrar el botón solo si el usuario es profesor */}
-      {userRole === "profesor" && (
+      {userRole === "profesor" || !userRole ? (
         <>
           <Button
             variant="contained"
@@ -390,7 +392,7 @@ const LobbyScreen = () => {
             </Box>
           </Modal>
         </>
-      )}
+      ) : null}
     </Box>
   );
 };
