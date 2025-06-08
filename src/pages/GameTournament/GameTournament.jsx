@@ -135,6 +135,13 @@ const GameTournamentScreen = () => {
         color="#000039"
         textAlign="center"
         mb={2}
+        sx={{
+          fontFamily: "Roboto",
+          fontSize: "40px",
+          fontStyle: "normal",
+          fontWeight: 700,
+          lineHeight: "normal",
+        }}
       >
         Todos vs todos
       </Typography>
