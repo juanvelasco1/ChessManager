@@ -55,7 +55,13 @@ const LobbyScreen = () => {
     // Actualizar Redux con las parejas
     dispatch(setPairs(pairs));
 
-    navigate(`/game-tournament/${roomId}`);
+    if (userRole === "profesor") {
+      console.log("Redirigiendo al profesor a GameTournament...");
+      navigate(`/game-tournament/${roomId}`);
+    } else {
+      console.log("Redirigiendo al jugador a WaitingDuringGame...");
+      navigate("/waiting-during-game");
+    }
   };
 
   return isMobile ? (
