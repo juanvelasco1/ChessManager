@@ -8,12 +8,14 @@ import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig"; // Importar la instancia de Firestore
 import { useDispatch, useSelector } from "react-redux";
 import { setPairs, setParticipants } from "../../store/authSlice";
+import { Modal } from "@mui/material";
 
 const GameTournamentScreen = () => {
   const navigate = useNavigate();
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
   const [pairs, setPairsState] = useState([]); // Lista de parejas
   const [isMobile, setIsMobile] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const dispatch = useDispatch();
   const userRole = useSelector((state) => state.auth.rol); // Obtener el rol del usuario desde Redux
 
@@ -94,6 +96,11 @@ const GameTournamentScreen = () => {
     }
   };
 
+  const handleConfirmEndTournament = async () => {
+    setOpenModal(false);
+    await handleEndTournament(); // Guardar puntos y finalizar torneo
+  };
+
   return (
     <Box
       sx={{
@@ -150,28 +157,82 @@ const GameTournamentScreen = () => {
         )}
       </Box>
 
-      {/* Botón de Finalizar Torneo */}
-      {userRole === "profesor" && (
-        <Button
-          variant="contained"
-          onClick={handleEndTournament}
-          sx={{
-            bgcolor: "#000039",
-            color: "#fff",
-            borderRadius: "10px",
-            fontWeight: "bold",
-            px: 4,
-            py: 1.5,
-            mt: 3,
-            mx: "auto",
-            "&:hover": {
+      <Box>
+        {/* Botón de Finalizar Torneo */}
+        {userRole === "profesor" && (
+          <Button
+            variant="contained"
+            onClick={() => setOpenModal(true)} // Abrir modal de confirmación
+            sx={{
               bgcolor: "#000039",
-            },
+              color: "#fff",
+              borderRadius: "10px",
+              fontWeight: "bold",
+              px: 4,
+              py: 1.5,
+              mt: 3,
+              mx: "auto",
+              "&:hover": {
+                bgcolor: "#000039",
+              },
+            }}
+          >
+            Finalizar Torneo
+          </Button>
+        )}
+      </Box>
+
+      {/* Modal de Confirmación */}
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            borderRadius: "10px",
+            p: 4,
+            textAlign: "center",
           }}
         >
-          Finalizar Torneo
-        </Button>
-      )}
+          <Typography variant="h6" mb={2}>
+            ¿Estás seguro de que deseas finalizar el torneo?
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={handleConfirmEndTournament}
+            sx={{
+              bgcolor: "#28a745",
+              color: "#fff",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              mx: 1,
+              "&:hover": {
+                bgcolor: "#218838",
+              },
+            }}
+          >
+            Sí, finalizar
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setOpenModal(false)}
+            sx={{
+              color: "#000039",
+              borderColor: "#000039",
+              fontWeight: "bold",
+              borderRadius: "10px",
+              mx: 1,
+              "&:hover": {
+                bgcolor: "#f5f5f5",
+              },
+            }}
+          >
+            Cancelar
+          </Button>
+        </Box>
+      </Modal>
     </Box>
   );
 };

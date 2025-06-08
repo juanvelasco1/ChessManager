@@ -1,13 +1,52 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 
-const GameCard = ({ pair }) => {
+const GameCard = ({ pair, updatePoints }) => {
   const { player1, player2 } = pair || {};
-  const [player1Selected, setPlayer1Selected] = useState(false);
-  const [player2Selected, setPlayer2Selected] = useState(false);
+  const [player1State, setPlayer1State] = useState("initial"); // Estados: initial, winner, draw
+  const [player2State, setPlayer2State] = useState("initial");
 
-  const togglePlayerSelection = (player, setSelected) => {
-    setSelected((prevSelected) => !prevSelected); // Alternar selección
+  const handleWinnerSelection = (winner) => {
+    if (winner === "player1") {
+      if (player1State === "winner") {
+        // Deseleccionar ganador
+        setPlayer1State("initial");
+        setPlayer2State("initial");
+        updatePoints(player1, -100);
+      } else {
+        // Seleccionar ganador
+        setPlayer1State("winner");
+        setPlayer2State("initial"); // Perdedor no suma ni resta puntos
+        updatePoints(player1, 100);
+      }
+    } else if (winner === "player2") {
+      if (player2State === "winner") {
+        // Deseleccionar ganador
+        setPlayer2State("initial");
+        setPlayer1State("initial");
+        updatePoints(player2, -100);
+      } else {
+        // Seleccionar ganador
+        setPlayer2State("winner");
+        setPlayer1State("initial"); // Perdedor no suma ni resta puntos
+        updatePoints(player2, 100);
+      }
+    }
+  };
+
+  const handleDrawSelection = () => {
+    if (player1State === "draw" && player2State === "draw") {
+      // Deseleccionar empate
+      setPlayer1State("initial");
+      setPlayer2State("initial");
+      // No se modifican los puntos al deseleccionar el empate
+    } else {
+      // Seleccionar empate
+      setPlayer1State("draw");
+      setPlayer2State("draw");
+      updatePoints(player1, 50);
+      updatePoints(player2, 50);
+    }
   };
 
   return (
@@ -52,7 +91,7 @@ const GameCard = ({ pair }) => {
               height: 40,
               borderRadius: "50%",
               marginBottom: 8,
-              border: player1Selected ? "2px solid green" : "none",
+              border: player1State === "winner" ? "2px solid green" : player1State === "draw" ? "2px solid orange" : "none",
             }}
           />
           <Typography fontWeight="bold" color="white" fontSize="14px">
@@ -81,7 +120,7 @@ const GameCard = ({ pair }) => {
               height: 40,
               borderRadius: "50%",
               marginBottom: 8,
-              border: player2Selected ? "2px solid green" : "none",
+              border: player2State === "winner" ? "2px solid green" : player2State === "draw" ? "2px solid orange" : "none",
             }}
           />
           <Typography fontWeight="bold" color="white" fontSize="14px">
@@ -101,37 +140,54 @@ const GameCard = ({ pair }) => {
       >
         <Button
           variant="contained"
-          onClick={() => togglePlayerSelection(player1, setPlayer1Selected)}
+          onClick={() => handleWinnerSelection("player1")}
           sx={{
-            backgroundColor: player1Selected ? "#28a745" : "#434379",
+            backgroundColor: player1State === "winner" ? "#28a745" : "#434379",
             color: "white",
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
             fontSize: "12px",
             "&:hover": {
-              backgroundColor: player1Selected ? "#218838" : "#434379",
+              backgroundColor: player1State === "winner" ? "#218838" : "#434379",
             },
           }}
         >
-          {player1Selected ? "Deseleccionar" : "Seleccionar"}
+          {player1State === "winner" ? "Deseleccionar" : "Ganador"}
         </Button>
         <Button
           variant="contained"
-          onClick={() => togglePlayerSelection(player2, setPlayer2Selected)}
+          onClick={handleDrawSelection}
           sx={{
-            backgroundColor: player2Selected ? "#28a745" : "#434379",
+            backgroundColor: player1State === "draw" && player2State === "draw" ? "#ffc107" : "#434379",
             color: "white",
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
             fontSize: "12px",
             "&:hover": {
-              backgroundColor: player2Selected ? "#218838" : "#434379",
+              backgroundColor: player1State === "draw" && player2State === "draw" ? "#e0a800" : "#434379",
             },
           }}
         >
-          {player2Selected ? "Deseleccionar" : "Seleccionar"}
+          {player1State === "draw" && player2State === "draw" ? "Deseleccionar" : "Empate"}
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleWinnerSelection("player2")}
+          sx={{
+            backgroundColor: player2State === "winner" ? "#28a745" : "#434379",
+            color: "white",
+            fontWeight: "bold",
+            borderRadius: "10px",
+            width: "30%",
+            fontSize: "12px",
+            "&:hover": {
+              backgroundColor: player2State === "winner" ? "#218838" : "#434379",
+            },
+          }}
+        >
+          {player2State === "winner" ? "Deseleccionar" : "Ganador"}
         </Button>
       </Box>
     </Box>
