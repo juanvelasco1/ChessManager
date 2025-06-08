@@ -64,18 +64,16 @@ const GameTournamentScreen = () => {
             const userData = userSnapshot.data();
             const currentGames = userData.games || 0;
 
-            // Incrementar el número de juegos
+            // Incrementar el número de juegos y actualizar puntos
             await updateDoc(userRef, {
               games: currentGames + 1,
+              points: participant.points, // Actualizar puntos finales
             });
           } else {
             console.error(`El usuario con UID ${participant.uid} no existe en Firestore.`);
           }
 
-          return {
-            ...participant,
-            points: participant.points, // Los puntos ya están actualizados en GameCard
-          };
+          return participant;
         });
 
         await updateDoc(roomRef, { participants: updatedParticipants });
