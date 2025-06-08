@@ -191,5 +191,4 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
     </Box>
   );
 };
-console.log("GameCard component loaded");
 export default GameCard;
