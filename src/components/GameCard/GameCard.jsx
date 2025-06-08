@@ -32,20 +32,47 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
     fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
 
-  const handleDrawSelection = async () => {
-    if (player1State === "draw" && player2State === "draw") {
-      setPlayer1State("initial");
-      setPlayer2State("initial");
-      await updatePlayerPoints(player1, -50, updatePointsInRedux);
-      await updatePlayerPoints(player2, -50, updatePointsInRedux);
-    } else {
-      setPlayer1State("draw");
-      setPlayer2State("draw");
-      await updatePlayerPoints(player1, 50, updatePointsInRedux);
-      await updatePlayerPoints(player2, 50, updatePointsInRedux);
+  const handleDrawPoints = async () => {
+    try {
+      const pointsToAdd = 50; // Puntos por empate
+      const updatedPlayer1Points = player1.points + pointsToAdd;
+      const updatedPlayer2Points = player2.points + pointsToAdd;
+
+      setPlayer1Points(updatedPlayer1Points); // Actualizar visualmente los puntos
+      setPlayer2Points(updatedPlayer2Points);
+
+      // Actualizar los puntos en Firestore y Redux
+      await updateFirestorePoints(player1, pointsToAdd, roomId);
+      await updateFirestorePoints(player2, pointsToAdd, roomId);
+    } catch (error) {
+      console.error("Error al actualizar los puntos por empate:", error);
     }
-    fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
+
+  // Lógica para estilos dinámicos según el resultado
+  const resultStyles = {
+    player1: {
+      backgroundColor: "#434379",
+    },
+    player2: {
+      backgroundColor: "#434379",
+    },
+    draw: {
+      backgroundColor: "#434379",
+    },
+  };
+
+  if (player1Points > player2Points) {
+    resultStyles.player1.backgroundColor = "#4CAF50";
+    resultStyles.player2.backgroundColor = "#C62828";
+  } else if (player1Points < player2Points) {
+    resultStyles.player1.backgroundColor = "#C62828";
+    resultStyles.player2.backgroundColor = "#4CAF50";
+  } else if (player1Points === player2Points && player1Points !== 0) {
+    resultStyles.player1.backgroundColor = "#9E9E9E";
+    resultStyles.player2.backgroundColor = "#9E9E9E";
+    resultStyles.draw.backgroundColor = "#9E9E9E";
+  }
 
   return (
     <Box
@@ -60,7 +87,9 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         borderRadius: "10px",
         padding: 2,
         marginBottom: 2,
+        maxWidth: "420px",
         width: "100%",
+        mx: "auto",
       }}
     >
       {/* Contenedor de los jugadores */}
