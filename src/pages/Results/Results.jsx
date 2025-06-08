@@ -1,20 +1,25 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const ResultsScreen = ({ result }) => {
+const ResultsScreen = () => {
   const navigate = useNavigate();
+  const participants = useSelector((state) => state.auth.participants); // Obtener los participantes desde Redux
+  const user = useSelector((state) => state.auth); // Obtener los datos del usuario actual
 
   const getResultMessage = () => {
-    switch (result) {
-      case "win":
-        return "¡Felicidades, ganaste!";
-      case "lose":
-        return "Lo sentimos, perdiste.";
-      case "draw":
-        return "¡Es un empate!";
-      default:
-        return "Resultado desconocido.";
+    const sortedParticipants = [...participants].sort(
+      (a, b) => b.points - a.points
+    );
+    const userRank = sortedParticipants.findIndex((p) => p.uid === user.uid) + 1;
+
+    if (userRank === 1) {
+      return "¡Felicidades, ganaste!";
+    } else if (userRank === sortedParticipants.length) {
+      return "Lo sentimos, perdiste.";
+    } else {
+      return "¡Es un empate!";
     }
   };
 
@@ -56,7 +61,7 @@ const ResultsScreen = ({ result }) => {
           },
         }}
       >
-        Ir al Home
+        Ir al inicio
       </Button>
     </Box>
   );

@@ -1,12 +1,12 @@
 import GameCard from "../../components/GameCard/GameCard";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { IconButton } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig"; // Importar la instancia de Firestore
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setPairs, setParticipants } from "../../store/authSlice";
 
 const GameTournamentScreen = () => {
@@ -15,6 +15,7 @@ const GameTournamentScreen = () => {
   const [pairs, setPairsState] = useState([]); // Lista de parejas
   const [isMobile, setIsMobile] = useState(false);
   const dispatch = useDispatch();
+  const userRole = useSelector((state) => state.auth.rol); // Obtener el rol del usuario desde Redux
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
@@ -48,22 +49,32 @@ const GameTournamentScreen = () => {
   }, []);
 
   const handleEndTournament = async () => {
-    const roomRef = doc(db, "rooms", roomId);
-    const roomSnapshot = await getDoc(roomRef);
+    try {
+      const roomRef = doc(db, "rooms", roomId);
+      const roomSnapshot = await getDoc(roomRef);
 
-    if (roomSnapshot.exists()) {
-      const roomData = roomSnapshot.data();
-      const updatedParticipants = roomData.participants.map((participant) => ({
-        ...participant,
-        points: participant.points + Math.floor(Math.random() * 10), // Ejemplo: sumar puntos aleatorios
-      }));
+      if (roomSnapshot.exists()) {
+        const roomData = roomSnapshot.data();
+        const updatedParticipants = roomData.participants.map((participant) => ({
+          ...participant,
+          points: participant.points, // Los puntos ya están actualizados en GameCard
+        }));
 
-      await updateDoc(roomRef, { participants: updatedParticipants });
+        await updateDoc(roomRef, { participants: updatedParticipants });
 
-      // Actualizar Redux con los nuevos puntos
-      dispatch(setParticipants(updatedParticipants));
+        // Actualizar Redux con los nuevos puntos
+        dispatch(setParticipants(updatedParticipants));
 
-      navigate("/results");
+        if (userRole === "profesor") {
+          alert("El torneo ha finalizado con éxito.");
+          navigate("/home-teacher");
+        } else {
+          navigate("/results");
+        }
+      }
+    } catch (error) {
+      console.error("Error al finalizar el torneo:", error);
+      alert("Hubo un problema al finalizar el torneo.");
     }
   };
 
@@ -109,7 +120,7 @@ const GameTournamentScreen = () => {
       >
         {pairs.length > 0 ? (
           pairs.map((pair, index) => (
-            <GameCard key={index} pair={pair} />
+            <GameCard key={index} pair={pair} roomId={roomId} />
           ))
         ) : (
           <Typography
@@ -122,6 +133,29 @@ const GameTournamentScreen = () => {
           </Typography>
         )}
       </Box>
+
+      {/* Botón de Finalizar Torneo */}
+      {userRole === "profesor" && (
+        <Button
+          variant="contained"
+          onClick={handleEndTournament}
+          sx={{
+            bgcolor: "#000039",
+            color: "#fff",
+            borderRadius: "10px",
+            fontWeight: "bold",
+            px: 4,
+            py: 1.5,
+            mt: 3,
+            mx: "auto",
+            "&:hover": {
+              bgcolor: "#000039",
+            },
+          }}
+        >
+          Finalizar Torneo
+        </Button>
+      )}
     </Box>
   );
 };

@@ -1,8 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
-const GameCard = ({ pair }) => {
+const GameCard = ({ pair, roomId }) => {
   const { player1, player2 } = pair || {};
+  const [player1Points, setPlayer1Points] = useState(player1?.points || 0);
+  const [player2Points, setPlayer2Points] = useState(player2?.points || 0);
+
+  const handleAddPoints = async (player, setPoints, pointsToAdd) => {
+    try {
+      const updatedPoints = player.points + pointsToAdd;
+      setPoints(updatedPoints); // Actualizar visualmente los puntos en el botón
+
+      // Actualizar los puntos en Firestore
+      const roomRef = doc(db, "rooms", roomId);
+      await updateDoc(roomRef, {
+        participants: pair.map((p) =>
+          p.uid === player.uid ? { ...p, points: updatedPoints } : p
+        ),
+      });
+    } catch (error) {
+      console.error("Error al actualizar los puntos:", error);
+    }
+  };
+
+  const handleDrawPoints = async () => {
+    try {
+      const updatedPlayer1Points = player1.points + 50;
+      const updatedPlayer2Points = player2.points + 50;
+
+      setPlayer1Points(updatedPlayer1Points); // Actualizar visualmente los puntos
+      setPlayer2Points(updatedPlayer2Points);
+
+      // Actualizar los puntos en Firestore
+      const roomRef = doc(db, "rooms", roomId);
+      await updateDoc(roomRef, {
+        participants: pair.map((p) =>
+          p.uid === player1.uid
+            ? { ...p, points: updatedPlayer1Points }
+            : p.uid === player2.uid
+            ? { ...p, points: updatedPlayer2Points }
+            : p
+        ),
+      });
+    } catch (error) {
+      console.error("Error al actualizar los puntos por empate:", error);
+    }
+  };
 
   return (
     <Box
@@ -93,6 +138,7 @@ const GameCard = ({ pair }) => {
       >
         <Button
           variant="contained"
+          onClick={() => handleAddPoints(player1, setPlayer1Points, 100)}
           sx={{
             backgroundColor: "#434379",
             color: "white",
@@ -105,10 +151,11 @@ const GameCard = ({ pair }) => {
             },
           }}
         >
-          Ganador
+          {`+${player1Points}`}
         </Button>
         <Button
           variant="contained"
+          onClick={handleDrawPoints}
           sx={{
             backgroundColor: "#434379",
             color: "white",
@@ -125,6 +172,7 @@ const GameCard = ({ pair }) => {
         </Button>
         <Button
           variant="contained"
+          onClick={() => handleAddPoints(player2, setPlayer2Points, 100)}
           sx={{
             backgroundColor: "#434379",
             color: "white",
@@ -137,7 +185,7 @@ const GameCard = ({ pair }) => {
             },
           }}
         >
-          Ganador
+          {`+${player2Points}`}
         </Button>
       </Box>
     </Box>
