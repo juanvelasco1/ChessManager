@@ -31,6 +31,7 @@ const GameTournamentScreen = () => {
         );
         setPairsState(validPairs);
         dispatch(setPairs(validPairs)); // Actualizar Redux
+        dispatch(setParticipants(roomData.participants || [])); // Actualizar participantes en Redux
       } else {
         console.error("El documento de la sala no existe.");
       }
