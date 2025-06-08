@@ -58,7 +58,7 @@ const LobbyScreen = () => {
     if (userRole === "profesor") {
       console.log("Redirigiendo al profesor a GameTournament...");
       navigate(`/game-tournament/${roomId}`);
-    } else {
+    } else if (userRole === "jugador") {
       console.log("Redirigiendo al jugador a WaitingDuringGame...");
       navigate("/waiting-during-game");
     }
