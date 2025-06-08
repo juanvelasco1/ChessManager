@@ -56,10 +56,27 @@ const GameTournamentScreen = () => {
 
       if (roomSnapshot.exists()) {
         const roomData = roomSnapshot.data();
-        const updatedParticipants = roomData.participants.map((participant) => ({
-          ...participant,
-          points: participant.points, // Los puntos ya están actualizados en GameCard
-        }));
+        const updatedParticipants = roomData.participants.map(async (participant) => {
+          const userRef = doc(db, "users", participant.uid);
+          const userSnapshot = await getDoc(userRef);
+
+          if (userSnapshot.exists()) {
+            const userData = userSnapshot.data();
+            const currentGames = userData.games || 0;
+
+            // Incrementar el número de juegos
+            await updateDoc(userRef, {
+              games: currentGames + 1,
+            });
+          } else {
+            console.error(`El usuario con UID ${participant.uid} no existe en Firestore.`);
+          }
+
+          return {
+            ...participant,
+            points: participant.points, // Los puntos ya están actualizados en GameCard
+          };
+        });
 
         await updateDoc(roomRef, { participants: updatedParticipants });
 
