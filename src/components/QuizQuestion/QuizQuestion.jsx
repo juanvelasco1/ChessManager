@@ -103,8 +103,8 @@ const QuizQuestion = () => {
       if (user) {
         await updateDoc(doc(db, "users", user.uid), {
           rank: score,
-          trophies: correctCount,
-          games: increment(1),
+          trophies: 0,
+          games: 0,
         });
       }
       localStorage.clear();
