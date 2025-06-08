@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { CircularProgress, Box } from "@mui/material";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
-  const { uid, rol, email, loading } = useSelector((state) => state.auth);
+  const { uid, rol, loading } = useSelector((state) => state.auth);
 
   if (loading) {
     return (
@@ -24,17 +24,16 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to="/login" />;
   }
 
-  const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
   if (
     !loading &&
     uid &&
     requiredRole &&
     (
-      (requiredRole === "profesor" && normalizedEmail !== "profesor@gmail.com" && rol !== "profesor") ||
+      (requiredRole === "profesor" && rol !== "profesor") ||
       (requiredRole === "jugador" && rol !== "jugador") // Permitir acceso a jugadores
     )
   ) {
-    console.log("Acceso denegado. Rol del usuario:", rol ?? "no definido", "Correo:", email ?? "no definido", "Rol requerido:", requiredRole);
+    console.log("Acceso denegado. Rol del usuario:", rol ?? "no definido", "Rol requerido:", requiredRole);
     return <Navigate to="/unauthorized" />;
   }
 
