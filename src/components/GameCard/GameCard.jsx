@@ -64,15 +64,16 @@ const GameCard = ({ pair, roomId }) => {
 
   const handleDrawPoints = async () => {
     try {
-      const updatedPlayer1Points = player1.points + 50;
-      const updatedPlayer2Points = player2.points + 50;
+      const pointsToAdd = 50; // Puntos por empate
+      const updatedPlayer1Points = player1.points + pointsToAdd;
+      const updatedPlayer2Points = player2.points + pointsToAdd;
 
       setPlayer1Points(updatedPlayer1Points); // Actualizar visualmente los puntos
       setPlayer2Points(updatedPlayer2Points);
 
       // Actualizar los puntos en Firestore y Redux
-      await updateFirestorePoints(player1, 50, roomId);
-      await updateFirestorePoints(player2, 50, roomId);
+      await updateFirestorePoints(player1, pointsToAdd, roomId);
+      await updateFirestorePoints(player2, pointsToAdd, roomId);
     } catch (error) {
       console.error("Error al actualizar los puntos por empate:", error);
     }
