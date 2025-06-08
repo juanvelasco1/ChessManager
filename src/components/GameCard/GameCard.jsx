@@ -20,6 +20,7 @@ const GameCard = ({ pair }) => {
         width: "100%",
       }}
     >
+      {/* Contenedor de los jugadores */}
       <Box
         sx={{
           display: "flex",
@@ -29,6 +30,7 @@ const GameCard = ({ pair }) => {
           paddingBottom: 2,
         }}
       >
+        {/* Jugador 1 */}
         <Box
           sx={{
             display: "flex",
@@ -40,19 +42,23 @@ const GameCard = ({ pair }) => {
             src={player1?.avatar || "/avatars/default-avatar.png"}
             alt={player1?.nickname || "Jugador 1"}
             style={{
-              width: 50,
-              height: 50,
+              width: 40,
+              height: 40,
               borderRadius: "50%",
               marginBottom: 8,
             }}
           />
-          <Typography fontWeight="bold" color="white">
+          <Typography fontWeight="bold" color="white" fontSize="14px">
             {player1?.nickname || "Jugador 1"}
           </Typography>
         </Box>
-        <Typography fontWeight="bold" color="white">
+
+        {/* Texto VS */}
+        <Typography fontWeight="bold" color="white" fontSize="16px">
           VS
         </Typography>
+
+        {/* Jugador 2 */}
         <Box
           sx={{
             display: "flex",
@@ -64,22 +70,25 @@ const GameCard = ({ pair }) => {
             src={player2?.avatar || "/avatars/default-avatar.png"}
             alt={player2?.nickname || "Jugador 2"}
             style={{
-              width: 50,
-              height: 50,
+              width: 40,
+              height: 40,
               borderRadius: "50%",
               marginBottom: 8,
             }}
           />
-          <Typography fontWeight="bold" color="white">
+          <Typography fontWeight="bold" color="white" fontSize="14px">
             {player2?.nickname || "Jugador 2"}
           </Typography>
         </Box>
       </Box>
+
+      {/* Botones */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
+          gap: 1,
         }}
       >
         <Button
@@ -90,6 +99,7 @@ const GameCard = ({ pair }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
+            fontSize: "12px",
             "&:hover": {
               backgroundColor: "#434379",
             },
@@ -105,6 +115,7 @@ const GameCard = ({ pair }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
+            fontSize: "12px",
             "&:hover": {
               backgroundColor: "#434379",
             },
@@ -120,6 +131,7 @@ const GameCard = ({ pair }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
+            fontSize: "12px",
             "&:hover": {
               backgroundColor: "#434379",
             },
