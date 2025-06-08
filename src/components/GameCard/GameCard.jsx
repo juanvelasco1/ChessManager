@@ -1,12 +1,27 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
-const GameCard = ({ pair, roomId }) => {
+const GameCard = ({ pair }) => {
   const { player1, player2 } = pair || {};
   const [player1Points, setPlayer1Points] = useState(player1?.points || 0);
   const [player2Points, setPlayer2Points] = useState(player2?.points || 0);
+
+  const updateFirestorePoints = async (player, updatedPoints) => {
+    try {
+      const userRef = doc(db, "users", player.uid);
+      const userSnapshot = await getDoc(userRef);
+
+      if (userSnapshot.exists()) {
+        await updateDoc(userRef, { points: updatedPoints });
+      } else {
+        console.error(`El usuario con UID ${player.uid} no existe en Firestore.`);
+      }
+    } catch (error) {
+      console.error("Error al actualizar los puntos en Firestore:", error);
+    }
+  };
 
   const handleAddPoints = async (player, setPoints, pointsToAdd) => {
     try {
@@ -14,12 +29,7 @@ const GameCard = ({ pair, roomId }) => {
       setPoints(updatedPoints); // Actualizar visualmente los puntos en el botón
 
       // Actualizar los puntos en Firestore
-      const roomRef = doc(db, "rooms", roomId);
-      await updateDoc(roomRef, {
-        participants: pair.map((p) =>
-          p.uid === player.uid ? { ...p, points: updatedPoints } : p
-        ),
-      });
+      await updateFirestorePoints(player, updatedPoints);
     } catch (error) {
       console.error("Error al actualizar los puntos:", error);
     }
@@ -34,16 +44,8 @@ const GameCard = ({ pair, roomId }) => {
       setPlayer2Points(updatedPlayer2Points);
 
       // Actualizar los puntos en Firestore
-      const roomRef = doc(db, "rooms", roomId);
-      await updateDoc(roomRef, {
-        participants: pair.map((p) =>
-          p.uid === player1.uid
-            ? { ...p, points: updatedPlayer1Points }
-            : p.uid === player2.uid
-            ? { ...p, points: updatedPlayer2Points }
-            : p
-        ),
-      });
+      await updateFirestorePoints(player1, updatedPlayer1Points);
+      await updateFirestorePoints(player2, updatedPlayer2Points);
     } catch (error) {
       console.error("Error al actualizar los puntos por empate:", error);
     }
