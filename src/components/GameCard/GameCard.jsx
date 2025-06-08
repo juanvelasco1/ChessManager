@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar } from "@mui/material";
 
 const GameCard = ({ pair }) => {
-  const [player1, player2] = pair || {};
+  const { player1, player2 } = pair || {}; // Desestructurar como objeto
 
   return (
     <Box

@@ -25,7 +25,9 @@ const GameTournamentScreen = () => {
         console.log("Datos de la sala:", roomData); // Log para depuración
 
         // Validar estructura de pairs
-        const validPairs = roomData.pairs || [];
+        const validPairs = (roomData.pairs || []).filter(
+          (pair) => pair.player1 && pair.player2
+        );
         setPairsState(validPairs);
         dispatch(setPairs(validPairs)); // Actualizar Redux
       } else {
