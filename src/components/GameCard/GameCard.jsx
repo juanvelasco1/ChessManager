@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
+import { useDispatch } from "react-redux";
+import { updatePoints } from "../../store/authSlice";
 
 const GameCard = ({ pair, roomId }) => {
   const { player1, player2 } = pair || {};
   const [player1Points, setPlayer1Points] = useState(player1?.points || 0);
   const [player2Points, setPlayer2Points] = useState(player2?.points || 0);
+  const dispatch = useDispatch();
 
-  const updateFirestorePoints = async (player, updatedPoints, roomId) => {
+  const updateFirestorePoints = async (player, pointsToAdd, roomId) => {
     try {
       const userRef = doc(db, "users", player.uid);
       const userSnapshot = await getDoc(userRef);
@@ -16,15 +19,29 @@ const GameCard = ({ pair, roomId }) => {
       if (userSnapshot.exists()) {
         const userData = userSnapshot.data();
         const tournamentPoints = userData.tournamentPoints || {};
+        const updatedTournamentPoints = (tournamentPoints[roomId] || 0) + pointsToAdd;
+        const updatedTotalPoints = userData.points + pointsToAdd;
 
-        // Actualizar puntos totales y puntos del torneo
+        // Actualizar puntos en Firestore
         await updateDoc(userRef, {
-          points: updatedPoints,
+          points: updatedTotalPoints,
           tournamentPoints: {
             ...tournamentPoints,
-            [roomId]: (tournamentPoints[roomId] || 0) + updatedPoints,
+            [roomId]: updatedTournamentPoints,
           },
         });
+
+        // Actualizar puntos en Redux
+        dispatch(
+          updatePoints({
+            uid: player.uid,
+            points: updatedTotalPoints,
+            tournamentPoints: {
+              ...tournamentPoints,
+              [roomId]: updatedTournamentPoints,
+            },
+          })
+        );
       } else {
         console.error(`El usuario con UID ${player.uid} no existe en Firestore.`);
       }
@@ -38,7 +55,7 @@ const GameCard = ({ pair, roomId }) => {
       const updatedPoints = player.points + pointsToAdd;
       setPoints(updatedPoints); // Actualizar visualmente los puntos en el botón
 
-      // Actualizar los puntos en Firestore
+      // Actualizar los puntos en Firestore y Redux
       await updateFirestorePoints(player, pointsToAdd, roomId);
     } catch (error) {
       console.error("Error al actualizar los puntos:", error);
@@ -53,7 +70,7 @@ const GameCard = ({ pair, roomId }) => {
       setPlayer1Points(updatedPlayer1Points); // Actualizar visualmente los puntos
       setPlayer2Points(updatedPlayer2Points);
 
-      // Actualizar los puntos en Firestore
+      // Actualizar los puntos en Firestore y Redux
       await updateFirestorePoints(player1, 50, roomId);
       await updateFirestorePoints(player2, 50, roomId);
     } catch (error) {

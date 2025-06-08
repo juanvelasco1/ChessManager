@@ -66,8 +66,16 @@ const AuthSlice = createSlice({
     setRanking: (state, action) => {
       state.ranking = action.payload;
     },
+    updatePoints: (state, action) => {
+      const { uid, points, tournamentPoints } = action.payload;
+      const participant = state.participants.find((p) => p.uid === uid);
+      if (participant) {
+        participant.points = points;
+        participant.tournamentPoints = tournamentPoints;
+      }
+    },
   },
 });
 
-export const { login, logout, setUser, setTypeRol, setLoading, setParticipants, setPairs, setRanking } = AuthSlice.actions;
+export const { login, logout, setUser, setTypeRol, setLoading, setParticipants, setPairs, setRanking, updatePoints } = AuthSlice.actions;
 export default AuthSlice.reducer;
