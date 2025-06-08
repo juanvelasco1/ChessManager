@@ -58,26 +58,31 @@ const GameTournamentScreen = () => {
 
       if (roomSnapshot.exists()) {
         const roomData = roomSnapshot.data();
-        const updatedParticipants = roomData.participants.map(async (participant) => {
-          const userRef = doc(db, "users", participant.uid);
-          const userSnapshot = await getDoc(userRef);
 
-          if (userSnapshot.exists()) {
-            const userData = userSnapshot.data();
-            const currentGames = userData.games || 0;
+        // Resolver todas las promesas antes de actualizar Firestore
+        const updatedParticipants = await Promise.all(
+          roomData.participants.map(async (participant) => {
+            const userRef = doc(db, "users", participant.uid);
+            const userSnapshot = await getDoc(userRef);
 
-            // Incrementar el número de juegos y actualizar puntos
-            await updateDoc(userRef, {
-              games: currentGames + 1,
-              points: participant.points, // Actualizar puntos finales
-            });
-          } else {
-            console.error(`El usuario con UID ${participant.uid} no existe en Firestore.`);
-          }
+            if (userSnapshot.exists()) {
+              const userData = userSnapshot.data();
+              const currentGames = userData.games || 0;
 
-          return participant;
-        });
+              // Incrementar el número de juegos y actualizar puntos
+              await updateDoc(userRef, {
+                games: currentGames + 1,
+                points: participant.points, // Actualizar puntos finales
+              });
+            } else {
+              console.error(`El usuario con UID ${participant.uid} no existe en Firestore.`);
+            }
 
+            return participant; // Retornar el participante actualizado
+          })
+        );
+
+        // Actualizar los participantes en la sala
         await updateDoc(roomRef, { participants: updatedParticipants });
 
         // Actualizar Redux con los nuevos puntos
