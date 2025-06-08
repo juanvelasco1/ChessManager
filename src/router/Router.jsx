@@ -129,14 +129,7 @@ const Router = () => {
         <Route path="/join-room/:roomId" element={<JoinRoomScreen />} />
         <Route path="/waiting/:roomId" element={<WaitingScreen />} />
         <Route path="/results" element={<ResultsScreen />} />
-        <Route
-          path="/waiting-during-game"
-          element={
-            <ProtectedRoute requiredRole="jugador">
-              <WaitingDuringGameScreen />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/waiting-during-game" element={<WaitingDuringGameScreen />}/>
       </Routes>
     </BrowserRouter>
   );
