@@ -277,5 +277,5 @@ const GameTournamentScreen = () => {
     </Box>
   );
 };
-
+console.log("GameTournamentScreen loaded");
 export default GameTournamentScreen;
