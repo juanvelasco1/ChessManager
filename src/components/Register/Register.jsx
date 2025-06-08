@@ -56,12 +56,8 @@ const Register = () => {
         points: 0,
       });
 
-      // Redirige al quiz si el parámetro redirect está presente, de lo contrario al home
-      if (redirectPath) {
-        navigate(`/quiz?redirect=${redirectPath}`);
-      } else {
-        navigate("/home");
-      }
+      // Redirige al quiz directamente
+      navigate("/quiz");
     } catch (err) {
       if (err.code === "auth/email-already-in-use") {
         setError("El correo ya está registrado. Intenta iniciar sesión.");
