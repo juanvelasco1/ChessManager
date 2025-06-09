@@ -69,11 +69,16 @@ const GameTournamentScreen = () => {
               const userData = userSnapshot.data();
               const currentGames = userData.games || 0;
               const currentPoints = userData.points || 0;
+              const tournamentPoints = userData.tournamentPoints || {};
+
+              // Actualizar puntos del torneo
+              tournamentPoints[roomId] = participant.points || 0;
 
               // Incrementar el número de juegos y actualizar puntos
               await updateDoc(userRef, {
                 games: currentGames + 1,
                 points: currentPoints + (participant.points || 0), // Sumar puntos correctamente
+                tournamentPoints, // Actualizar puntos del torneo
               });
 
               return {
