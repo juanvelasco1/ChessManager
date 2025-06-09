@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 
 const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
@@ -11,11 +11,22 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
   const updatePointsInFirebase = async (player, points) => {
     try {
       const userRef = doc(db, "users", player.uid);
-      await updateDoc(userRef, {
-        points: player.points + points,
-      });
-      console.log(`Puntos actualizados en Firebase para ${player.nickname}: ${points}`);
-      fetchRankingData(); // Actualizar el ranking después de modificar los puntos
+      const userSnapshot = await getDoc(userRef);
+
+      if (userSnapshot.exists()) {
+        const userData = userSnapshot.data();
+        const currentPoints = userData.points || 0; // Asegurarse de que los puntos existentes se sumen
+        const updatedPoints = currentPoints + points;
+
+        await updateDoc(userRef, {
+          points: updatedPoints,
+        });
+
+        console.log(`Puntos actualizados en Firebase para ${player.nickname}: ${updatedPoints}`);
+        fetchRankingData(); // Actualizar el ranking después de modificar los puntos
+      } else {
+        console.error(`El usuario con UID ${player.uid} no existe en Firebase.`);
+      }
     } catch (error) {
       console.error("Error al actualizar puntos en Firebase:", error);
     }

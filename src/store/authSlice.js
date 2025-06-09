@@ -67,11 +67,10 @@ const AuthSlice = createSlice({
       state.ranking = action.payload;
     },
     updatePoints: (state, action) => {
-      const { uid, points, tournamentPoints } = action.payload;
+      const { uid, points } = action.payload;
       const participant = state.participants.find((p) => p.uid === uid);
       if (participant) {
-        participant.points = points;
-        participant.tournamentPoints = tournamentPoints;
+        participant.points = (participant.points || 0) + points; // Sumar puntos correctamente
       }
     },
   },
