@@ -78,18 +78,15 @@ const UserCard = () => {
   }
 
   // Obtener imagen y texto del rango en base al puntaje del quiz
-  const getRankImage = (score) => {
-    if (score >= 90) return "🥇"; // Oro
-    if (score >= 60) return "🥈"; // Plata
-    if (score >= 30) return "🏵️"; // Bronce
+  const getRankImage = (rank) => {
+    if (rank === "Oro 🥇") return "🥇"; // Oro
+    if (rank === "Plata 🥈") return "🥈"; // Plata
+    if (rank === "Bronce 🥉") return "🏵️"; // Bronce
     return "🪵"; // Madera
   };
 
-  const getRankText = (score) => {
-    if (score >= 90) return "Oro";
-    if (score >= 60) return "Plata";
-    if (score >= 30) return "Bronce";
-    return "Madera";
+  const getRankText = (rank) => {
+    return rank || "Sin rango"; // Mostrar el rango o un texto predeterminado
   };
 
   return (
@@ -251,9 +248,9 @@ const UserCard = () => {
         {/* Rango */}
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">{getRankImage(user.quizScore)}</Box>
+          <Box fontSize="30px">{getRankImage(user.rank)}</Box>
           <Typography variant="body2" fontWeight="regular">
-            {getRankText(user.quizScore)}
+            {getRankText(user.rank)}
           </Typography>
         </Box>
       </Box>

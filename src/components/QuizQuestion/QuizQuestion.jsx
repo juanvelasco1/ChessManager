@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../../services/firebaseConfig";
 import { db } from "../../services/firebaseConfig";
 import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
 
 const QuizQuestion = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/home";
 
   const [questions, setQuestions] = useState([]);
   const [current, setCurrent] = useState(() => {
@@ -70,9 +68,10 @@ const QuizQuestion = () => {
 
   const question = questions[current];
 
-  const handleClick = (option) => {
+  const handleClick = async (option) => {
     setSelected(option);
     localStorage.setItem(`quizAnswer_${current}`, option);
+
     if (option === question.correct) {
       const newScore = score + question.points;
       setScore(newScore);
@@ -81,7 +80,17 @@ const QuizQuestion = () => {
       const newCorrectCount = correctCount + 1;
       setCorrectCount(newCorrectCount);
       localStorage.setItem("quizCorrect", newCorrectCount.toString());
+
+      // Actualizar puntos en Firebase usando increment
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, {
+          points: increment(question.points), // Incrementar puntos en Firebase
+        });
+      }
     }
+
     setTimeout(() => {
       const next = current + 1;
       setSelected(null);
@@ -101,20 +110,23 @@ const QuizQuestion = () => {
     const handleContinue = async () => {
       const user = auth.currentUser;
       if (user) {
-        await updateDoc(doc(db, "users", user.uid), {
-          rank: score,
-          trophies: 0,
-          games: 0,
+        // Calcular el rango basado en el puntaje
+        let rank;
+        if (score <= 70) rank = "Madera 🪵";
+        else if (score <= 110) rank = "Bronce 🥉";
+        else if (score <= 150) rank = "Plata 🥈";
+        else rank = "Oro 🥇";
+
+        // Guardar el rango en Firebase
+        const userRef = doc(db, "users", user.uid);
+        await updateDoc(userRef, {
+          rank: rank, // Guardar el rango calculado
+          games: increment(1), // Incrementar el número de juegos en Firebase
         });
       }
-      localStorage.clear();
 
-      // Redirige al lobby si el parámetro redirect está presente, de lo contrario al home
-      if (redirectPath) {
-        navigate(redirectPath);
-      } else {
-        navigate("/home");
-      }
+      localStorage.clear();
+      navigate("/home");
     };
 
     return (
