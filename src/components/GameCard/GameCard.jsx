@@ -12,24 +12,24 @@ const GameCard = ({ pair, updatePoints }) => {
         // Deseleccionar ganador
         setPlayer1State("initial");
         setPlayer2State("initial");
-        updatePoints(player1, -100);
+        if (updatePoints) updatePoints(player1, 0); // No restar puntos
       } else {
         // Seleccionar ganador
         setPlayer1State("winner");
         setPlayer2State("initial"); // Perdedor no suma ni resta puntos
-        updatePoints(player1, 100);
+        if (updatePoints) updatePoints(player1, 100);
       }
     } else if (winner === "player2") {
       if (player2State === "winner") {
         // Deseleccionar ganador
         setPlayer2State("initial");
         setPlayer1State("initial");
-        updatePoints(player2, -100);
+        if (updatePoints) updatePoints(player2, 0); // No restar puntos
       } else {
         // Seleccionar ganador
         setPlayer2State("winner");
         setPlayer1State("initial"); // Perdedor no suma ni resta puntos
-        updatePoints(player2, 100);
+        if (updatePoints) updatePoints(player2, 100);
       }
     }
   };
@@ -39,13 +39,18 @@ const GameCard = ({ pair, updatePoints }) => {
       // Deseleccionar empate
       setPlayer1State("initial");
       setPlayer2State("initial");
-      // No se modifican los puntos al deseleccionar el empate
+      if (updatePoints) {
+        updatePoints(player1, 0); // No modificar puntos
+        updatePoints(player2, 0); // No modificar puntos
+      }
     } else {
       // Seleccionar empate
       setPlayer1State("draw");
       setPlayer2State("draw");
-      updatePoints(player1, 50);
-      updatePoints(player2, 50);
+      if (updatePoints) {
+        updatePoints(player1, 50);
+        updatePoints(player2, 50);
+      }
     }
   };
 

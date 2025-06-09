@@ -165,7 +165,10 @@ const GameTournamentScreen = () => {
                   avatar: pair.player2.avatar || "/avatars/default-avatar.png",
                 },
               }}
-              roomId={roomId}
+              updatePoints={(player, points) => {
+                console.log(`Actualizando puntos para ${player.nickname}: ${points}`);
+                // Aquí puedes implementar la lógica para actualizar los puntos
+              }}
             />
           ))
         ) : (
