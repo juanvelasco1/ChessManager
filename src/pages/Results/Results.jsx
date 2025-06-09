@@ -10,15 +10,14 @@ const ResultsScreen = () => {
   const reduxParticipants = useSelector((state) => state.auth.participants);
   const user = useSelector((state) => state.auth);
   const [participants, setParticipants] = useState(reduxParticipants);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [resultMessage, setResultMessage] = useState("Cargando resultados...");
 
-  // Intenta cargar los participantes desde Firestore si no hay en Redux
+  // Primer useEffect: carga participantes
   useEffect(() => {
     if (!participants || participants.length === 0) {
       const fetchParticipants = async () => {
         setLoading(true);
-        // Busca la última sala activa del usuario
-        // Si tienes el roomId en Redux o en localStorage, úsalo directamente
         const roomId = localStorage.getItem("lastRoomId") || user.lastRoomId;
         if (!roomId) {
           setLoading(false);
@@ -33,36 +32,51 @@ const ResultsScreen = () => {
         setLoading(false);
       };
       fetchParticipants();
+    } else {
+      setLoading(false);
     }
   }, [participants, user]);
 
-  const getResultMessage = () => {
-    if (!participants || participants.length === 0) return "Cargando resultados...";
+  // Segundo useEffect: calcula el mensaje cuando cambian los participantes
+  useEffect(() => {
+    if (loading) {
+      setResultMessage("Cargando resultados...");
+      return;
+    }
+    if (!participants || participants.length === 0) {
+      setResultMessage("Cargando resultados...");
+      return;
+    }
 
-    // Ordena los participantes por puntos de mayor a menor
     const sortedParticipants = [...participants].sort((a, b) => b.points - a.points);
     const userData = sortedParticipants.find((p) => p.uid === user.uid);
 
-    if (!userData) return "No se encontró tu resultado.";
+    if (!userData) {
+      setResultMessage("No se encontró tu resultado.");
+      return;
+    }
 
     const userPoints = userData.points;
     const samePoints = sortedParticipants.filter((p) => p.points === userPoints);
 
     if (samePoints.length > 1) {
-      return "¡Es un empate!";
+      setResultMessage("¡Es un empate!");
+      return;
     }
 
     const maxPoints = sortedParticipants[0].points;
     const minPoints = sortedParticipants[sortedParticipants.length - 1].points;
 
     if (userPoints === maxPoints) {
-      return "¡Felicidades, ganaste!";
+      setResultMessage("¡Felicidades, ganaste!");
+      return;
     }
     if (userPoints === minPoints) {
-      return "Lo sentimos, perdiste.";
+      setResultMessage("Lo sentimos, perdiste.");
+      return;
     }
-    return "¡Buen juego!";
-  };
+    setResultMessage("¡Buen juego!");
+  }, [participants, loading, user]);
 
   return (
     <Box
@@ -85,7 +99,7 @@ const ResultsScreen = () => {
           mb: 2,
         }}
       >
-        {getResultMessage()}
+        {resultMessage}
       </Typography>
       <Button
         variant="contained"
