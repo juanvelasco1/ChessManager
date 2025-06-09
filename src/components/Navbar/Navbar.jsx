@@ -30,7 +30,7 @@ const NavBar = () => {
         position: "fixed",
         top: {
           xs: 690,     // mobile
-          md: 930           // desktop
+          md: 920           // desktop
         },
         bottom: {
           xs: 50,          // mobile
