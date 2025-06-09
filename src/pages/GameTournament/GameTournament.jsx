@@ -153,7 +153,20 @@ const GameTournamentScreen = () => {
       >
         {pairs.length > 0 ? (
           pairs.map((pair, index) => (
-            <GameCard key={index} pair={pair} roomId={roomId} />
+            <GameCard
+              key={index}
+              pair={{
+                player1: {
+                  ...pair.player1,
+                  avatar: pair.player1.avatar || "/avatars/default-avatar.png",
+                },
+                player2: {
+                  ...pair.player2,
+                  avatar: pair.player2.avatar || "/avatars/default-avatar.png",
+                },
+              }}
+              roomId={roomId}
+            />
           ))
         ) : (
           <Typography
