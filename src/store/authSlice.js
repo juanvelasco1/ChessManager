@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  uid: null,
-  email: null,
-  nickname: null,
-  avatar: null,
-  points: 0,
-  rol: null,
+  uid: localStorage.getItem("uid") || null,
+  email: localStorage.getItem("email") || null,
+  nickname: localStorage.getItem("nickname") || null,
+  avatar: localStorage.getItem("avatar") || "/avatars/default-avatar.png",
+  points: parseInt(localStorage.getItem("points"), 10) || 0,
+  rol: localStorage.getItem("rol") || "jugador",
   participants: [],
   pairs: [],
   ranking: [],
@@ -29,10 +29,13 @@ const AuthSlice = createSlice({
       state.uid = action.payload.uid;
       state.email = action.payload.email;
       state.nickname = action.payload.nickname;
-      state.avatar = action.payload.avatar || "/avatars/default-avatar.png"; // Valor predeterminado
-      state.points = action.payload.points || 0; // Valor predeterminado
+      state.avatar = action.payload.avatar || "/avatars/default-avatar.png";
+      state.points = action.payload.points || 0;
       const normalizedEmail = (action.payload.email || "").trim().toLowerCase();
-      const assignedRole = normalizedEmail === "administrador@gmail.com" ? "administrador" : (action.payload.rol || "jugador");
+      const assignedRole =
+        normalizedEmail === "administrador@gmail.com"
+          ? "administrador"
+          : action.payload.rol || "jugador";
       state.rol = assignedRole;
       state.loading = false;
 
@@ -70,11 +73,21 @@ const AuthSlice = createSlice({
       const { uid, points } = action.payload;
       const participant = state.participants.find((p) => p.uid === uid);
       if (participant) {
-        participant.points = (participant.points || 0) + points; // Sumar puntos correctamente
+        participant.points = (participant.points || 0) + points;
       }
     },
   },
 });
 
-export const { login, logout, setUser, setTypeRol, setLoading, setParticipants, setPairs, setRanking, updatePoints } = AuthSlice.actions;
+export const {
+  login,
+  logout,
+  setUser,
+  setTypeRol,
+  setLoading,
+  setParticipants,
+  setPairs,
+  setRanking,
+  updatePoints,
+} = AuthSlice.actions;
 export default AuthSlice.reducer;

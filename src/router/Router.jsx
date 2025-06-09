@@ -24,43 +24,63 @@ import {
   WaitingDuringGameScreen,
 } from "../pages/index.jsx";
 
-
 const Router = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLoading(true)); // Inicia la carga
 
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const uid = user.uid;
-        dispatch(setUser(uid));
+    const uid = localStorage.getItem("uid");
+    const email = localStorage.getItem("email");
+    const nickname = localStorage.getItem("nickname");
+    const avatar = localStorage.getItem("avatar");
+    const points = parseInt(localStorage.getItem("points"), 10) || 0;
+    const rol = localStorage.getItem("rol");
 
-        try {
-          const userDoc = await getDoc(doc(db, "users", uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            const normalizedEmail = (user.email || "").trim().toLowerCase();
-            dispatch(
-              login({
-                uid,
-                email: user.email || userData.email || null,
-                rol: normalizedEmail === "administrador@gmail.com" ? "administrador" : "jugador",
-              })
-            );
+    if (uid) {
+      dispatch(
+        login({
+          uid,
+          email,
+          nickname,
+          avatar,
+          points,
+          rol,
+        })
+      );
+      dispatch(setLoading(false));
+    } else {
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const uid = user.uid;
+          dispatch(setUser(uid));
+
+          try {
+            const userDoc = await getDoc(doc(db, "users", uid));
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              const normalizedEmail = (user.email || "").trim().toLowerCase();
+              dispatch(
+                login({
+                  uid,
+                  email: user.email || userData.email || null,
+                  rol: normalizedEmail === "administrador@gmail.com" ? "administrador" : "jugador",
+                })
+              );
+              dispatch(setLoading(false));
+            }
+          } catch (error) {
+            console.error("Error al obtener el rol del usuario desde Firestore:", error);
             dispatch(setLoading(false));
           }
-        } catch (error) {
-          console.error("Error al obtener el rol del usuario desde Firestore:", error);
+        } else {
+          dispatch(logout());
           dispatch(setLoading(false));
         }
-      } else {
-        dispatch(logout());
-        dispatch(setLoading(false));
-      }
-    });
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }
   }, [dispatch]);
 
   return (
