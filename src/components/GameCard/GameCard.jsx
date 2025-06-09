@@ -1,78 +1,50 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
-import { db } from "../../services/firebaseConfig";
+import { updatePlayerPoints } from "../../utils/pointsUtils";
 
 const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
   const { player1, player2 } = pair || {};
   const [player1State, setPlayer1State] = useState("initial");
   const [player2State, setPlayer2State] = useState("initial");
 
-  const updatePointsInFirebase = async (player, points) => {
-    try {
-      const userRef = doc(db, "users", player.uid);
-      const userSnapshot = await getDoc(userRef);
-
-      if (userSnapshot.exists()) {
-        const userData = userSnapshot.data();
-        const currentPoints = userData.points || 0; // Asegurarse de que los puntos existentes se sumen
-        const updatedPoints = currentPoints + points;
-
-        await updateDoc(userRef, {
-          points: updatedPoints,
-        });
-
-        console.log(`Puntos actualizados en Firebase para ${player.nickname}: ${updatedPoints}`);
-        fetchRankingData(); // Actualizar el ranking después de modificar los puntos
-      } else {
-        console.error(`El usuario con UID ${player.uid} no existe en Firebase.`);
-      }
-    } catch (error) {
-      console.error("Error al actualizar puntos en Firebase:", error);
-    }
-  };
-
-  const updatePoints = (player, points) => {
-    updatePointsInRedux(player.uid, points); // Actualizar puntos en Redux
-    updatePointsInFirebase(player, points); // Actualizar puntos en Firebase
-  };
-
-  const handleWinnerSelection = (winner) => {
+  const handleWinnerSelection = async (winner) => {
     if (winner === "player1") {
       if (player1State === "winner") {
         setPlayer1State("initial");
         setPlayer2State("initial");
-        updatePoints(player1, -100);
+        await updatePlayerPoints(player1, -100, updatePointsInRedux);
       } else {
         setPlayer1State("winner");
         setPlayer2State("initial");
-        updatePoints(player1, 100);
+        await updatePlayerPoints(player1, 100, updatePointsInRedux);
       }
     } else if (winner === "player2") {
       if (player2State === "winner") {
         setPlayer2State("initial");
         setPlayer1State("initial");
-        updatePoints(player2, -100);
+        await updatePlayerPoints(player2, -100, updatePointsInRedux);
       } else {
         setPlayer2State("winner");
         setPlayer1State("initial");
-        updatePoints(player2, 100);
+        await updatePlayerPoints(player2, 100, updatePointsInRedux);
       }
     }
+    fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
 
-  const handleDrawSelection = () => {
+  const handleDrawSelection = async () => {
     if (player1State === "draw" && player2State === "draw") {
       setPlayer1State("initial");
       setPlayer2State("initial");
-      updatePoints(player1, -50);
-      updatePoints(player2, -50);
+      await updatePlayerPoints(player1, -50, updatePointsInRedux);
+      await updatePlayerPoints(player2, -50, updatePointsInRedux);
     } else {
       setPlayer1State("draw");
       setPlayer2State("draw");
-      updatePoints(player1, 50);
-      updatePoints(player2, 50);
+      await updatePlayerPoints(player1, 50, updatePointsInRedux);
+      await updatePlayerPoints(player2, 50, updatePointsInRedux);
     }
+    fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
 
   return (
