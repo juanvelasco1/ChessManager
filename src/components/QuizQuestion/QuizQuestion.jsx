@@ -86,7 +86,7 @@ const QuizQuestion = () => {
       if (user) {
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
-          points: increment(question.points), // Incrementar puntos en Firebase
+          quizPoints: increment(question.points), // Incrementar puntos en Firebase
         });
       }
     }
