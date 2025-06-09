@@ -22,8 +22,8 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
   };
 
   const updatePoints = (player, points) => {
-    updatePointsInRedux(player.uid, points);
-    updatePointsInFirebase(player, points);
+    updatePointsInRedux(player.uid, points); // Actualizar puntos en Redux
+    updatePointsInFirebase(player, points); // Actualizar puntos en Firebase
   };
 
   const handleWinnerSelection = (winner) => {
