@@ -57,11 +57,11 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: "10px",
-        padding: 2,
-        marginBottom: 2,
-        width: "100%",
-        maxWidth: "400px",
+        borderRadius: "12px",
+        padding: "20px",
+        margin: "0 auto 20px",
+        width: "90%",
+        maxWidth: "500px",
       }}
     >
       {/* Contenedor de los jugadores */}
@@ -72,6 +72,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
           justifyContent: "space-between",
           width: "100%",
           paddingBottom: 2,
+          gap: 2,
         }}
       >
         {/* Jugador 1 */}
@@ -86,10 +87,10 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             src={player1?.avatar || "/avatars/default-avatar.png"}
             alt={player1?.nickname || "Jugador 1"}
             style={{
-              width: 48,
-              height: 48,
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
-              marginBottom: 8,
+              marginBottom: 4,
               border:
                 player1State === "winner"
                   ? "2px solid #28a745"
@@ -104,7 +105,12 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         </Box>
 
         {/* Texto VS */}
-        <Typography fontWeight="bold" color="white" fontSize="16px">
+        <Typography
+          fontWeight="bold"
+          color="white"
+          fontSize="18px"
+          sx={{ display: "flex", alignItems: "center" }}
+        >
           VS
         </Typography>
 
@@ -120,10 +126,10 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             src={player2?.avatar || "/avatars/default-avatar.png"}
             alt={player2?.nickname || "Jugador 2"}
             style={{
-              width: 48,
-              height: 48,
+              width: "40px",
+              height: "40px",
               borderRadius: "50%",
-              marginBottom: 8,
+              marginBottom: 4,
               border:
                 player2State === "winner"
                   ? "2px solid #28a745"
@@ -145,6 +151,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
           justifyContent: "space-between",
           width: "100%",
           gap: 1,
+          flexWrap: "wrap",
         }}
       >
         <Button
@@ -157,6 +164,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             borderRadius: "10px",
             flex: 1,
             fontSize: "12px",
+            minWidth: "30%",
             "&:hover": {
               backgroundColor: player1State === "winner" ? "#218838" : "#2f2f77",
             },
@@ -177,6 +185,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             borderRadius: "10px",
             flex: 1,
             fontSize: "12px",
+            minWidth: "30%",
             "&:hover": {
               backgroundColor:
                 player1State === "draw" && player2State === "draw"
@@ -199,6 +208,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             borderRadius: "10px",
             flex: 1,
             fontSize: "12px",
+            minWidth: "30%",
             "&:hover": {
               backgroundColor: player2State === "winner" ? "#218838" : "#2f2f77",
             },

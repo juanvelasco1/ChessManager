@@ -198,7 +198,12 @@ const GameTournamentScreen = () => {
         )}
       </Box>
 
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
         {/* Botón de Finalizar Torneo */}
         {userRole === "profesor" && (
           <Button
