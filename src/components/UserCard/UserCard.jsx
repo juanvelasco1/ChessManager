@@ -256,9 +256,9 @@ const UserCard = () => {
         {/* Rango */}
         <Box textAlign="center">
           <Typography variant="subtitle2">Rango</Typography>
-          <Box fontSize="30px">{getRankImage(user.quizScore)}</Box>
+          <Box fontSize="30px">{getRankImage(user.rank)}</Box>
           <Typography variant="body2" fontWeight="regular">
-            {getRankText(user.quizScore)}
+            {getRankText(user.rank)}
           </Typography>
         </Box>
       </Box>

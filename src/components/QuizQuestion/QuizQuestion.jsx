@@ -121,7 +121,7 @@ const QuizQuestion = () => {
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
           rank: rank, // Actualizar el rango basado en el quiz
-          quizPoints: increment(score), // Incrementar los puntos obtenidos en el quiz
+          quizPoints: score, // Guardar los puntos obtenidos en el quiz
         });
       }
 
