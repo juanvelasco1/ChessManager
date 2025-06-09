@@ -33,18 +33,26 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
   };
 
   const handleDrawSelection = async () => {
-    if (player1State === "draw" && player2State === "draw") {
-      setPlayer1State("initial");
-      setPlayer2State("initial");
-      await updatePlayerPoints(player1, -50, updatePointsInRedux);
-      await updatePlayerPoints(player2, -50, updatePointsInRedux);
-    } else {
-      setPlayer1State("draw");
-      setPlayer2State("draw");
-      await updatePlayerPoints(player1, 50, updatePointsInRedux);
-      await updatePlayerPoints(player2, 50, updatePointsInRedux);
+    try {
+      if (player1State === "draw" && player2State === "draw") {
+        // Deseleccionar empate y restar puntos
+        setPlayer1State("initial");
+        setPlayer2State("initial");
+        await updatePlayerPoints(player1, -50, updatePointsInRedux);
+        await updatePlayerPoints(player2, -50, updatePointsInRedux);
+      } else {
+        // Seleccionar empate y asignar puntos
+        setPlayer1State("draw");
+        setPlayer2State("draw");
+        await updatePlayerPoints(player1, 50, updatePointsInRedux);
+        await updatePlayerPoints(player2, 50, updatePointsInRedux);
+      }
+
+      // Actualizar el ranking después de modificar los puntos
+      fetchRankingData();
+    } catch (error) {
+      console.error("Error al asignar puntos en caso de empate:", error);
     }
-    fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
 
   return (
