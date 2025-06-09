@@ -15,6 +15,7 @@ const ResultsScreen = () => {
 
   // Primer useEffect: carga participantes
   useEffect(() => {
+    // Solo cargar participantes una vez al montar o cuando cambie el usuario
     if (!participants || participants.length === 0) {
       const fetchParticipants = async () => {
         setLoading(true);
@@ -35,7 +36,8 @@ const ResultsScreen = () => {
     } else {
       setLoading(false);
     }
-  }, [participants, user]);
+    // Solo depende de user (y opcionalmente de reduxParticipants si quieres recargar si cambia el global)
+  }, [user]);
 
   // Segundo useEffect: calcula el mensaje cuando cambian los participantes
   useEffect(() => {
