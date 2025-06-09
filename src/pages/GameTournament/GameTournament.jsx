@@ -9,6 +9,7 @@ import { db } from "../../services/firebaseConfig"; // Importar la instancia de 
 import { useDispatch, useSelector } from "react-redux";
 import { setPairs, setParticipants, updatePoints } from "../../store/authSlice";
 import { Modal } from "@mui/material";
+import { fetchRankingData } from "../../utils/rankingUtils"; // Importar la función correctamente
 
 const GameTournamentScreen = () => {
   const navigate = useNavigate();
@@ -164,9 +165,7 @@ const GameTournamentScreen = () => {
               updatePointsInRedux={(uid, points) => {
                 dispatch(updatePoints({ uid, points })); // Llamar a la acción de Redux
               }}
-              fetchRankingData={() => {
-                dispatch(fetchRanking()); // Actualizar el ranking
-              }}
+              fetchRankingData={fetchRankingData} // Pasar la función correctamente
             />
           ))
         ) : (
