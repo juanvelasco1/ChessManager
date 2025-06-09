@@ -15,7 +15,7 @@ export const fetchRankingData = async () => {
       uid: doc.id,
       nickname: doc.data().nickname || "Sin nombre",
       points: doc.data().points || 0,
-      avatar: doc.data().avatar || "ChessManager/chess-quiz-app/public/avatars/default.jpg",
+      avatar: doc.data().avatar || "/avatars/default-avatar.png",
       rank: index + 1, // Rank starts at 1
     }));
 

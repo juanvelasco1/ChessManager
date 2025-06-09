@@ -22,6 +22,12 @@ const RankingTable = ({ showCurrentUser = false }) => {
         }));
         setRankingData(sanitizedRanking);
         dispatch(setRanking(sanitizedRanking));
+
+        // Encontrar al usuario actual en el ranking
+        const user = sanitizedRanking.find((user) => user.uid === uid);
+        if (user) {
+          setCurrentUser(user); // Actualizar el estado local del usuario actual
+        }
       } catch (error) {
         console.error("Error al obtener los datos de ranking:", error);
       }
