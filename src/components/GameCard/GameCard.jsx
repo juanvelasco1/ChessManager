@@ -12,7 +12,7 @@ const GameCard = ({ pair, updatePoints }) => {
         // Deseleccionar ganador
         setPlayer1State("initial");
         setPlayer2State("initial");
-        if (updatePoints) updatePoints(player1, 0); // No restar puntos
+        if (updatePoints) updatePoints(player1, -100); // Restar puntos si se deselecciona
       } else {
         // Seleccionar ganador
         setPlayer1State("winner");
@@ -24,7 +24,7 @@ const GameCard = ({ pair, updatePoints }) => {
         // Deseleccionar ganador
         setPlayer2State("initial");
         setPlayer1State("initial");
-        if (updatePoints) updatePoints(player2, 0); // No restar puntos
+        if (updatePoints) updatePoints(player2, -100); // Restar puntos si se deselecciona
       } else {
         // Seleccionar ganador
         setPlayer2State("winner");
@@ -40,8 +40,8 @@ const GameCard = ({ pair, updatePoints }) => {
       setPlayer1State("initial");
       setPlayer2State("initial");
       if (updatePoints) {
-        updatePoints(player1, 0); // No modificar puntos
-        updatePoints(player2, 0); // No modificar puntos
+        updatePoints(player1, -50); // Restar puntos si se deselecciona
+        updatePoints(player2, -50); // Restar puntos si se deselecciona
       }
     } else {
       // Seleccionar empate

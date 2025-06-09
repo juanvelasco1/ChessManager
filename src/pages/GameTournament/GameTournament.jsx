@@ -172,7 +172,7 @@ const GameTournamentScreen = () => {
               }}
               updatePoints={(player, points) => {
                 console.log(`Actualizando puntos para ${player.nickname}: ${points}`);
-                // Aquí puedes implementar la lógica para actualizar los puntos
+                player.points = (player.points || 0) + points; // Actualizar puntos en el objeto
               }}
             />
           ))
