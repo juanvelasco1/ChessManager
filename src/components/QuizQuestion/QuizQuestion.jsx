@@ -120,8 +120,7 @@ const QuizQuestion = () => {
         // Guardar el rango y puntos del quiz en Firebase
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
-          rank: rank,
-          games: increment(1), // Incrementar el número de juegos
+          rank: rank, // Actualizar el rango basado en el quiz
           quizPoints: increment(score), // Incrementar los puntos obtenidos en el quiz
         });
       }
