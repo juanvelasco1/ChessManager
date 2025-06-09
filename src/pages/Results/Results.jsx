@@ -1,26 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
 const ResultsScreen = () => {
   const navigate = useNavigate();
-  const participants = useSelector((state) => state.auth.participants); // Obtener los participantes desde Redux
-  const user = useSelector((state) => state.auth); // Obtener los datos del usuario actual
+  const reduxParticipants = useSelector((state) => state.auth.participants);
+  const user = useSelector((state) => state.auth);
+  const [participants, setParticipants] = useState(reduxParticipants);
+  const [loading, setLoading] = useState(false);
+
+  // Intenta cargar los participantes desde Firestore si no hay en Redux
+  useEffect(() => {
+    if (!participants || participants.length === 0) {
+      const fetchParticipants = async () => {
+        setLoading(true);
+        // Busca la última sala activa del usuario
+        // Si tienes el roomId en Redux o en localStorage, úsalo directamente
+        const roomId = localStorage.getItem("lastRoomId") || user.lastRoomId;
+        if (!roomId) {
+          setLoading(false);
+          return;
+        }
+        const roomRef = doc(db, "rooms", roomId);
+        const roomSnap = await getDoc(roomRef);
+        if (roomSnap.exists()) {
+          const roomData = roomSnap.data();
+          setParticipants(roomData.participants || []);
+        }
+        setLoading(false);
+      };
+      fetchParticipants();
+    }
+  }, [participants, user]);
 
   const getResultMessage = () => {
-    const sortedParticipants = [...participants].sort(
-      (a, b) => b.points - a.points
-    );
-    const userRank = sortedParticipants.findIndex((p) => p.uid === user.uid) + 1;
+    if (!participants || participants.length === 0) return "Cargando resultados...";
 
-    if (userRank === 1) {
-      return "¡Felicidades, ganaste!";
-    } else if (userRank === sortedParticipants.length) {
-      return "Lo sentimos, perdiste.";
-    } else {
+    // Ordena los participantes por puntos de mayor a menor
+    const sortedParticipants = [...participants].sort((a, b) => b.points - a.points);
+    const userData = sortedParticipants.find((p) => p.uid === user.uid);
+
+    if (!userData) return "No se encontró tu resultado.";
+
+    const userPoints = userData.points;
+    const samePoints = sortedParticipants.filter((p) => p.points === userPoints);
+
+    if (samePoints.length > 1) {
       return "¡Es un empate!";
     }
+
+    const maxPoints = sortedParticipants[0].points;
+    const minPoints = sortedParticipants[sortedParticipants.length - 1].points;
+
+    if (userPoints === maxPoints) {
+      return "¡Felicidades, ganaste!";
+    }
+    if (userPoints === minPoints) {
+      return "Lo sentimos, perdiste.";
+    }
+    return "¡Buen juego!";
   };
 
   return (
