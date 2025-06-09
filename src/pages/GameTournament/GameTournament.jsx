@@ -95,7 +95,7 @@ const GameTournamentScreen = () => {
         );
 
         // Actualizar los participantes en la sala
-        await updateDoc(roomRef, { participants: updatedParticipants });
+        await updateDoc(roomRef, { participants: updatedParticipants, isActive: false });
 
         // Actualizar Redux con los nuevos puntos
         dispatch(setParticipants(updatedParticipants));
