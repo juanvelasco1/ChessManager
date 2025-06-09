@@ -34,7 +34,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
 
   const handleDrawPoints = async () => {
     try {
-      const pointsToAdd = 50; // Puntos por empate
+      const pointsToAdd = 0.5; // Puntos por empate
       const updatedPlayer1Points = player1.points + pointsToAdd;
       const updatedPlayer2Points = player2.points + pointsToAdd;
 
@@ -121,7 +121,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
               border: player1State === "winner" ? "2px solid green" : player1State === "draw" ? "2px solid orange" : "none",
             }}
           />
-          <Typography fontWeight="bold" color="white" fontSize="14px">
+          <Typography fontWeight="bold" color="white" fontSize="16px">
             {player1?.nickname || "Jugador 1"}
           </Typography>
         </Box>
@@ -150,7 +150,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
               border: player2State === "winner" ? "2px solid green" : player2State === "draw" ? "2px solid orange" : "none",
             }}
           />
-          <Typography fontWeight="bold" color="white" fontSize="14px">
+          <Typography fontWeight="bold" color="white" fontSize="16px">
             {player2?.nickname || "Jugador 2"}
           </Typography>
         </Box>
@@ -167,7 +167,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
       >
         <Button
           variant="contained"
-          onClick={() => handleWinnerSelection("player1")}
+          onClick={() => handleAddPoints(player1, setPlayer1Points, 1)}
           sx={{
             backgroundColor: player1State === "winner" ? "#28a745" : "#434379",
             color: "white",
@@ -180,7 +180,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             },
           }}
         >
-          {player1State === "winner" ? "Deseleccionar" : "Ganador"}
+          1
         </Button>
         <Button
           variant="contained"
@@ -201,7 +201,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         </Button>
         <Button
           variant="contained"
-          onClick={() => handleWinnerSelection("player2")}
+          onClick={() => handleAddPoints(player2, setPlayer2Points, 1)}
           sx={{
             backgroundColor: player2State === "winner" ? "#28a745" : "#434379",
             color: "white",
@@ -214,7 +214,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             },
           }}
         >
-          {player2State === "winner" ? "Deseleccionar" : "Ganador"}
+          1
         </Button>
       </Box>
     </Box>
