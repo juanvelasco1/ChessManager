@@ -8,7 +8,7 @@ import { db } from "../services/firebaseConfig";
 export const fetchRankingData = async () => {
   try {
     const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("points", "desc")); // Order by points descending
+    const q = query(usersRef, orderBy("points", "desc")); // Ordenar por puntos descendentes
     const querySnapshot = await getDocs(q);
 
     const users = querySnapshot.docs.map((doc, index) => ({

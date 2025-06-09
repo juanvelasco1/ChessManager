@@ -52,8 +52,8 @@ const Register = () => {
         role: role,
         trophies: 0,
         games: 0,
-        rank: 0,
-        points: 0,
+        rank: 0, // Inicializa el rango en 0
+        points: 0, // Inicializa los puntos en 0
       });
 
       // Redirige al quiz directamente

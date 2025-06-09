@@ -7,20 +7,31 @@ import { setRanking } from "../../store/authSlice";
 const RankingTable = ({ showCurrentUser = false }) => {
   const [rankingData, setRankingData] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
-  const uid = useSelector((state) => state.auth.uid);
+  const uid = useSelector((state) => state.auth.uid); // Obtener el UID del usuario actual desde Redux
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchData = async () => {
-      const { ranking } = await fetchRankingData();
-      setRankingData(ranking);
+      try {
+        const { ranking } = await fetchRankingData();
+        const sanitizedRanking = ranking.map((user) => ({
+          ...user,
+          points: user.points || 0, // Asegurar que los puntos sean 0 si no están definidos
+          rank: user.rank || "Sin rango", // Asegurar que el rango sea "Sin rango" si no está definido
+          games: user.games || 0, // Asegurar que los juegos sean 0 si no están definidos
+        }));
+        setRankingData(sanitizedRanking);
+        dispatch(setRanking(sanitizedRanking));
+      } catch (error) {
+        console.error("Error al obtener los datos de ranking:", error);
+      }
     };
 
     fetchData();
 
     const interval = setInterval(fetchData, 5000); // Actualizar cada 5 segundos
     return () => clearInterval(interval);
-  }, []);
+  }, [uid, dispatch]); // Asegúrate de que el efecto se ejecute cuando cambie el UID o el dispatch
 
   return (
     <Box
@@ -79,7 +90,7 @@ const RankingTable = ({ showCurrentUser = false }) => {
       >
         {rankingData.map((user) => (
           <Box
-            key={user.uid} // Usar uid como clave única
+            key={user.uid}
             sx={{
               border: "1.5px solid #000039",
               bgcolor: "white",

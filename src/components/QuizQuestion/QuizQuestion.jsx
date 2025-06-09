@@ -117,11 +117,12 @@ const QuizQuestion = () => {
         else if (score <= 150) rank = "Plata 🥈";
         else rank = "Oro 🥇";
 
-        // Guardar el rango en Firebase
+        // Guardar el rango y puntos en Firebase solo si el usuario participa en el quiz
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
-          rank: rank, // Guardar el rango calculado
-          games: increment(1), // Incrementar el número de juegos en Firebase
+          rank: rank,
+          games: increment(1), // Incrementar el número de juegos
+          points: increment(score), // Incrementar los puntos obtenidos en el quiz
         });
       }
 

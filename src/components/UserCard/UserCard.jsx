@@ -81,7 +81,7 @@ const UserCard = () => {
   const getRankImage = (rank) => {
     if (rank === "Oro 🥇") return "🥇"; // Oro
     if (rank === "Plata 🥈") return "🥈"; // Plata
-    if (rank === "Bronce 🥉") return "🏵️"; // Bronce
+    if (rank === "Bronce 🥉") return "🥉"; // Bronce
     return "🪵"; // Madera
   };
 
