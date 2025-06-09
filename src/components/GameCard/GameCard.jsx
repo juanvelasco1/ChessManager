@@ -32,52 +32,25 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
     fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
 
-  const handleDrawPoints = async () => {
-    try {
-      const pointsToAdd = 0.5; // Puntos por empate
-      const updatedPlayer1Points = player1.points + pointsToAdd;
-      const updatedPlayer2Points = player2.points + pointsToAdd;
-
-      setPlayer1Points(updatedPlayer1Points); // Actualizar visualmente los puntos
-      setPlayer2Points(updatedPlayer2Points);
-
-      // Actualizar los puntos en Firestore y Redux
-      await updateFirestorePoints(player1, pointsToAdd, roomId);
-      await updateFirestorePoints(player2, pointsToAdd, roomId);
-    } catch (error) {
-      console.error("Error al actualizar los puntos por empate:", error);
+  const handleDrawSelection = async () => {
+    if (player1State === "draw" && player2State === "draw") {
+      setPlayer1State("initial");
+      setPlayer2State("initial");
+      await updatePlayerPoints(player1, -50, updatePointsInRedux);
+      await updatePlayerPoints(player2, -50, updatePointsInRedux);
+    } else {
+      setPlayer1State("draw");
+      setPlayer2State("draw");
+      await updatePlayerPoints(player1, 50, updatePointsInRedux);
+      await updatePlayerPoints(player2, 50, updatePointsInRedux);
     }
+    fetchRankingData(); // Actualizar el ranking después de modificar los puntos
   };
-
-  // Lógica para estilos dinámicos según el resultado
-  const resultStyles = {
-    player1: {
-      backgroundColor: "#434379",
-    },
-    player2: {
-      backgroundColor: "#434379",
-    },
-    draw: {
-      backgroundColor: "#434379",
-    },
-  };
-
-  if (player1Points > player2Points) {
-    resultStyles.player1.backgroundColor = "#4CAF50";
-    resultStyles.player2.backgroundColor = "#C62828";
-  } else if (player1Points < player2Points) {
-    resultStyles.player1.backgroundColor = "#C62828";
-    resultStyles.player2.backgroundColor = "#4CAF50";
-  } else if (player1Points === player2Points && player1Points !== 0) {
-    resultStyles.player1.backgroundColor = "#9E9E9E";
-    resultStyles.player2.backgroundColor = "#9E9E9E";
-    resultStyles.draw.backgroundColor = "#9E9E9E";
-  }
 
   return (
     <Box
       sx={{
-        border: "1.5px solid #000039",
+        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
         bgcolor: "#000039",
         color: "white",
         display: "flex",
@@ -85,12 +58,10 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "10px",
-        px: { xs: 2, md: 3 },
-        py: { xs: 2, md: 3 },
-        mb: { xs: 2, md: 3 },
-        maxWidth: { xs: "90%", sm: "420px" },
+        padding: 2,
+        marginBottom: 2,
         width: "100%",
-        mx: "auto",
+        maxWidth: "400px",
       }}
     >
       {/* Contenedor de los jugadores */}
@@ -115,14 +86,19 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             src={player1?.avatar || "/avatars/default-avatar.png"}
             alt={player1?.nickname || "Jugador 1"}
             style={{
-              width: 40,
-              height: 40,
+              width: 48,
+              height: 48,
               borderRadius: "50%",
               marginBottom: 8,
-              border: player1State === "winner" ? "2px solid green" : player1State === "draw" ? "2px solid orange" : "none",
+              border:
+                player1State === "winner"
+                  ? "2px solid #28a745"
+                  : player1State === "draw"
+                  ? "2px solid #ffc107"
+                  : "2px solid transparent",
             }}
           />
-          <Typography fontWeight="bold" color="white" fontSize="16px">
+          <Typography fontWeight="bold" color="white" fontSize="14px">
             {player1?.nickname || "Jugador 1"}
           </Typography>
         </Box>
@@ -144,14 +120,19 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             src={player2?.avatar || "/avatars/default-avatar.png"}
             alt={player2?.nickname || "Jugador 2"}
             style={{
-              width: 40,
-              height: 40,
+              width: 48,
+              height: 48,
               borderRadius: "50%",
               marginBottom: 8,
-              border: player2State === "winner" ? "2px solid green" : player2State === "draw" ? "2px solid orange" : "none",
+              border:
+                player2State === "winner"
+                  ? "2px solid #28a745"
+                  : player2State === "draw"
+                  ? "2px solid #ffc107"
+                  : "2px solid transparent",
             }}
           />
-          <Typography fontWeight="bold" color="white" fontSize="16px">
+          <Typography fontWeight="bold" color="white" fontSize="14px">
             {player2?.nickname || "Jugador 2"}
           </Typography>
         </Box>
@@ -168,58 +149,66 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
       >
         <Button
           variant="contained"
-          onClick={() => handleAddPoints(player1, setPlayer1Points, 1)}
+          onClick={() => handleWinnerSelection("player1")}
           sx={{
-            backgroundColor: player1State === "winner" ? "#28a745" : "#434379",
+            backgroundColor: player1State === "winner" ? "#28a745" : "#2f2f77",
             color: "white",
             fontWeight: "bold",
             borderRadius: "10px",
-            width: "30%",
-            fontSize: { xs: "12px", md: "14px" },
+            flex: 1,
+            fontSize: "12px",
             "&:hover": {
-              backgroundColor: player1State === "winner" ? "#218838" : "#434379",
+              backgroundColor: player1State === "winner" ? "#218838" : "#2f2f77",
             },
           }}
         >
-          1
+          {player1State === "winner" ? "Deseleccionar" : "Ganador"}
         </Button>
         <Button
           variant="contained"
           onClick={handleDrawSelection}
           sx={{
-            backgroundColor: player1State === "draw" && player2State === "draw" ? "#ffc107" : "#434379",
+            backgroundColor:
+              player1State === "draw" && player2State === "draw"
+                ? "#6c757d"
+                : "#2f2f77",
             color: "white",
             fontWeight: "bold",
             borderRadius: "10px",
-            width: "30%",
-            fontSize: { xs: "12px", md: "14px" },
+            flex: 1,
+            fontSize: "12px",
             "&:hover": {
-              backgroundColor: player1State === "draw" && player2State === "draw" ? "#e0a800" : "#434379",
+              backgroundColor:
+                player1State === "draw" && player2State === "draw"
+                  ? "#5a6268"
+                  : "#2f2f77",
             },
           }}
         >
-          {player1State === "draw" && player2State === "draw" ? "Deseleccionar" : "Empate"}
+          {player1State === "draw" && player2State === "draw"
+            ? "Deseleccionar"
+            : "Empate"}
         </Button>
         <Button
           variant="contained"
-          onClick={() => handleAddPoints(player2, setPlayer2Points, 1)}
+          onClick={() => handleWinnerSelection("player2")}
           sx={{
-            backgroundColor: player2State === "winner" ? "#28a745" : "#434379",
+            backgroundColor: player2State === "winner" ? "#28a745" : "#2f2f77",
             color: "white",
             fontWeight: "bold",
             borderRadius: "10px",
-            width: "30%",
-            fontSize: { xs: "12px", md: "14px" },
+            flex: 1,
+            fontSize: "12px",
             "&:hover": {
-              backgroundColor: player2State === "winner" ? "#218838" : "#434379",
+              backgroundColor: player2State === "winner" ? "#218838" : "#2f2f77",
             },
           }}
         >
-          1
+          {player2State === "winner" ? "Deseleccionar" : "Ganador"}
         </Button>
       </Box>
     </Box>
   );
 };
-console.log("GameCard component loaded");
+
 export default GameCard;
