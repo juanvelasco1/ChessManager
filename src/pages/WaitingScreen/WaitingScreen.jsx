@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
@@ -7,7 +7,6 @@ import { db } from "../../services/firebaseConfig";
 const WaitingScreen = () => {
   const { roomId } = useParams(); // Obtiene el ID de la sala desde la URL
   const navigate = useNavigate();
-  const [isTournamentStarted, setIsTournamentStarted] = useState(false);
 
   useEffect(() => {
     // Escucha los cambios en la sala en tiempo real
@@ -15,10 +14,9 @@ const WaitingScreen = () => {
     const unsubscribe = onSnapshot(roomRef, (docSnapshot) => {
       if (docSnapshot.exists()) {
         const roomData = docSnapshot.data();
-        if (roomData.pairs) {
-          // Si el torneo ha comenzado (se han creado las parejas), redirige al usuario
-          setIsTournamentStarted(true);
-          navigate(`/game-tournament/${roomId}`);
+        // Si el torneo ya inició (hay pairs), redirige al jugador
+        if (roomData.pairs && roomData.pairs.length > 0) {
+          navigate(`/waiting-during-game/${roomId}`);
         }
       }
     });
