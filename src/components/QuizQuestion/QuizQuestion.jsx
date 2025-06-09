@@ -110,19 +110,19 @@ const QuizQuestion = () => {
     const handleContinue = async () => {
       const user = auth.currentUser;
       if (user) {
-        // Calcular el rango basado en el puntaje
+        // Calcular el rango basado en los puntos del quiz
         let rank;
         if (score <= 70) rank = "Madera 🪵";
         else if (score <= 110) rank = "Bronce 🥉";
         else if (score <= 150) rank = "Plata 🥈";
         else rank = "Oro 🥇";
 
-        // Guardar el rango y puntos en Firebase solo si el usuario participa en el quiz
+        // Guardar el rango y puntos del quiz en Firebase
         const userRef = doc(db, "users", user.uid);
         await updateDoc(userRef, {
           rank: rank,
           games: increment(1), // Incrementar el número de juegos
-          points: increment(score), // Incrementar los puntos obtenidos en el quiz
+          quizPoints: increment(score), // Incrementar los puntos obtenidos en el quiz
         });
       }
 

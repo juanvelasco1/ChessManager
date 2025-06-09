@@ -69,22 +69,17 @@ const GameTournamentScreen = () => {
             if (userSnapshot.exists()) {
               const userData = userSnapshot.data();
               const currentGames = userData.games || 0;
-              const currentPoints = userData.points || 0;
-              const tournamentPoints = userData.tournamentPoints || {};
+              const currentGamePoints = userData.gamePoints || 0;
 
-              // Actualizar puntos del torneo
-              tournamentPoints[roomId] = participant.points || 0;
-
-              // Incrementar el número de juegos y actualizar puntos
+              // Incrementar el número de juegos y actualizar puntos del juego
               await updateDoc(userRef, {
                 games: currentGames + 1,
-                points: currentPoints + (participant.points || 0), // Sumar puntos correctamente
-                tournamentPoints, // Actualizar puntos del torneo
+                gamePoints: currentGamePoints + (participant.points || 0), // Sumar puntos del juego
               });
 
               return {
                 ...participant,
-                points: currentPoints + (participant.points || 0), // Actualizar puntos en el participante
+                points: currentGamePoints + (participant.points || 0), // Actualizar puntos en el participante
               };
             } else {
               console.error(`El usuario con UID ${participant.uid} no existe en Firestore.`);

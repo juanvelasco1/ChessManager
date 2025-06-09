@@ -34,9 +34,6 @@ const RankingTable = ({ showCurrentUser = false }) => {
     };
 
     fetchData();
-
-    const interval = setInterval(fetchData, 5000); // Actualizar cada 5 segundos
-    return () => clearInterval(interval);
   }, [uid, dispatch]); // Asegúrate de que el efecto se ejecute cuando cambie el UID o el dispatch
 
   return (

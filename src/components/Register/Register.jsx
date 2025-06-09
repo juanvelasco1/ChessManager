@@ -46,14 +46,15 @@ const Register = () => {
       const role = normalizedEmail === "profesor@gmail.com" ? "profesor" : "jugador";
 
       await setDoc(doc(db, "users", user.uid), {
-        avatar: selectedAvatar,
+        avatar: selectedAvatar || "/avatars/default-avatar.png",
         nickname: nickname,
         email: email,
-        role: role,
-        trophies: 0,
-        games: 0,
-        rank: 0, // Inicializa el rango en 0
-        points: 0, // Inicializa los puntos en 0
+        role: role || "jugador",
+        trophies: 0, // Inicializa trofeos en 0
+        games: 0, // Inicializa juegos en 0
+        rank: "Sin rango", // Inicializa rango como texto predeterminado
+        quizPoints: 0, // Puntos del quiz inicializados en 0
+        gamePoints: 0, // Puntos del juego inicializados en 0
       });
 
       // Redirige al quiz directamente

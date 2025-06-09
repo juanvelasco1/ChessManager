@@ -39,15 +39,23 @@ const UserCard = () => {
   // Sincronizar datos del usuario en tiempo real
   useEffect(() => {
     if (uid) {
-      updateUserFields(); // Inicializar campos si es necesario
-
       const userDocRef = doc(db, "users", uid);
 
       const unsubscribe = onSnapshot(userDocRef, (docSnapshot) => {
         if (docSnapshot.exists()) {
-          setUser(docSnapshot.data());
+          const userData = docSnapshot.data();
+          // Validar y corregir valores iniciales si no existen
+          if (!userData.trophies || !userData.games || !userData.rank || !userData.points) {
+            updateDoc(userDocRef, {
+              trophies: userData.trophies || 0,
+              games: userData.games || 0,
+              rank: userData.rank || "Sin rango",
+              points: userData.points || 0,
+            });
+          }
+          setUser(userData);
         } else {
-          console.log("No se encontró el documento del usuario.");
+          console.error("No se encontró el documento del usuario.");
         }
       });
 
@@ -79,9 +87,9 @@ const UserCard = () => {
 
   // Obtener imagen y texto del rango en base al puntaje del quiz
   const getRankImage = (rank) => {
-    if (rank === "Oro 🥇") return "🥇"; // Oro
-    if (rank === "Plata 🥈") return "🥈"; // Plata
-    if (rank === "Bronce 🥉") return "🥉"; // Bronce
+    if (rank === "Oro") return "🥇"; // Oro
+    if (rank === "Plata") return "🥈"; // Plata
+    if (rank === "Bronce") return "🥉"; // Bronce
     return "🪵"; // Madera
   };
 
