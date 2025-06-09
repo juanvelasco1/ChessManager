@@ -255,22 +255,11 @@ const UserCard = () => {
 
         {/* Rango */}
         <Box textAlign="center">
-          <Typography variant="subtitle1" fontWeight="bold" sx={{ color: "#fff", fontSize: "20px", mb: 1 }}>
-            Rango
+          <Typography variant="subtitle2">Rango</Typography>
+          <Box fontSize="30px">{getRankImage(user.quizScore)}</Box>
+          <Typography variant="body2" fontWeight="regular">
+            {getRankText(user.quizScore)}
           </Typography>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Box fontSize="50px">{getRankImage(user.rank)}</Box> {/* Ícono del rango */}
-            <Typography variant="h6" fontWeight="bold" sx={{ color: "#fff", mt: 1 }}>
-              {getRankText(user.rank)}
-            </Typography>
-          </Box>
         </Box>
       </Box>
     </Box>
