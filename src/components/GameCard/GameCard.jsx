@@ -85,9 +85,10 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "10px",
-        padding: 2,
-        marginBottom: 2,
-        maxWidth: "420px",
+        px: { xs: 2, md: 3 },
+        py: { xs: 2, md: 3 },
+        mb: { xs: 2, md: 3 },
+        maxWidth: { xs: "90%", sm: "420px" },
         width: "100%",
         mx: "auto",
       }}
@@ -174,7 +175,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
-            fontSize: "12px",
+            fontSize: { xs: "12px", md: "14px" },
             "&:hover": {
               backgroundColor: player1State === "winner" ? "#218838" : "#434379",
             },
@@ -191,7 +192,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
-            fontSize: "12px",
+            fontSize: { xs: "12px", md: "14px" },
             "&:hover": {
               backgroundColor: player1State === "draw" && player2State === "draw" ? "#e0a800" : "#434379",
             },
@@ -208,7 +209,7 @@ const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
             fontWeight: "bold",
             borderRadius: "10px",
             width: "30%",
-            fontSize: "12px",
+            fontSize: { xs: "12px", md: "14px" },
             "&:hover": {
               backgroundColor: player2State === "winner" ? "#218838" : "#434379",
             },
