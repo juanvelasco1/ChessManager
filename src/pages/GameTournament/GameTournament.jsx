@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig"; // Importar la instancia de Firestore
 import { useDispatch, useSelector } from "react-redux";
-import { setPairs, setParticipants } from "../../store/authSlice";
+import { setPairs, setParticipants, updatePoints } from "../../store/authSlice";
 import { Modal } from "@mui/material";
 
 const GameTournamentScreen = () => {
@@ -162,10 +162,10 @@ const GameTournamentScreen = () => {
               key={index}
               pair={pair}
               updatePointsInRedux={(uid, points) => {
-                dispatch(updatePoints({ uid, points }));
+                dispatch(updatePoints({ uid, points })); // Llamar a la acción de Redux
               }}
               fetchRankingData={() => {
-                dispatch(fetchRanking());
+                dispatch(fetchRanking()); // Actualizar el ranking
               }}
             />
           ))
