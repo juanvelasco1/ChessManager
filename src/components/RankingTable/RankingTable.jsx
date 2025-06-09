@@ -13,29 +13,14 @@ const RankingTable = ({ showCurrentUser = false }) => {
   useEffect(() => {
     const fetchData = async () => {
       const { ranking } = await fetchRankingData();
-      dispatch(setRanking(ranking)); // Actualizar Redux
-
-      // Reiniciar tabla si el ranking expiró (simulado)
-      const now = new Date();
-      const lastReset = localStorage.getItem("lastRankingReset");
-      const interval = 1000 * 60 * 60 * 24 * 15; // 15 días
-
-      if (!lastReset || now - new Date(lastReset) > interval) {
-        localStorage.setItem("lastRankingReset", now.toISOString());
-        setRankingData([]); // Reinicia visualmente el ranking
-        // Aquí podrías llamar a una función adicional para reiniciar los datos en Firestore si fuera necesario
-      } else {
-        setRankingData(ranking);
-      }
-
-      if (uid) {
-        const user = ranking.find((user) => user.uid === uid);
-        setCurrentUser(user || null);
-      }
+      setRankingData(ranking);
     };
 
     fetchData();
-  }, [uid, dispatch]);
+
+    const interval = setInterval(fetchData, 5000); // Actualizar cada 5 segundos
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box

@@ -1,56 +1,66 @@
 import React, { useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../services/firebaseConfig";
 
-const GameCard = ({ pair, updatePoints }) => {
+const GameCard = ({ pair, updatePointsInRedux, fetchRankingData }) => {
   const { player1, player2 } = pair || {};
-  const [player1State, setPlayer1State] = useState("initial"); // Estados: initial, winner, draw
+  const [player1State, setPlayer1State] = useState("initial");
   const [player2State, setPlayer2State] = useState("initial");
+
+  const updatePointsInFirebase = async (player, points) => {
+    try {
+      const userRef = doc(db, "users", player.uid);
+      await updateDoc(userRef, {
+        points: player.points + points,
+      });
+      console.log(`Puntos actualizados en Firebase para ${player.nickname}: ${points}`);
+      fetchRankingData(); // Actualizar el ranking después de modificar los puntos
+    } catch (error) {
+      console.error("Error al actualizar puntos en Firebase:", error);
+    }
+  };
+
+  const updatePoints = (player, points) => {
+    updatePointsInRedux(player.uid, points);
+    updatePointsInFirebase(player, points);
+  };
 
   const handleWinnerSelection = (winner) => {
     if (winner === "player1") {
       if (player1State === "winner") {
-        // Deseleccionar ganador
         setPlayer1State("initial");
         setPlayer2State("initial");
-        if (updatePoints) updatePoints(player1, -100); // Restar puntos si se deselecciona
+        updatePoints(player1, -100);
       } else {
-        // Seleccionar ganador
         setPlayer1State("winner");
-        setPlayer2State("initial"); // Perdedor no suma ni resta puntos
-        if (updatePoints) updatePoints(player1, 100);
+        setPlayer2State("initial");
+        updatePoints(player1, 100);
       }
     } else if (winner === "player2") {
       if (player2State === "winner") {
-        // Deseleccionar ganador
         setPlayer2State("initial");
         setPlayer1State("initial");
-        if (updatePoints) updatePoints(player2, -100); // Restar puntos si se deselecciona
+        updatePoints(player2, -100);
       } else {
-        // Seleccionar ganador
         setPlayer2State("winner");
-        setPlayer1State("initial"); // Perdedor no suma ni resta puntos
-        if (updatePoints) updatePoints(player2, 100);
+        setPlayer1State("initial");
+        updatePoints(player2, 100);
       }
     }
   };
 
   const handleDrawSelection = () => {
     if (player1State === "draw" && player2State === "draw") {
-      // Deseleccionar empate
       setPlayer1State("initial");
       setPlayer2State("initial");
-      if (updatePoints) {
-        updatePoints(player1, -50); // Restar puntos si se deselecciona
-        updatePoints(player2, -50); // Restar puntos si se deselecciona
-      }
+      updatePoints(player1, -50);
+      updatePoints(player2, -50);
     } else {
-      // Seleccionar empate
       setPlayer1State("draw");
       setPlayer2State("draw");
-      if (updatePoints) {
-        updatePoints(player1, 50);
-        updatePoints(player2, 50);
-      }
+      updatePoints(player1, 50);
+      updatePoints(player2, 50);
     }
   };
 

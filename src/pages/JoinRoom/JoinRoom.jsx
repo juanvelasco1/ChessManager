@@ -22,6 +22,11 @@ const JoinRoomScreen = () => {
         return;
       }
 
+      if (!nickname || !avatar || points === undefined || points === null) {
+        alert("Los datos del usuario no están completos.");
+        return;
+      }
+
       try {
         const roomRef = doc(db, "rooms", roomId);
         const roomSnapshot = await getDoc(roomRef);

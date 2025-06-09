@@ -160,19 +160,12 @@ const GameTournamentScreen = () => {
           pairs.map((pair, index) => (
             <GameCard
               key={index}
-              pair={{
-                player1: {
-                  ...pair.player1,
-                  avatar: pair.player1.avatar || "/avatars/default-avatar.png",
-                },
-                player2: {
-                  ...pair.player2,
-                  avatar: pair.player2.avatar || "/avatars/default-avatar.png",
-                },
+              pair={pair}
+              updatePointsInRedux={(uid, points) => {
+                dispatch(updatePoints({ uid, points }));
               }}
-              updatePoints={(player, points) => {
-                console.log(`Actualizando puntos para ${player.nickname}: ${points}`);
-                player.points = (player.points || 0) + points; // Actualizar puntos en el objeto
+              fetchRankingData={() => {
+                dispatch(fetchRanking());
               }}
             />
           ))
