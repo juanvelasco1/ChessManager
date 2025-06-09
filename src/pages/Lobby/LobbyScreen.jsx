@@ -43,8 +43,8 @@ const LobbyScreen = () => {
     const pairs = [];
     for (let i = 0; i < participants.length; i += 2) {
       const pair = {
-        player1: participants[i],
-        player2: participants[i + 1] || null,
+        player1: { ...participants[i], role: "jugador" }, // Agregar rol al jugador 1
+        player2: participants[i + 1] ? { ...participants[i + 1], role: "jugador" } : null, // Agregar rol al jugador 2 si existe
       };
       pairs.push(pair);
     }
@@ -58,9 +58,9 @@ const LobbyScreen = () => {
     if (userRole === "profesor") {
       console.log("Redirigiendo al profesor a GameTournament...");
       navigate(`/game-tournament/${roomId}`);
-    } else{
+    } else {
       console.log("Redirigiendo al jugador a WaitingDuringGame...");
-      navigate("/waiting-during-game");
+      navigate("/waiting-during-game"); // Redirigir a la pantalla de espera
     }
   };
 

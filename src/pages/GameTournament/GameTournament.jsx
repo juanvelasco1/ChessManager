@@ -28,13 +28,18 @@ const GameTournamentScreen = () => {
         const roomData = docSnapshot.data();
         console.log("Datos de la sala:", roomData); // Log para depuración
 
-        // Validar estructura de pairs
+        // Validar estructura de pairs y participantes
         const validPairs = (roomData.pairs || []).filter(
           (pair) => pair.player1 && pair.player2
         );
         setPairsState(validPairs);
         dispatch(setPairs(validPairs)); // Actualizar Redux
-        dispatch(setParticipants(roomData.participants || [])); // Actualizar participantes en Redux
+
+        const updatedParticipants = (roomData.participants || []).map((participant) => ({
+          ...participant,
+          role: participant.role || "jugador", // Asegurar que el rol esté asignado
+        }));
+        dispatch(setParticipants(updatedParticipants)); // Actualizar participantes en Redux
       } else {
         console.error("El documento de la sala no existe.");
       }
